@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  color: var(--trn-text-on-shell);
+  background: var(--trn-surface-shell);
+  font-family: var(--trn-font-ui);
+  font-size: 16px;
+  font-optical-sizing: auto;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--trn-surface-shell);
+}
+
+::selection {
+  background: var(--trn-brass);
+  color: var(--trn-surface-shell);
+}
+
+button,
+input,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--trn-focus-on-shell);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,14 @@
+id: matches
+title: Matches
+summary: "Matching challenge dice on an action roll invite a twist: on a strong
+  hit, an interesting development or opportunity; on a miss, an unexpected
+  complication or new danger. Matched 10s on a miss signal a dire turn. Use the
+  fiction, or Ask the Oracle if unsure. On the yes/no oracle table, matching
+  oracle dice indicate an extreme answer or twist; if interpretation stalls
+  play, move on. A match on the Pay the Price table has no special
+  significance."
+source:
+  section: "Matches; Pay the Price / Rolling Matches; Ask the Oracle / Rolling a Match"
+related:
+  - procedure: action-roll
+  - procedure: ask-the-oracle

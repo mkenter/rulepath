@@ -1,0 +1,37 @@
+.root {
+  max-width: 760px;
+  margin-bottom: 24px;
+}
+
+.root h1 {
+  margin: 0 0 8px;
+  color: var(--trn-text-dark-primary);
+  font-family: var(--trn-font-editorial);
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
+  font-weight: 600;
+  font-optical-sizing: auto;
+  line-height: 1.05;
+}
+
+.root p {
+  max-width: 64ch;
+  margin: 0;
+  color: var(--trn-text-dark-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.paper h1 { color: var(--trn-text-paper-primary); }
+.paper p { color: var(--trn-text-paper-muted); }
+
+.eyebrow {
+  color: var(--trn-brass-strong);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .root { margin-bottom: 20px; }
+}

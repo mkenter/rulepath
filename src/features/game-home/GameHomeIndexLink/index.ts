@@ -1,0 +1,1 @@
+export { GameHomeIndexLink } from './GameHomeIndexLink';

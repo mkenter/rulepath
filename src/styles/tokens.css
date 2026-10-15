@@ -1,0 +1,56 @@
+:root {
+  --trn-shell-950: #171918;
+  --trn-shell-900: #15191b;
+  --trn-shell-800: #222728;
+  --trn-shell-700: #2c3232;
+  --trn-shell-raised: #202524;
+  --trn-shell-raised-hover: #292f2e;
+  --trn-shell-raised-pressed: #181c1c;
+  --trn-paper: #e9e2d3;
+  --trn-paper-raised: #f1eadc;
+  --trn-paper-muted: #ddd3bf;
+  --trn-paper-margin: #e2d8c5;
+  --trn-text-dark-primary: #f3efe6;
+  --trn-text-dark-muted: #b7bcba;
+  --trn-text-paper-primary: #202427;
+  --trn-text-paper-muted: #625f58;
+  --trn-border-dark: #4d5353;
+  --trn-border-paper: #a79f8f;
+  --trn-border-paper-strong: #777064;
+  --trn-brass: #b99a58;
+  --trn-brass-strong: #d1b36b;
+  --trn-focus-on-shell: #e4d19a;
+  --trn-focus-on-rules: #6d5526;
+  --trn-error: #d36663;
+  --trn-shadow-soft: 0 16px 40px rgb(0 0 0 / 18%);
+  --trn-shadow-paper: 0 12px 30px rgb(5 8 9 / 16%);
+  --trn-content-wide: 1180px;
+  --trn-content-reading: 760px;
+  --trn-route-a: #3f6075;
+  --trn-route-b: #6f4f65;
+  --trn-route-c: #754b39;
+  --trn-route-return: #6d5526;
+
+  /* Stable material roles. Palette tokens above remain available for tonal steps. */
+  --trn-surface-shell: var(--trn-shell-950);
+  --trn-surface-shell-navigation: var(--trn-shell-900);
+  --trn-surface-shell-instrument: var(--trn-shell-800);
+  --trn-surface-shell-raised: var(--trn-shell-raised);
+  --trn-surface-shell-raised-hover: var(--trn-shell-raised-hover);
+  --trn-surface-shell-raised-pressed: var(--trn-shell-raised-pressed);
+  --trn-surface-rules: var(--trn-paper);
+  --trn-surface-rules-raised: var(--trn-paper-raised);
+  --trn-surface-rules-muted: var(--trn-paper-muted);
+  --trn-surface-rules-margin: var(--trn-paper-margin);
+  --trn-text-on-shell: var(--trn-text-dark-primary);
+  --trn-text-on-shell-muted: var(--trn-text-dark-muted);
+  --trn-text-on-rules: var(--trn-text-paper-primary);
+  --trn-text-on-rules-muted: var(--trn-text-paper-muted);
+  --trn-border-on-shell: var(--trn-border-dark);
+  --trn-border-on-rules: var(--trn-border-paper);
+  --trn-border-on-rules-strong: var(--trn-border-paper-strong);
+
+  --trn-font-ui: "Instrument Sans Variable", sans-serif;
+  --trn-font-editorial: "Newsreader Variable", serif;
+  --trn-motion-functional: 150ms ease;
+}

@@ -1,0 +1,11 @@
+action-roll: []
+gather-information:
+  - action-roll
+  - ask-the-oracle
+  - pay-the-price
+secure-an-advantage:
+  - action-roll
+  - pay-the-price
+ask-the-oracle: []
+pay-the-price:
+  - ask-the-oracle

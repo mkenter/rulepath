@@ -1,0 +1,100 @@
+id: gather-information
+title: Gather Information
+summary: When you search an area, ask questions, investigate, or follow a track,
+  roll +wits.
+source:
+  section: "Gather Information"
+nodes:
+  - id: start
+    type: start
+    label: Search, investigate, ask questions, or follow a track
+  - id: bond
+    type: decision
+    label: Acting within a community with which you share a bond, or questioning a person with whom you share a
+      bond?
+  - id: bonus
+    type: step
+    label: Add +1 for the bond
+  - id: roll
+    type: procedure
+    label: Action Roll (+wits)
+    target: action-roll
+  - id: result
+    type: decision
+    label: What is the action roll result?
+  - id: strong
+    type: step
+    label: "Strong hit: discover helpful, specific information that makes your next
+      path or action clear. Take +2 momentum"
+  - id: weak
+    type: step
+    label: "Weak hit: the information complicates your quest or introduces a new
+      danger. Take +1 momentum"
+  - id: envision
+    type: decision
+    label: Can you envision what you learn?
+  - id: oracle
+    type: procedure
+    label: Ask the Oracle (Yes/No) if a question will clarify the discovery
+    target: ask-the-oracle
+  - id: miss
+    type: step
+    label: "Miss: uncover a dire threat or unwelcome truth that undermines your quest"
+  - id: price
+    type: procedure
+    label: Pay the Price
+    target: pay-the-price
+  - id: done
+    type: end
+    label: Envision the discovery and continue the fiction
+edges:
+  - from: start
+    to: bond
+  - from: bond
+    to: bonus
+    label: Yes
+  - from: bond
+    to: roll
+    label: No
+  - from: bonus
+    to: roll
+  - from: roll
+    to: result
+  - from: result
+    to: strong
+    label: Strong hit
+  - from: result
+    to: weak
+    label: Weak hit
+  - from: result
+    to: miss
+    label: Miss
+  - from: strong
+    to: envision
+  - from: weak
+    to: envision
+  - from: envision
+    to: done
+    label: Yes
+  - from: envision
+    to: oracle
+    label: No
+  - from: oracle
+    to: done
+  - from: miss
+    to: price
+  - from: price
+    to: done
+keyRules:
+  - The bond bonus applies within a community with which you share a bond, or
+    when questioning a person with whom you share a bond.
+  - Ask the Oracle offers other ways to envision a discovery, including deciding
+    an answer or brainstorming; see Oracle Options.
+  - "Follow the fiction: this is investigation, rather than reacting to an
+    immediate threat or preparing to act."
+references:
+  - momentum
+  - oracle-options
+  - credits
+related:
+  - secure-an-advantage

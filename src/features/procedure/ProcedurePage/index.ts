@@ -1,0 +1,1 @@
+export { ProcedurePage } from './ProcedurePage';

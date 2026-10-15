@@ -1,0 +1,74 @@
+id: ask-the-oracle
+title: Ask the Oracle (Yes/No)
+summary: Use the yes/no option of Ask the Oracle to resolve uncertainty. The
+  other options are preserved in Oracle Options.
+source:
+  section: "Ask the Oracle"
+nodes:
+  - id: start
+    type: start
+    label: Ask a yes/no question and envision the situation
+  - id: odds
+    type: step
+    label: "Choose the odds of yes: almost certain, likely, 50/50, unlikely, or
+      small chance"
+  - id: roll
+    type: step
+    label: Roll two ten-sided oracle dice as a number from 1 to 100 (00 means 100)
+  - id: answer
+    type: decision
+    label: Is the roll at or above the threshold for your chosen odds?
+  - id: yes
+    type: step
+    label: "Yes: the proposed answer is true"
+  - id: no
+    type: step
+    label: "No: the proposed answer is false"
+  - id: match
+    type: decision
+    label: Do the oracle dice match?
+  - id: twist
+    type: step
+    label: An extreme result or twist has occurred. Envision it; if stuck, move on
+  - id: done
+    type: end
+    label: Interpret the answer in the fiction and continue
+edges:
+  - from: start
+    to: odds
+  - from: odds
+    to: roll
+  - from: roll
+    to: answer
+  - from: answer
+    to: yes
+    label: Yes
+  - from: answer
+    to: no
+    label: No
+  - from: yes
+    to: match
+  - from: no
+    to: match
+  - from: match
+    to: twist
+    label: Yes
+  - from: match
+    to: done
+    label: No
+  - from: twist
+    to: done
+keyRules:
+  - "Almost certain: yes on 11–100. Likely: yes on 26–100. 50/50: yes on 51–100.
+    Unlikely: yes on 76–100. Small chance: yes on 91–100."
+  - For “pick two,” envision two options and rate one likely. On 26–100 it
+    happens; otherwise the other does.
+  - This is an oracle roll, not an action roll. Do not add a stat or apply
+    momentum.
+  - In guided play, the GM is the oracle; use this move when talking things out
+    needs a random result or inspiration.
+references:
+  - oracle-options
+  - matches
+  - credits
+related: []

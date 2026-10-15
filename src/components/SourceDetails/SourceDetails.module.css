@@ -1,0 +1,20 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--trn-border-paper);
+}
+
+.root div { display: flex; gap: 6px; }
+.root dt {
+  color: var(--trn-text-paper-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.root dd { margin: 0; }
+.root .verification { display: block; width: 100%; overflow-wrap: anywhere; }
+.verification dt { display: none; }
+.verification summary { cursor: pointer; }

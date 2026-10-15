@@ -1,0 +1,77 @@
+id: secure-an-advantage
+title: Secure an Advantage
+summary: When you assess a situation, prepare, or attempt to gain leverage,
+  envision your action and roll with the appropriate stat.
+source:
+  section: "Secure an Advantage"
+nodes:
+  - id: start
+    type: start
+    label: Assess, prepare, or gain leverage
+  - id: stat
+    type: step
+    label: "Choose the stat matching your approach: edge, heart, iron, shadow, or
+      wits (see Key Rules)"
+  - id: roll
+    type: procedure
+    label: Action Roll (+chosen stat)
+    target: action-roll
+  - id: result
+    type: decision
+    label: What is the action roll result?
+  - id: strong
+    type: decision
+    label: "Strong hit: choose an advantage"
+  - id: control
+    type: end
+    label: "Take control: make another move now (not a progress move), and add +1
+      when you do"
+  - id: prepare
+    type: end
+    label: "Prepare to act: take +2 momentum"
+  - id: weak
+    type: end
+    label: "Weak hit: your advantage is short-lived. Take +1 momentum"
+  - id: price
+    type: procedure
+    label: "Miss: fail or your assumptions betray you. Pay the Price"
+    target: pay-the-price
+  - id: done
+    type: end
+    label: Resolve the cost and continue the fiction
+edges:
+  - from: start
+    to: stat
+  - from: stat
+    to: roll
+  - from: roll
+    to: result
+  - from: result
+    to: strong
+    label: Strong hit
+  - from: result
+    to: weak
+    label: Weak hit
+  - from: result
+    to: price
+    label: Miss
+  - from: strong
+    to: control
+    label: Take control
+  - from: strong
+    to: prepare
+    label: Prepare to act
+  - from: price
+    to: done
+keyRules:
+  - "Speed, agility, or precision: roll +edge."
+  - "Charm, loyalty, or courage: roll +heart."
+  - "Aggression, forceful defense, strength, or endurance: roll +iron."
+  - "Deception, stealth, or trickery: roll +shadow."
+  - "Expertise, insight, or observation: roll +wits."
+references:
+  - stats
+  - momentum
+  - credits
+related:
+  - gather-information

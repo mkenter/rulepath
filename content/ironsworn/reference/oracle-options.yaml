@@ -1,0 +1,16 @@
+id: oracle-options
+title: Oracle Options
+summary: "Ask the Oracle offers four options: draw a conclusion using the most
+  interesting and obvious result; ask a yes/no question, choose odds, and roll;
+  envision two options, rate one likely, and roll (yes selects it, no selects
+  the other); or spark an idea by brainstorming or using a random prompt. The
+  linked Yes/No procedure covers the roll, not all four options as mandatory
+  steps. Oracle dice generate 1–100. Yes thresholds: almost certain 11+, likely
+  26+, 50/50 51+, unlikely 76+, small chance 91+. Matching yes/no dice invite an
+  extreme result or twist. In guided play, the GM is the oracle."
+source:
+  section: "Ask the Oracle"
+related:
+  - procedure: ask-the-oracle
+  - procedure: pay-the-price
+  - procedure: gather-information

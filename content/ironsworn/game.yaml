@@ -1,0 +1,50 @@
+schemaVersion: 1
+game:
+  id: ironsworn
+  title: Ironsworn
+  publisher: Shawn Tomkin
+  summary: "A small, unofficial SRD sample: investigation, preparation, action
+    rolls, and fate. CC BY 4.0; not a complete game reference."
+  source:
+    publication:
+      title: Ironsworn System Reference Document
+      edition: Ironsworn SRD .09 (January 14, 2023)
+      url: https://docs.google.com/document/d/11ypqt6GfLuBhGDJuBGWKlHa-Ru48Tf3G_6zbrYKmXgY/edit
+      creator: Shawn Tomkin
+      publisher: Shawn Tomkin
+    licensing:
+      copyright: Copyright ©2018 Shawn Tomkin.
+      license:
+        name: Creative Commons Attribution 4.0 International (CC BY 4.0)
+        url: https://creativecommons.org/licenses/by/4.0/
+      attribution: >-
+        This work is based on Ironsworn (found at https://www.ironswornrpg.com),
+        created by Shawn Tomkin, and licensed for our use under the Creative
+        Commons Attribution 4.0 International License
+        (https://creativecommons.org/licenses/by/4.0/).
+      adaptation: >-
+        Selected SRD text has been reorganized and paraphrased into linked
+        procedures and references. The adapted rules content is licensed under
+        CC BY 4.0. No publisher artwork, icons, or layout assets are included.
+        This is an unofficial product and does not imply endorsement.
+sections:
+  - id: adventure
+    title: Adventure Moves
+    items:
+      - procedure: gather-information
+      - procedure: secure-an-advantage
+  - id: resolution
+    title: Resolution and Fate
+    items:
+      - procedure: action-roll
+      - procedure: pay-the-price
+      - procedure: ask-the-oracle
+  - id: references
+    title: References
+    items:
+      - reference: momentum
+      - reference: matches
+      - reference: stats
+      - reference: oracle-options
+      - reference: price-table
+      - reference: credits

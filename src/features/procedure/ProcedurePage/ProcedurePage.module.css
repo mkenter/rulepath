@@ -1,0 +1,78 @@
+.root {
+  width: min(var(--trn-content-wide), 100%);
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 32px) 64px;
+}
+.root > header { margin-bottom: 24px; }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  overflow: hidden;
+  border: 1px solid var(--trn-border-paper);
+  background: var(--trn-paper);
+  box-shadow: var(--trn-shadow-paper);
+  color: var(--trn-text-paper-primary);
+}
+.support {
+  display: grid;
+  align-content: start;
+  border-top: 1px solid var(--trn-border-paper-strong);
+  background: var(--trn-paper-margin);
+  color: var(--trn-text-paper-primary);
+}
+.support section { padding: 22px clamp(18px, 2.5vw, 24px); }
+.support section + section { border-top: 0; padding-top: 8px; }
+.support h2 {
+  margin: 0;
+  color: var(--trn-text-paper-primary);
+  font-size: 0.875rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+.support ul {
+  margin: 12px 0 0;
+  padding-left: 17px;
+  color: var(--trn-text-paper-muted);
+  line-height: 1.5;
+}
+.key h2 { color: #5f481c; font-size: 1rem; }
+.links { display: grid; gap: 2px; padding-left: 0 !important; list-style: none; }
+.links a {
+  display: inline-flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  padding-inline: 7px;
+  border-radius: 3px;
+  color: var(--trn-text-paper-primary);
+  font-weight: 620;
+  text-decoration: none;
+  text-underline-offset: 4px;
+  transition:
+    border-color var(--trn-motion-functional),
+    background-color var(--trn-motion-functional),
+    color var(--trn-motion-functional),
+    box-shadow var(--trn-motion-functional);
+}
+.links a:hover,
+.links a:focus-visible { background: rgb(255 255 255 / 28%); color: #5f481c; }
+.links a:focus-visible {
+  outline: 2px solid var(--trn-focus-on-rules);
+  outline-offset: 2px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+.links a:active { background: rgb(98 95 88 / 14%); }
+.source { color: var(--trn-text-paper-muted); font-size: 0.8125rem; }
+.source dl { margin-top: 12px; padding-top: 12px; }
+
+@media (min-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 3fr) minmax(240px, 1fr); align-items: stretch; }
+  .support { border-top: 0; border-left: 1px solid var(--trn-border-paper); }
+}
+@media (max-width: 560px) {
+  .root { padding-top: 24px; padding-bottom: 40px; }
+  .root > header h1 { font-size: 1.5rem; }
+}

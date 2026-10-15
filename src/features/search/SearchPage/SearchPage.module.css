@@ -1,0 +1,155 @@
+.root {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 32px) 64px;
+}
+.root > header { margin-bottom: 16px; }
+.form { margin-bottom: 24px; }
+.controls { position: relative; display: flex; align-items: center; }
+.icon {
+  position: absolute;
+  z-index: 1;
+  left: 16px;
+  color: var(--trn-brass-strong);
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+.form input {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 10px 44px;
+  border: 1px solid var(--trn-border-dark);
+  border-radius: 4px;
+  background: var(--trn-shell-900);
+  color: var(--trn-text-dark-primary);
+  font-size: 1.0625rem;
+  transition:
+    border-color var(--trn-motion-functional),
+    background-color var(--trn-motion-functional),
+    box-shadow var(--trn-motion-functional);
+}
+.form input::-webkit-search-cancel-button { appearance: none; }
+.form input::placeholder { color: var(--trn-text-dark-muted); }
+.form input:focus { border-color: var(--trn-brass); }
+.form input:hover { border-color: #657278; background: var(--trn-shell-raised); }
+.form input:focus-visible {
+  border-color: var(--trn-focus-on-shell);
+  background: var(--trn-shell-raised);
+  box-shadow:
+    0 0 0 2px var(--trn-surface-shell),
+    0 0 0 4px var(--trn-focus-on-shell);
+  outline: none;
+}
+.controls:focus-within .icon { color: var(--trn-focus-on-shell); }
+.clear {
+  position: absolute;
+  z-index: 2;
+  right: 4px;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--trn-text-on-shell-muted);
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition:
+    background-color var(--trn-motion-functional),
+    color var(--trn-motion-functional),
+    box-shadow var(--trn-motion-functional);
+}
+.clear:hover { background: var(--trn-shell-700); color: var(--trn-text-on-shell); }
+.clear:focus-visible {
+  background: var(--trn-shell-700);
+  box-shadow:
+    inset 0 0 0 2px var(--trn-shell-700),
+    inset 0 0 0 4px var(--trn-focus-on-shell);
+  outline: none;
+}
+.clear:active { background: var(--trn-shell-raised-pressed); color: var(--trn-brass-strong); }
+
+.scope {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 0;
+  color: var(--trn-text-dark-muted);
+  font-size: 0.8125rem;
+}
+.globalScope { margin-bottom: 0; }
+.scopePill {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 9px 7px 14px;
+  border: 1px solid var(--trn-border-dark);
+  border-radius: 999px;
+  background: var(--trn-shell-800);
+  color: var(--trn-text-dark-primary);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+  transition:
+    border-color var(--trn-motion-functional),
+    background-color var(--trn-motion-functional),
+    color var(--trn-motion-functional),
+    box-shadow var(--trn-motion-functional);
+}
+.scopePill:hover { border-color: var(--trn-brass); background: var(--trn-shell-700); }
+.scopePill:focus-visible {
+  border-color: var(--trn-focus-on-shell);
+  box-shadow:
+    0 0 0 2px var(--trn-surface-shell),
+    0 0 0 4px var(--trn-focus-on-shell);
+  outline: none;
+}
+.scopePill:active { background: var(--trn-shell-raised-pressed); }
+.remove {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 7%);
+  color: var(--trn-text-dark-muted);
+}
+.scopePill svg { width: 14px; height: 14px; }
+.scopePill path { fill: none; stroke: currentcolor; stroke-linecap: round; stroke-width: 2; }
+
+.results {
+  overflow: visible;
+  border: 1px solid var(--trn-border-paper);
+  background: var(--trn-paper);
+  color: var(--trn-text-paper-primary);
+  box-shadow: var(--trn-shadow-paper);
+}
+.heading {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px clamp(18px, 3vw, 26px);
+  border-bottom: 1px solid var(--trn-border-paper);
+}
+.heading h2 {
+  margin: 0;
+  color: var(--trn-text-paper-muted);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.results ul { margin: 0; padding: 0; list-style: none; }
+.results li + li { border-top: 1px solid var(--trn-border-paper); }
+.empty { margin: 0; padding: 28px clamp(18px, 3vw, 26px); color: var(--trn-text-paper-muted); }
+
+@media (max-width: 560px) {
+  .root { padding-top: 24px; padding-bottom: 40px; }
+  .controls { align-items: center; }
+}

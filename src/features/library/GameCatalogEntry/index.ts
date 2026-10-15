@@ -1,0 +1,1 @@
+export { GameCatalogEntry } from './GameCatalogEntry';

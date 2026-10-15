@@ -1,0 +1,50 @@
+.root {
+  margin-bottom: 16px;
+  color: var(--trn-text-dark-muted);
+  font-size: 0.8125rem;
+}
+
+.root ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.root li:not(:last-child)::after {
+  margin-left: 6px;
+  color: var(--trn-border-dark);
+  content: "/";
+}
+
+.root a {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  color: var(--trn-text-dark-primary);
+  text-decoration: none;
+  transition:
+    border-color var(--trn-motion-functional),
+    background-color var(--trn-motion-functional),
+    color var(--trn-motion-functional),
+    box-shadow var(--trn-motion-functional);
+}
+
+.root a:hover {
+  color: var(--trn-brass-strong);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.root a:focus-visible {
+  border-radius: 2px;
+  outline-color: var(--trn-focus-on-shell);
+  outline-offset: 2px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.root a:active { color: var(--trn-brass); }

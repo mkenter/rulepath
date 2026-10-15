@@ -1,0 +1,8 @@
+.root {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-width: 1.7;
+}

@@ -1,0 +1,589 @@
+{
+  "detour": {
+    "id": "detour",
+    "title": "detour",
+    "summary": "Synthetic graph regression fixture.",
+    "source": {
+      "section": "Synthetic topology; no game rules."
+    },
+    "nodes": [
+      {
+        "id": "start",
+        "type": "start",
+        "label": "Node start"
+      },
+      {
+        "id": "value",
+        "type": "step",
+        "label": "Node value"
+      },
+      {
+        "id": "bonus",
+        "type": "step",
+        "label": "Node bonus"
+      },
+      {
+        "id": "surprise",
+        "type": "decision",
+        "label": "Node surprise"
+      },
+      {
+        "id": "extra",
+        "type": "step",
+        "label": "Node extra"
+      },
+      {
+        "id": "pool",
+        "type": "step",
+        "label": "Node pool"
+      },
+      {
+        "id": "roll",
+        "type": "step",
+        "label": "Node roll"
+      },
+      {
+        "id": "modify",
+        "type": "step",
+        "label": "Node modify"
+      },
+      {
+        "id": "count",
+        "type": "step",
+        "label": "Node count"
+      },
+      {
+        "id": "fate",
+        "type": "decision",
+        "label": "Node fate"
+      },
+      {
+        "id": "add",
+        "type": "step",
+        "label": "Node add"
+      },
+      {
+        "id": "result",
+        "type": "end",
+        "label": "Node result"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "value"
+      },
+      {
+        "from": "value",
+        "to": "bonus"
+      },
+      {
+        "from": "bonus",
+        "to": "surprise"
+      },
+      {
+        "from": "surprise",
+        "to": "extra",
+        "label": "Yes"
+      },
+      {
+        "from": "surprise",
+        "to": "pool",
+        "label": "No"
+      },
+      {
+        "from": "extra",
+        "to": "pool"
+      },
+      {
+        "from": "pool",
+        "to": "roll"
+      },
+      {
+        "from": "roll",
+        "to": "modify"
+      },
+      {
+        "from": "modify",
+        "to": "count"
+      },
+      {
+        "from": "count",
+        "to": "fate"
+      },
+      {
+        "from": "fate",
+        "to": "add",
+        "label": "Yes"
+      },
+      {
+        "from": "fate",
+        "to": "result",
+        "label": "No"
+      },
+      {
+        "from": "add",
+        "to": "result"
+      }
+    ],
+    "aliases": [],
+    "keyRules": [],
+    "references": [],
+    "related": [],
+    "authorNotes": []
+  },
+  "nested": {
+    "id": "nested",
+    "title": "nested",
+    "summary": "Synthetic graph regression fixture.",
+    "source": {
+      "section": "Synthetic topology; no game rules."
+    },
+    "nodes": [
+      {
+        "id": "start",
+        "type": "start",
+        "label": "Node start"
+      },
+      {
+        "id": "stranger",
+        "type": "decision",
+        "label": "Node stranger"
+      },
+      {
+        "id": "none",
+        "type": "step",
+        "label": "Node none"
+      },
+      {
+        "id": "drawn",
+        "type": "decision",
+        "label": "Node drawn"
+      },
+      {
+        "id": "hidden",
+        "type": "decision",
+        "label": "Node hidden"
+      },
+      {
+        "id": "foe",
+        "type": "step",
+        "label": "Node foe"
+      },
+      {
+        "id": "choice",
+        "type": "decision",
+        "label": "Node choice"
+      },
+      {
+        "id": "hero",
+        "type": "step",
+        "label": "Node hero"
+      },
+      {
+        "id": "evasion",
+        "type": "procedure",
+        "label": "Node evasion",
+        "target": "target-evasion"
+      },
+      {
+        "id": "evaded",
+        "type": "decision",
+        "label": "Node evaded"
+      },
+      {
+        "id": "battle",
+        "type": "procedure",
+        "label": "Node battle",
+        "target": "target-battle"
+      },
+      {
+        "id": "done",
+        "type": "end",
+        "label": "Node done"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "stranger"
+      },
+      {
+        "from": "stranger",
+        "to": "none",
+        "label": "Yes"
+      },
+      {
+        "from": "stranger",
+        "to": "drawn",
+        "label": "No"
+      },
+      {
+        "from": "drawn",
+        "to": "hidden",
+        "label": "Yes"
+      },
+      {
+        "from": "drawn",
+        "to": "hidden",
+        "label": "No"
+      },
+      {
+        "from": "hidden",
+        "to": "foe",
+        "label": "Route hidden-foe"
+      },
+      {
+        "from": "hidden",
+        "to": "choice",
+        "label": "Yes"
+      },
+      {
+        "from": "hidden",
+        "to": "none",
+        "label": "Route hidden-none"
+      },
+      {
+        "from": "choice",
+        "to": "evasion",
+        "label": "Route choice-evasion"
+      },
+      {
+        "from": "choice",
+        "to": "hero",
+        "label": "Route choice-hero"
+      },
+      {
+        "from": "evasion",
+        "to": "evaded"
+      },
+      {
+        "from": "evaded",
+        "to": "done",
+        "label": "Yes"
+      },
+      {
+        "from": "evaded",
+        "to": "foe",
+        "label": "No"
+      },
+      {
+        "from": "none",
+        "to": "battle"
+      },
+      {
+        "from": "foe",
+        "to": "battle"
+      },
+      {
+        "from": "hero",
+        "to": "battle"
+      },
+      {
+        "from": "battle",
+        "to": "done"
+      }
+    ],
+    "aliases": [],
+    "keyRules": [],
+    "references": [],
+    "related": [],
+    "authorNotes": []
+  },
+  "loop": {
+    "id": "loop",
+    "title": "loop",
+    "summary": "Synthetic graph regression fixture.",
+    "source": {
+      "section": "Synthetic topology; no game rules."
+    },
+    "nodes": [
+      {
+        "id": "start",
+        "type": "start",
+        "label": "Node start"
+      },
+      {
+        "id": "trap",
+        "type": "step",
+        "label": "Node trap"
+      },
+      {
+        "id": "hp",
+        "type": "step",
+        "label": "Node hp"
+      },
+      {
+        "id": "hero",
+        "type": "procedure",
+        "label": "Node hero",
+        "target": "target-hero"
+      },
+      {
+        "id": "foe",
+        "type": "procedure",
+        "label": "Node foe",
+        "target": "target-foe"
+      },
+      {
+        "id": "apply",
+        "type": "step",
+        "label": "Node apply"
+      },
+      {
+        "id": "surprise",
+        "type": "step",
+        "label": "Node surprise"
+      },
+      {
+        "id": "foedead",
+        "type": "decision",
+        "label": "Node foedead"
+      },
+      {
+        "id": "reward",
+        "type": "procedure",
+        "label": "Node reward",
+        "target": "target-reward"
+      },
+      {
+        "id": "herodead",
+        "type": "decision",
+        "label": "Node herodead"
+      },
+      {
+        "id": "defeat",
+        "type": "procedure",
+        "label": "Node defeat",
+        "target": "target-defeat"
+      },
+      {
+        "id": "wasfoe",
+        "type": "decision",
+        "label": "Node wasfoe"
+      },
+      {
+        "id": "escape",
+        "type": "decision",
+        "label": "Node escape"
+      },
+      {
+        "id": "move",
+        "type": "step",
+        "label": "Node move"
+      },
+      {
+        "id": "restore",
+        "type": "step",
+        "label": "Node restore"
+      },
+      {
+        "id": "done",
+        "type": "end",
+        "label": "Node done"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "trap"
+      },
+      {
+        "from": "trap",
+        "to": "hp"
+      },
+      {
+        "from": "hp",
+        "to": "hero"
+      },
+      {
+        "from": "hero",
+        "to": "foe"
+      },
+      {
+        "from": "foe",
+        "to": "apply"
+      },
+      {
+        "from": "apply",
+        "to": "surprise"
+      },
+      {
+        "from": "surprise",
+        "to": "foedead"
+      },
+      {
+        "from": "foedead",
+        "to": "reward",
+        "label": "Yes"
+      },
+      {
+        "from": "reward",
+        "to": "herodead"
+      },
+      {
+        "from": "foedead",
+        "to": "herodead",
+        "label": "No"
+      },
+      {
+        "from": "herodead",
+        "to": "defeat",
+        "label": "Yes"
+      },
+      {
+        "from": "defeat",
+        "to": "done"
+      },
+      {
+        "from": "herodead",
+        "to": "wasfoe",
+        "label": "No"
+      },
+      {
+        "from": "wasfoe",
+        "to": "done",
+        "label": "Yes"
+      },
+      {
+        "from": "wasfoe",
+        "to": "escape",
+        "label": "No"
+      },
+      {
+        "from": "escape",
+        "to": "move",
+        "label": "Yes"
+      },
+      {
+        "from": "move",
+        "to": "restore"
+      },
+      {
+        "from": "restore",
+        "to": "done"
+      },
+      {
+        "from": "escape",
+        "to": "hero",
+        "label": "No"
+      }
+    ],
+    "aliases": [],
+    "keyRules": [],
+    "references": [],
+    "related": [],
+    "authorNotes": []
+  },
+  "linked-detour": {
+    "id": "linked-detour",
+    "title": "linked-detour",
+    "summary": "Synthetic graph regression fixture.",
+    "source": {
+      "section": "Synthetic topology; no game rules."
+    },
+    "nodes": [
+      {
+        "id": "start",
+        "type": "start",
+        "label": "Node start"
+      },
+      {
+        "id": "enemy",
+        "type": "decision",
+        "label": "Node enemy"
+      },
+      {
+        "id": "eng",
+        "type": "procedure",
+        "label": "Node eng",
+        "target": "target-eng"
+      },
+      {
+        "id": "continue",
+        "type": "decision",
+        "label": "Node continue"
+      },
+      {
+        "id": "choice",
+        "type": "decision",
+        "label": "Node choice"
+      },
+      {
+        "id": "post",
+        "type": "decision",
+        "label": "Node post"
+      },
+      {
+        "id": "posteng",
+        "type": "procedure",
+        "label": "Node posteng",
+        "target": "target-posteng"
+      },
+      {
+        "id": "done",
+        "type": "end",
+        "label": "Node done"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "enemy"
+      },
+      {
+        "from": "enemy",
+        "to": "eng",
+        "label": "Yes"
+      },
+      {
+        "from": "enemy",
+        "to": "choice",
+        "label": "No"
+      },
+      {
+        "from": "eng",
+        "to": "continue"
+      },
+      {
+        "from": "continue",
+        "to": "done",
+        "label": "No"
+      },
+      {
+        "from": "continue",
+        "to": "choice",
+        "label": "Yes"
+      },
+      {
+        "from": "choice",
+        "to": "post",
+        "label": "Route choice-post"
+      },
+      {
+        "from": "choice",
+        "to": "done",
+        "label": "Route choice-done"
+      },
+      {
+        "from": "post",
+        "to": "posteng",
+        "label": "Yes"
+      },
+      {
+        "from": "post",
+        "to": "done",
+        "label": "No"
+      },
+      {
+        "from": "posteng",
+        "to": "done"
+      }
+    ],
+    "aliases": [],
+    "keyRules": [],
+    "references": [],
+    "related": [],
+    "authorNotes": []
+  }
+}
