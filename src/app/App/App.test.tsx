@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { AppRoutes } from './AppRoutes';
+import { contentRegistry } from '../../content/bundled-content';
+import { testRegisteredGameRoutes } from '../../../tests/registered-game-routes';
 
 const gatherUrl = '/games/ironsworn/procedures/gather-information';
 const priceUrl = '/games/ironsworn/procedures/pay-the-price';
@@ -10,13 +12,15 @@ function renderRoute(route: string) {
   const router = createMemoryRouter([{ path: '*', element: <AppRoutes /> }], { initialEntries: [route] });
   return { router, ...render(<RouterProvider router={router} />) };
 }
-describe('application routes', () => {
+testRegisteredGameRoutes(contentRegistry, renderRoute);
+
+describe('Ironsworn application regressions', () => {
   it('opens the Ironsworn library entry and exposes all canonical resources', async () => {
     const user = userEvent.setup();
     renderRoute('/');
     expect(screen.getByRole('link', { name: 'Rulepath library' })).toBeInTheDocument();
     expect(document.title).toBe('Library | Rulepath');
-    await user.click(screen.getByRole('link', { name: /Ironsworn/ }));
+    await user.click(within(screen.getByRole('region', { name: 'Games' })).getAllByRole('link').find(link => link.getAttribute('href') === '/games/ironsworn')!);
     expect(screen.getByRole('heading', { name: 'Ironsworn' })).toBeInTheDocument();
     const contents = screen.getByRole('navigation', { name: 'Ironsworn contents' });
     expect(within(contents).getAllByRole('link')).toHaveLength(11);

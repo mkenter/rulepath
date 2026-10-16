@@ -54,7 +54,7 @@ test('primary journeys remain keyboard operable with modal focus containment and
 }) => {
   await page.goto('/');
 
-  const libraryGame = page.getByRole('link', { name: /Ironsworn/ });
+  const libraryGame = page.locator('[data-library-game][href="/games/ironsworn"]');
   await focusByKeyboard(page, libraryGame);
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL('/games/ironsworn');
@@ -158,7 +158,7 @@ test('primary controls retain the stronger 44px touch-target standard', async ({
     page.getByRole('navigation', { name: 'Primary navigation' })
       .getByRole('link', { name: 'Search' }),
   );
-  await expectMinimumTarget(page.getByRole('link', { name: /Ironsworn/ }));
+  await expectMinimumTarget(page.locator('[data-library-game][href="/games/ironsworn"]'));
 
   await page.goto('/games/ironsworn');
   await expectMinimumTarget(page.getByRole('link', { name: 'Gather Information' }));

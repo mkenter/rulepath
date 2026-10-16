@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { loadContentRegistry } from '../../content/load-content';
 import { combinedSources } from '../../../tests/fixtures/sources';
+import { testRegisteredGameRoutes } from '../../../tests/registered-game-routes';
 
 vi.mock('../../content/bundled-content', () => ({ contentRegistry: registry }));
 const registry = loadContentRegistry(combinedSources);
@@ -15,14 +16,16 @@ function renderRoute(route: string) {
   return { router, ...render(<RouterProvider router={router} />) };
 }
 
+testRegisteredGameRoutes(registry, renderRoute);
+
 describe('multi-game application routes', () => {
   it('lists both games and resolves each section to its own resources', async () => {
     const user = userEvent.setup();
     renderRoute('/');
-    expect(screen.getByRole('link', { name: /Ironsworn/ })).toHaveAttribute('href', '/games/ironsworn');
-    await user.click(screen.getByRole('link', { name: /Clockwork Lantern/ }));
+    expect(within(screen.getByRole('region', { name: 'Games' })).getAllByRole('link').find(link => link.getAttribute('href') === '/games/ironsworn')!).toHaveAttribute('href', '/games/ironsworn');
+    await user.click(within(screen.getByRole('region', { name: 'Games' })).getAllByRole('link').find(link => link.getAttribute('href') === '/games/clockwork')!);
     const contents = screen.getByRole('navigation', { name: 'Clockwork Lantern contents' });
-    expect(within(contents).getAllByRole('link')).toHaveLength(3);
+    expect(within(contents).getAllByRole('link')).toHaveLength(4);
     expect(within(contents).getByRole('link', { name: 'Gather Information' })).toHaveAttribute('href', '/games/clockwork/procedures/gather-information');
     expect(within(contents).getByRole('link', { name: 'Signal Glossary' })).toHaveAttribute('href', '/games/clockwork/reference/momentum');
   });
@@ -50,6 +53,16 @@ describe('multi-game application routes', () => {
     expect(screen.getByRole('link', { name: 'Clockwork Lantern Test Rules' })).toHaveAttribute('href', 'https://example.com/clockwork-rules');
     await router.navigate('/games/ironsworn/reference/momentum');
     expect(await screen.findByRole('heading', { name: 'Momentum' })).toBeInTheDocument();
+  });
+
+  it('opens same-ID resources by type and follows the reference link without ambiguity', async () => {
+    const user = userEvent.setup();
+    const { router } = renderRoute('/games/clockwork/procedures/momentum');
+    expect(screen.getByRole('heading', { name: 'Calibrate Lantern' })).toBeInTheDocument();
+    await user.click(screen.getByRole('link', { name: 'Signal Glossary' }));
+    expect(router.state.location.pathname).toBe('/games/clockwork/reference/momentum');
+    expect(screen.getByRole('dialog', { name: 'Signal Glossary' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Calibrate Lantern' })).toBeInTheDocument();
   });
 
   it.each(['/games/unknown', '/games/clockwork/procedures/unknown', '/games/clockwork/reference/unknown'])('preserves not-found behavior for %s', route => {

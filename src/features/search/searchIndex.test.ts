@@ -3,7 +3,7 @@ import { contentRegistry } from '../../content/bundled-content';
 import { createSearchIndex, searchContent } from './searchIndex';
 
 const index = createSearchIndex(contentRegistry);
-describe('local search index', () => {
+describe('Ironsworn search regressions', () => {
   it('ranks exact titles before supporting-text matches', () => {
     expect(searchContent(index, 'Action Roll', 'ironsworn')[0]).toMatchObject({ kind: 'Procedure', path: '/games/ironsworn/procedures/action-roll' });
     expect(searchContent(index, 'Momentum', 'ironsworn')[0]).toMatchObject({ kind: 'Reference', title: 'Momentum' });

@@ -20,7 +20,7 @@ describe('multi-game content loading', () => {
     const registry = loadContentRegistry(combinedSources);
     expect(registry.games.map(game => game.details.id)).toEqual(expect.arrayContaining(['clockwork', 'ironsworn']));
     expect(loadContentRegistry(productionSources).getGame('ironsworn')).toBeDefined();
-    expect(registry.getGame('clockwork')?.procedures.size).toBe(2);
+    expect(registry.getGame('clockwork')?.procedures.size).toBe(3);
     expect(registry.getGame('clockwork')?.references.size).toBe(1);
   });
 
@@ -40,6 +40,23 @@ describe('multi-game content loading', () => {
     expect(resolveSource(clockwork.details.source, clockwork.procedures.get('decode-signal')!.source).licensing).toBe(clockwork.details.source.licensing);
     expect(resolveSource(clockwork.details.source, clockwork.references.get('momentum')!.source).licensing.license.name).toBe('Glossary Test License');
     expect(resolveSource(ironsworn.details.source, ironsworn.references.get('momentum')!.source).licensing.license.name).toContain('Creative Commons');
+  });
+
+  it('accepts decisions with more than three outcomes', () => {
+    const procedure = loadContentRegistry(combinedSources).getProcedure('clockwork', 'momentum')!;
+    expect(procedure.nodes).toContainEqual(expect.objectContaining({ id: 'color', type: 'decision' }));
+    expect(procedure.edges.filter(edge => edge.from === 'color')).toHaveLength(4);
+  });
+
+  it('keeps same-ID procedures and references in distinct routes and search results', () => {
+    const registry = loadContentRegistry(combinedSources);
+    const procedure = registry.getProcedure('clockwork', 'momentum')!;
+    const reference = registry.getReference('clockwork', 'momentum')!;
+    expect(procedure.title).toBe('Calibrate Lantern');
+    expect(reference.title).toBe('Signal Glossary');
+    const index = createSearchIndex(registry);
+    expect(searchContent(index, procedure.title, 'clockwork')).toContainEqual(expect.objectContaining({ kind: 'Procedure', path: '/games/clockwork/procedures/momentum' }));
+    expect(searchContent(index, reference.title, 'clockwork')).toContainEqual(expect.objectContaining({ kind: 'Reference', path: '/games/clockwork/reference/momentum' }));
   });
 
   it('indexes both games, keeps matching titles distinct, and filters scope reversibly', () => {

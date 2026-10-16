@@ -23,6 +23,7 @@ sections:
     items:
       - procedure: gather-information
       - procedure: decode-signal
+      - procedure: momentum
   - id: references
     title: References
     items:

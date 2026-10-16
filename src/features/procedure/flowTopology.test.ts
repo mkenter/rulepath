@@ -10,7 +10,7 @@ function fixture(procedureId: keyof typeof topology): Procedure {
 }
 
 describe('procedure flow topology', () => {
-  it('orders every production procedure without dropping nodes or forward edges', () => {
+  it('orders the Ironsworn procedures without dropping nodes or forward edges', () => {
     const game = contentRegistry.getGame('ironsworn');
     expect(game).toBeDefined();
 
