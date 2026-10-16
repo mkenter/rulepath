@@ -1,0 +1,15 @@
+id: momentum
+title: Signal Glossary
+summary: Copper marks are imaginary symbols used in the archive.
+source:
+  section: Glossary
+  overrides:
+    licensing:
+      copyright: Copyright 2026 Imaginary Glossary Editor (fictional)
+      license:
+        name: Glossary Test License
+        url: https://example.com/glossary-license
+      attribution: Original synthetic glossary by Imaginary Glossary Editor.
+      adaptation: Written solely for Rulepath tests.
+related:
+  - procedure: decode-signal

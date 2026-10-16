@@ -11,7 +11,7 @@ function renderRoute(route: string) {
   return { router, ...render(<RouterProvider router={router} />) };
 }
 describe('application routes', () => {
-  it('opens the single library entry and exposes all canonical resources', async () => {
+  it('opens the Ironsworn library entry and exposes all canonical resources', async () => {
     const user = userEvent.setup();
     renderRoute('/');
     expect(screen.getByRole('link', { name: 'Rulepath library' })).toBeInTheDocument();

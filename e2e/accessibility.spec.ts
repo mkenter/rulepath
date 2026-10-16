@@ -235,7 +235,7 @@ test('reduced motion removes nonessential transitions without removing state fee
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
 
-  const game = page.locator('[data-library-game]');
+  const game = page.locator('[data-library-game][href="/games/ironsworn"]');
   const transitionDuration = await game.evaluate((element) =>
     getComputedStyle(element, '::after').transitionDuration,
   );

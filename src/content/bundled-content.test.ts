@@ -4,8 +4,19 @@ import { contentRegistry } from './bundled-content';
 import { resolveSource } from './registry';
 
 describe('production content', () => {
-  it('loads only the Ironsworn SRD sample and lists every resource exactly once', () => {
-    expect(contentRegistry.games.map(game => game.details.id)).toEqual(['ironsworn']);
+  it('registers unique games and resolves every listed section item', () => {
+    const ids = contentRegistry.games.map(game => game.details.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const game of contentRegistry.games) {
+      const paths = game.sections.flatMap(section => section.items.map(item => 'procedure' in item ? `procedures/${item.procedure}` : `reference/${item.reference}`));
+      expect(new Set(paths).size).toBe(paths.length);
+      expect(paths).toHaveLength(game.procedures.size + game.references.size);
+      for (const procedure of game.procedures.values()) expect(contentRegistry.getProcedure(game.details.id, procedure.id)).toBe(procedure);
+      for (const reference of game.references.values()) expect(contentRegistry.getReference(game.details.id, reference.id)).toBe(reference);
+    }
+  });
+  it('preserves the Ironsworn SRD sample and lists its resources exactly once', () => {
+    expect(contentRegistry.getGame('ironsworn')).toBeDefined();
     const game = contentRegistry.getGame('ironsworn')!;
     expect(game.procedures.size).toBe(5);
     expect(game.references.size).toBe(6);
@@ -41,11 +52,16 @@ describe('production content', () => {
     expect(game.references.get('price-table')?.summary).toContain('99-00');
     expect(game.references.get('oracle-options')?.summary).toContain('four options');
   });
-  it('indexes all resources with unique canonical paths', () => {
+  it('indexes every registered resource with unique canonical paths', () => {
     const index = createSearchIndex(contentRegistry);
-    expect(index).toHaveLength(12);
-    expect(new Set(index.map(document => document.path)).size).toBe(12);
-    expect(searchContent(index, 'Gather Information')[0]?.path).toBe('/games/ironsworn/procedures/gather-information');
-    expect(index.every(document => document.gameId === 'ironsworn')).toBe(true);
+    expect(index).toHaveLength(contentRegistry.games.reduce((count, game) => count + 1 + game.procedures.size + game.references.size, 0));
+    expect(new Set(index.map(document => document.path)).size).toBe(index.length);
+    expect(searchContent(index, 'Gather Information', 'ironsworn')[0]?.path).toBe('/games/ironsworn/procedures/gather-information');
+    for (const game of contentRegistry.games) {
+      const prefix = `/games/${game.details.id}`;
+      expect(index.map(document => document.path)).toContain(prefix);
+      for (const procedure of game.procedures.values()) expect(index.map(document => document.path)).toContain(`${prefix}/procedures/${procedure.id}`);
+      for (const reference of game.references.values()) expect(index.map(document => document.path)).toContain(`${prefix}/reference/${reference.id}`);
+    }
   });
 });

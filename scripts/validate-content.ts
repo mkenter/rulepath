@@ -1,157 +1,50 @@
-import { readdir, readFile } from "node:fs/promises";
-import path from "node:path";
+import { readdir, readFile } from 'node:fs/promises';
+import path from 'node:path';
 
-import {
-  parseCrosslinks,
-  parseGameDocument,
-  parseProcedure,
-  parseReference,
-} from "../src/content/parser";
-import {
-  createContentRegistry,
-  type ContentBundle,
-} from "../src/content/registry";
-import type { Crosslinks } from "../src/content/schema";
+import { loadContentRegistry, type ContentSources } from '../src/content/load-content';
 
-async function yamlFiles(directory: string): Promise<string[]> {
-  const entries = await readdir(directory, { withFileTypes: true });
-  return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".yaml"))
-    .map((entry) => path.join(directory, entry.name))
-    .sort();
-}
-
-async function loadContentBundle(directory: string): Promise<ContentBundle> {
-  const gamePath = path.join(directory, "game.yaml");
-  const game = parseGameDocument(await readFile(gamePath, "utf8"), gamePath);
-  const procedurePaths = await yamlFiles(path.join(directory, "procedures"));
-  const referencePaths = await yamlFiles(path.join(directory, "reference"));
-
-  return {
-    game,
-    procedures: await Promise.all(
-      procedurePaths.map(async (filePath) =>
-        parseProcedure(await readFile(filePath, "utf8"), filePath),
-      ),
-    ),
-    references: await Promise.all(
-      referencePaths.map(async (filePath) =>
-        parseReference(await readFile(filePath, "utf8"), filePath),
-      ),
-    ),
-  };
-}
-
-async function contentDirectories(): Promise<string[]> {
-  const root = path.resolve("content");
-  const entries = await readdir(root, { withFileTypes: true });
-  return entries
-    .filter((entry) => entry.isDirectory() && entry.name !== "fixtures")
-    .map((entry) => path.join(root, entry.name))
-    .sort();
+async function readSources(directories: string[]): Promise<ContentSources> {
+  const sources: ContentSources = { games: {}, procedures: {}, references: {}, crosslinks: {} };
+  for (const directory of directories) {
+    const root = `content/${directory}`;
+    for (const [key, child] of [['games', 'game.yaml'], ['crosslinks', 'crosslinks.yaml']] as const) {
+      const name = `${root}/${child}`;
+      sources[key][name] = await readFile(name, 'utf8');
+    }
+    for (const [key, child] of [['procedures', 'procedures'], ['references', 'reference']] as const) {
+      const folder = `${root}/${child}`;
+      const entries = await readdir(folder, { withFileTypes: true });
+      for (const entry of entries) {
+        if (entry.isFile() && entry.name.endsWith('.yaml')) {
+          const name = `${folder}/${entry.name}`;
+          sources[key][name] = await readFile(name, 'utf8');
+        }
+      }
+    }
+  }
+  return sources;
 }
 
 async function main() {
-  const directories = await contentDirectories();
-  const bundles = await Promise.all(directories.map(loadContentBundle));
-  const registry = createContentRegistry(bundles);
-  const crosslinksByGame = new Map<string, Crosslinks>();
-
-  for (let index = 0; index < directories.length; index += 1) {
-    const directory = directories[index]!;
-    const gameId = bundles[index]!.game.game.id;
-    const crosslinksPath = path.join(directory, "crosslinks.yaml");
-    crosslinksByGame.set(
-      gameId,
-      parseCrosslinks(await readFile(crosslinksPath, "utf8"), crosslinksPath),
-    );
-  }
-
-  const crosslinkIssues: string[] = [];
-  const presentationWarnings: string[] = [];
-
+  const root = path.resolve('content');
+  const entries = await readdir(root, { withFileTypes: true });
+  const directories = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
+  const registry = loadContentRegistry(await readSources(directories));
+  const warnings: string[] = [];
   for (const game of registry.games) {
-    const crosslinks = crosslinksByGame.get(game.details.id);
-    if (!crosslinks) {
-      crosslinkIssues.push(`missing crosslinks for game "${game.details.id}"`);
-      continue;
-    }
-
     for (const procedure of game.procedures.values()) {
       for (const node of procedure.nodes) {
-        if (node.type !== "decision") continue;
-        const outcomes = procedure.edges.filter(
-          (edge) => edge.from === node.id,
-        );
+        if (node.type !== 'decision') continue;
+        const outcomes = procedure.edges.filter((edge) => edge.from === node.id);
         if (outcomes.length <= 3) continue;
-        presentationWarnings.push(
-          `${game.details.id}/${procedure.title} (${procedure.id}) decision "${node.label}" (${node.id}) has ${outcomes.length} outcomes: ${outcomes
-            .map((edge) => `${edge.label ?? "Unlabelled"} -> ${edge.to}`)
-            .join("; ")}`,
-        );
-      }
-
-      const declaredTargets = crosslinks[procedure.id];
-      const actualTargets = [
-        ...new Set(
-          procedure.nodes
-            .filter((node) => node.type === "procedure")
-            .map((node) => node.target),
-        ),
-      ].sort();
-
-      if (!declaredTargets) {
-        crosslinkIssues.push(
-          `${game.details.id}: missing crosslink entry for procedure "${procedure.id}"`,
-        );
-        continue;
-      }
-
-      const sortedDeclaredTargets = [...declaredTargets].sort();
-      if (
-        JSON.stringify(sortedDeclaredTargets) !== JSON.stringify(actualTargets)
-      ) {
-        crosslinkIssues.push(
-          `${game.details.id}: procedure "${procedure.id}" declares [${sortedDeclaredTargets.join(", ")}] but links [${actualTargets.join(", ")}]`,
-        );
-      }
-    }
-
-    for (const procedureId of Object.keys(crosslinks)) {
-      if (!game.procedures.has(procedureId)) {
-        crosslinkIssues.push(
-          `${game.details.id}: crosslinks contains unknown procedure "${procedureId}"`,
-        );
+        warnings.push(`${game.details.id}/${procedure.title} (${procedure.id}) decision "${node.label}" (${node.id}) has ${outcomes.length} outcomes: ${outcomes.map((edge) => `${edge.label ?? 'Unlabelled'} -> ${edge.to}`).join('; ')}`);
       }
     }
   }
-
-  if (crosslinkIssues.length) {
-    throw new Error(
-      `Crosslink validation failed:\n${crosslinkIssues.map((issue) => `- ${issue}`).join("\n")}`,
-    );
-  }
-
-  if (presentationWarnings.length) {
-    console.warn(
-      `Flow presentation warnings (>3 outcomes require authored presentation metadata):\n${presentationWarnings
-        .map((warning) => `- ${warning}`)
-        .join("\n")}`,
-    );
-  }
-
-  const procedureCount = registry.games.reduce(
-    (count, game) => count + game.procedures.size,
-    0,
-  );
-  const referenceCount = registry.games.reduce(
-    (count, game) => count + game.references.size,
-    0,
-  );
-
-  console.log(
-    `Validated ${registry.games.length} games, ${procedureCount} procedures, and ${referenceCount} references.`,
-  );
+  if (warnings.length) console.warn(`Flow presentation warnings (>3 outcomes require authored presentation metadata):\n${warnings.map((warning) => `- ${warning}`).join('\n')}`);
+  const procedures = registry.games.reduce((count, game) => count + game.procedures.size, 0);
+  const references = registry.games.reduce((count, game) => count + game.references.size, 0);
+  console.log(`Validated ${registry.games.length} games, ${procedures} procedures, and ${references} references.`);
 }
 
 main().catch((error: unknown) => {

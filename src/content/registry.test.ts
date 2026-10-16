@@ -103,6 +103,10 @@ describe('content registry', () => {
     ).toThrow(/duplicate procedure ID/);
   });
 
+  it('rejects an ID shared by a procedure and reference in the same game', () => {
+    expect(() => createContentRegistry([bundle({ references: [{ ...reference, id: 'overview' }] })])).toThrow(/duplicate resource ID "overview" across procedures and references/);
+  });
+
   it('rejects broken edges and unreachable nodes', () => {
     const broken: Procedure = {
       ...procedure,

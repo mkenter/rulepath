@@ -225,6 +225,9 @@ export function createContentRegistry(bundles: readonly ContentBundle[]): Conten
 
     const references = new Map<string, Reference>();
     for (const reference of bundle.references) {
+      if (procedures.has(reference.id)) {
+        issues.push(`${gameId}: duplicate resource ID "${reference.id}" across procedures and references`);
+      }
       if (references.has(reference.id)) {
         issues.push(`${gameId}: duplicate reference ID "${reference.id}"`);
       } else {

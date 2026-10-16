@@ -115,7 +115,7 @@ test('library presents a flat editorial catalog with tailored interaction states
   await page.goto('/');
   await expect(page).toHaveTitle('Library | Rulepath');
   await expect(page.getByRole('link', { name: 'Rulepath library' })).toBeVisible();
-  const gameRow = page.locator('[data-library-game]');
+  const gameRow = page.locator('[data-library-game][href="/games/ironsworn"]');
 
   const rest = await gameRow.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -191,7 +191,8 @@ test('library catalog fixture scales to adjacent entries and long phone content'
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
-  await page.locator('[data-library-game]').evaluate((entry) => {
+  const originalCount = await page.locator('[data-library-game]').count();
+  await page.locator('[data-library-game][href="/games/ironsworn"]').evaluate((entry) => {
     const item = entry.closest('li');
     const list = item?.parentElement;
     if (!item || !list) {
@@ -212,7 +213,7 @@ test('library catalog fixture scales to adjacent entries and long phone content'
   });
 
   const entries = page.locator('[data-library-game]');
-  await expect(entries).toHaveCount(4);
+  await expect(entries).toHaveCount(originalCount + 3);
   const geometry = await entries.evaluateAll((links) => {
     const boxes = links.map((link) => link.getBoundingClientRect());
     const titleHeights = links.map((link) =>
@@ -224,7 +225,7 @@ test('library catalog fixture scales to adjacent entries and long phone content'
       ),
       sameWidth: boxes.every((box) => Math.abs(box.width - boxes[0]!.width) <= 1),
       touchTargets: boxes.every((box) => box.height >= 44),
-      wrapsLongTitle: titleHeights[1]! > titleHeights[0]!,
+      wrapsLongTitle: titleHeights[links.findIndex((link) => link.querySelector('[data-game-title]')?.textContent === 'The Cartographer’s Exceptionally Long Field Reference')]! > titleHeights[links.findIndex((link) => link.getAttribute('href') === '/games/ironsworn')]!,
     };
   });
   expect(geometry).toEqual({
