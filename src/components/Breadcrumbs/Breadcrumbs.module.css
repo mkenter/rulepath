@@ -47,4 +47,4 @@
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
-.root a:active { color: var(--trn-brass); }
+.root a:active { color: var(--trn-text-dark-primary); }

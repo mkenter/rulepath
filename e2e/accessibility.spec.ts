@@ -62,7 +62,7 @@ test('library, contents, and scoped search remain keyboard operable', async ({ p
   await focusByKeyboard(page, procedure);
   await expect(procedure).toHaveCSS('outline-style', 'solid');
   await expect(procedure).toHaveCSS('outline-width', '2px');
-  await expect(procedure).toHaveCSS('outline-color', 'rgb(109, 85, 38)');
+  await expect(procedure).toHaveCSS('outline-color', 'rgb(38, 63, 55)');
   await expect(procedure).toHaveCSS('background-color', 'rgb(227, 233, 220)');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(entry.path);
@@ -170,6 +170,27 @@ test('primary controls retain the stronger 44px touch-target standard', async ({
     await minimum(page.getByRole('button', { name: `Close ${reference.reference.title}`, exact: true }));
   }
 });
+test('shared header uses consistent warm hover and keyboard focus states', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const headerLinks = [
+    page.getByRole('link', { name: 'Rulepath library', exact: true }),
+    page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Library', exact: true }),
+    page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Search', exact: true }),
+  ];
+  for (const link of headerLinks) {
+    await link.hover();
+    await expect(link).toHaveCSS('color', 'rgb(235, 220, 186)');
+    await expect(link).toHaveCSS('background-color', 'rgb(58, 81, 68)');
+    await page.mouse.move(0, 100);
+    await focusByKeyboard(page, link);
+    await expect(link).toHaveCSS('color', 'rgb(235, 220, 186)');
+    await expect(link).toHaveCSS('background-color', 'rgb(58, 81, 68)');
+    await expect(link).toHaveCSS('outline-color', 'rgb(223, 205, 165)');
+    await expect(link).toHaveCSS('outline-width', '2px');
+  }
+});
+
 test('Field Atlas text and focus roles meet their required contrast ratios', async ({ page }) => {
   await page.goto('/');
 
@@ -194,6 +215,11 @@ test('Field Atlas text and focus roles meet their required contrast ratios', asy
 
     return {
       brassOnShell: contrast(token('--trn-brass'), token('--trn-shell-raised')),
+      sandOnForest: contrast(token('--trn-signal'), token('--trn-forest')),
+      sandOnHeaderHover: contrast(token('--trn-signal-hover'), token('--trn-navigation-hover')),
+      focusOnHeaderHover: contrast(token('--trn-focus-on-shell'), token('--trn-navigation-hover')),
+      focusOnSand: contrast(token('--trn-focus-on-rules'), token('--trn-signal')),
+      focusOnSandHover: contrast(token('--trn-focus-on-rules'), token('--trn-signal-hover')),
       focusOnRules: contrast(token('--trn-focus-on-rules'), token('--trn-paper')),
       focusOnRulesRaised: contrast(token('--trn-focus-on-rules'), token('--trn-paper-raised')),
       focusOnShell: contrast(token('--trn-focus-on-shell'), token('--trn-shell-raised')),
@@ -212,6 +238,11 @@ test('Field Atlas text and focus roles meet their required contrast ratios', asy
   expect(ratios.shellMutedText).toBeGreaterThanOrEqual(4.5);
   expect(ratios.rulesText).toBeGreaterThanOrEqual(4.5);
   expect(ratios.rulesMutedText).toBeGreaterThanOrEqual(4.5);
+  expect(ratios.sandOnForest).toBeGreaterThanOrEqual(4.5);
+  expect(ratios.sandOnHeaderHover).toBeGreaterThanOrEqual(4.5);
+  expect(ratios.focusOnHeaderHover).toBeGreaterThanOrEqual(3);
+  expect(ratios.focusOnSand).toBeGreaterThanOrEqual(3);
+  expect(ratios.focusOnSandHover).toBeGreaterThanOrEqual(3);
   expect(ratios.brassOnShell).toBeGreaterThanOrEqual(3);
   expect(ratios.focusOnShell).toBeGreaterThanOrEqual(3);
   expect(ratios.focusOnShellHover).toBeGreaterThanOrEqual(3);

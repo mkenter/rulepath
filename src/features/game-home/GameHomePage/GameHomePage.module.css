@@ -5,7 +5,7 @@
 .breadcrumbs a:active { color: var(--trn-ink-accent); }
 .breadcrumbs > nav { margin-bottom: 12px; }
 .titleZone { padding: 30px 36px 0; background: #263f37; color: var(--trn-text-on-shell); }
-.eyebrow { margin: 0 0 18px; color: #dfd0ab; font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.14em; text-transform: uppercase; }
+.eyebrow { margin: 0 0 18px; color: var(--trn-signal); font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.14em; text-transform: uppercase; }
 .titleZone h1 { margin: 0; font-family: var(--trn-font-editorial); font-size: 4.25rem; font-weight: 500; letter-spacing: -0.035em; line-height: 1; overflow-wrap: anywhere; }
 .summary { max-width: 690px; margin: 18px 0 0; color: #e0e3d8; font-size: 1.0625rem; line-height: 1.6; }
 .metadata { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px 24px; margin-top: 26px; padding: 16px 0; border-top: 1px solid #65776b; color: #c8d2c8; font-size: 0.8125rem; line-height: 1.5; }
@@ -66,9 +66,9 @@
 .metadata { margin-top: 32px; }
 .jumpNav { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 0; padding: 28px; border: 0; background: var(--trn-signal); }
 .jumpLabel { margin: 0 0 18px; color: #30483c; font-size: .6875rem; letter-spacing: .12em; }
-.jumpNav a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 14px 0; border-top: 1px solid #a4b662; color: #263f37; font-size: .9375rem; text-decoration: none; }
+.jumpNav a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 14px 0; border-top: 1px solid var(--trn-signal-rule); color: #263f37; font-size: .9375rem; text-decoration: none; }
 .jumpNav a > span { padding-top: 2px; font-size: .6875rem; font-variant-numeric: tabular-nums; }
-.jumpNav a:hover, .jumpNav a:focus-visible { background: #e2f19c; text-decoration: underline; text-underline-offset: 4px; }
+.jumpNav a:hover, .jumpNav a:focus-visible { background: var(--trn-signal-hover); text-decoration: underline; text-underline-offset: 4px; }
 .contents { padding-top: 40px; }
 .sectionHeading { grid-template-columns: 42px minmax(0,1fr) auto; gap: 16px; padding-bottom: 16px; border-bottom: 2px solid var(--trn-forest); }
 .ordinal { align-self: stretch; display: flex; align-items: center; justify-content: center; min-height: 38px; background: var(--trn-forest); color: var(--trn-signal); font-size: .8125rem; }

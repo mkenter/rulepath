@@ -160,7 +160,7 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     await expect(procedure).toBeFocused();
     await expect(procedure).toHaveCSS('outline-style', 'solid');
     await expect(procedure).toHaveCSS('outline-width', '2px');
-    await expect(procedure).toHaveCSS('outline-color', 'rgb(109, 85, 38)');
+    await expect(procedure).toHaveCSS('outline-color', 'rgb(38, 63, 55)');
 
     for (const target of [procedure, reference]) {
       const box = await target.boundingBox();

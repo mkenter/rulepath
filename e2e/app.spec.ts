@@ -12,7 +12,7 @@ test('library presents a paper catalog with forest entries and visible interacti
   await expect(gameRow.locator('[data-game-counts]')).toBeVisible();
   await expect(gameRow).toContainText('Explore game');
   const cta = gameRow.getByText('Explore game');
-  await expect(cta).toHaveCSS('background-color', 'rgb(212, 231, 128)');
+  await expect(cta).toHaveCSS('background-color', 'rgb(223, 205, 165)');
   await expect(cta).toHaveCSS('color', 'rgb(38, 63, 55)');
 
   await gameRow.hover();
@@ -28,7 +28,7 @@ test('library presents a paper catalog with forest entries and visible interacti
   await expect(gameRow).toBeFocused();
   await expect(gameRow).toHaveCSS('outline-style', 'solid');
   await expect(gameRow).toHaveCSS('outline-width', '3px');
-  await expect(gameRow).toHaveCSS('outline-color', 'rgb(109, 85, 38)');
+  await expect(gameRow).toHaveCSS('outline-color', 'rgb(38, 63, 55)');
 });
 
 test('library catalog fixture scales to spaced entries and long phone content', async ({ page }) => {

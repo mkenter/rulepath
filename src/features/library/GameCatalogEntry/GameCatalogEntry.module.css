@@ -10,7 +10,7 @@
 .explore { display: flex; justify-content: space-between; align-items: center; min-height: 64px; padding: 16px 32px; background: var(--trn-signal); color: #263f37; font-size: .9375rem; font-weight: 650; transition: background-color var(--trn-motion-functional); }
 .explore > span { font-size: 2rem; font-weight: 400; line-height: 1; }
 .root:hover { background: #304d42; }
-.root:hover .explore, .root:focus-visible .explore { background: #e2f19c; }
+.root:hover .explore, .root:focus-visible .explore { background: var(--trn-signal-hover); }
 .root:hover .explore { text-decoration: underline; text-underline-offset: 5px; }
 .root:focus-visible { outline: 3px solid var(--trn-focus-on-rules); outline-offset: 4px; }
 .root:active { background: #1d342b; }

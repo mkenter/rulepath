@@ -20,7 +20,7 @@ body {
 }
 
 ::selection {
-  background: var(--trn-brass);
+  background: var(--trn-signal);
   color: var(--trn-surface-shell);
 }
 
