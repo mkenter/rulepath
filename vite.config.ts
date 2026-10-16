@@ -20,8 +20,8 @@ export default defineConfig({
         name: "Rulepath",
         short_name: "Rulepath",
         description: "Rulepath: connected tabletop rules procedures and references.",
-        theme_color: "#15191b",
-        background_color: "#171918",
+        theme_color: "#281d2f",
+        background_color: "#281d2f",
         display: "standalone",
         start_url: "/",
         icons: [

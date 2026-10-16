@@ -4,7 +4,7 @@
   inset: 0;
   display: flex;
   justify-content: flex-end;
-  background: rgb(15 24 21 / 38%);
+  background: var(--trn-overlay);
 }
 
 .sheet {
@@ -12,11 +12,11 @@
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
-  border-left: 1px solid var(--trn-border-paper);
-  background: var(--trn-paper);
-  color: var(--trn-text-paper-primary);
-  box-shadow: -12px 0 40px rgb(0 0 0 / 12%);
-  --trn-focus-on-shell: var(--trn-focus-on-rules);
+  border-left: 1px solid var(--trn-border-on-rules);
+  background: var(--trn-surface-reference);
+  color: var(--trn-text-on-rules);
+  box-shadow: var(--trn-shadow-sheet);
+  --trn-focus-context: var(--trn-focus-on-rules);
 }
 
 .header {
@@ -28,13 +28,13 @@
   justify-content: space-between;
   gap: 16px;
   padding: 28px 32px 22px;
-  border-bottom: 1px solid var(--trn-border-paper);
-  background: var(--trn-paper);
+  border-bottom: 1px solid var(--trn-border-on-rules);
+  background: var(--trn-surface-reference);
 }
 
 .header p {
   margin: 0 0 8px;
-  color: var(--trn-text-paper-muted);
+  color: var(--trn-text-on-rules-muted);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -56,10 +56,10 @@
   height: 44px;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid var(--trn-border-paper);
+  border: 1px solid var(--trn-border-on-rules-strong);
   border-radius: 50%;
   background: transparent;
-  color: var(--trn-text-paper-primary);
+  color: var(--trn-text-on-rules);
   cursor: pointer;
   font-size: 1.5rem;
   transition: background-color var(--trn-motion-functional);
@@ -70,7 +70,7 @@
 }
 
 .header button:active {
-  background: var(--trn-paper-muted);
+  background: var(--trn-surface-rules-muted);
 }
 
 .body {
@@ -81,7 +81,7 @@
 
 .body h2 {
   margin: 0 0 12px;
-  color: var(--trn-text-paper-muted);
+  color: var(--trn-text-on-rules-muted);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -90,7 +90,7 @@
 
 .body > section {
   padding-top: 20px;
-  border-top: 1px solid var(--trn-border-paper);
+  border-top: 1px solid var(--trn-border-on-rules);
 }
 
 .body ul {

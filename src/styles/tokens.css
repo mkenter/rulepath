@@ -1,64 +1,84 @@
 :root {
-  --trn-shell-950: #171918;
-  --trn-shell-900: #15191b;
-  --trn-shell-800: #222728;
-  --trn-shell-700: #2c3232;
-  --trn-shell-raised: #202524;
-  --trn-shell-raised-hover: #292f2e;
-  --trn-shell-raised-pressed: #181c1c;
-  --trn-paper: #f6f4ee;
-  --trn-paper-raised: #fffefa;
-  --trn-paper-muted: #eaece5;
-  --trn-paper-margin: #efede6;
-  --trn-text-dark-primary: #f3efe6;
-  --trn-text-dark-muted: #b7bcba;
-  --trn-text-paper-primary: #202427;
-  --trn-text-paper-muted: #625f58;
-  --trn-border-dark: #4d5353;
-  --trn-border-paper: #cccac0;
-  --trn-border-paper-strong: #7a8176;
-  --trn-ink-accent: #365c50;
-  --trn-ink-accent-soft: #e8eee8;
-  --trn-signal: #dfcda5;
-  --trn-signal-hover: #ebdcba;
-  --trn-signal-rule: #ad9871;
-  --trn-navigation: #1d302a;
-  --trn-navigation-selected: #30483c;
-  --trn-navigation-hover: #3a5144;
-  --trn-forest: #263f37;
-  --trn-brass: #dfcda5;
-  --trn-brass-strong: #ebdcba;
-  --trn-focus-on-shell: #dfcda5;
-  --trn-focus-on-rules: #263f37;
-  --trn-error: #d36663;
-  --trn-shadow-soft: 0 16px 40px rgb(0 0 0 / 18%);
-  --trn-shadow-paper: 0 12px 30px rgb(5 8 9 / 16%);
+  /* Quiet plum shell; coral identifies navigation without coloring every surface. */
+  --trn-surface-shell: #281d2f;
+  --trn-surface-shell-navigation: #281d2f;
+  --trn-surface-shell-instrument: #38283f;
+  --trn-surface-shell-raised: #38283f;
+  --trn-surface-shell-raised-hover: #493147;
+  --trn-surface-shell-raised-pressed: #281d2f;
+  --trn-navigation: var(--trn-surface-shell-navigation);
+  --trn-navigation-selected: #493147;
+  --trn-navigation-hover: #38283f;
+  --trn-text-on-shell: #f7f5fa;
+  --trn-text-on-shell-muted: #c3b8cb;
+  --trn-accent-on-shell: #ffaa96;
+  --trn-border-on-shell: #8a7b91;
+  --trn-border-on-shell-subtle: #59475f;
+
+  /* One vivid identity plane, always paired with dark type. */
+  --trn-surface-brand: #f26047;
+  --trn-surface-brand-hover: #ff735a;
+  --trn-surface-brand-pressed: #ed563e;
+  --trn-text-on-brand: #281d2a;
+  --trn-text-on-brand-muted: #281d2a;
+  --trn-border-on-brand: #6a322a;
+
+  /* Icy support is reserved for navigation rails, calls to action, and references. */
+  --trn-signal: #bde8eb;
+  --trn-signal-hover: #abe0e5;
+  --trn-signal-pressed: #9ad5dc;
+  --trn-text-on-signal: #223943;
+  --trn-border-on-signal: #48747b;
+  --trn-surface-reference: #e6eff1;
+
+  /* Reading surfaces stay cool and low in chroma. */
+  --trn-surface-rules: #f7f7fa;
+  --trn-surface-rules-raised: #ffffff;
+  --trn-surface-rules-muted: #eceaf1;
+  --trn-surface-rules-margin: #eceaf1;
+  --trn-text-on-rules: #292331;
+  --trn-text-on-rules-muted: #635d69;
+  --trn-border-on-rules: #d7d2da;
+  --trn-border-on-rules-strong: #827989;
+  --trn-ink-accent: #b53627;
+  --trn-ink-accent-hover: #96271d;
+  --trn-ink-accent-pressed: #7e2019;
+  --trn-ink-accent-soft: #fce8e2;
+  --trn-ink-accent-soft-hover: #f9dad1;
+  --trn-ink-accent-soft-pressed: #f6d1c6;
+
+  --trn-focus-on-shell: #ffaa96;
+  --trn-focus-on-rules: #b53627;
+  --trn-focus-on-brand: #281d2a;
+  --trn-focus-on-signal: #223943;
+  /* Shared components inherit context without redefining surface palette roles. */
+  --trn-text-context: var(--trn-text-on-shell);
+  --trn-text-context-muted: var(--trn-text-on-shell-muted);
+  --trn-border-context: var(--trn-border-on-shell);
+  --trn-accent-context: var(--trn-accent-on-shell);
+  --trn-focus-context: var(--trn-focus-on-shell);
+
+  --trn-success: #1f6e50;
+  --trn-success-soft: #e2f2e8;
+  --trn-warning: #805b0c;
+  --trn-warning-soft: #fff0c8;
+  --trn-error: #a32645;
+  --trn-error-soft: #fce7ea;
+  --trn-info: #1e657b;
+  --trn-info-soft: #e1f1f6;
+
+  /* Diagram-only hues; path labels, arrowheads, and line styles retain semantics. */
+  --trn-route-a: #166b7a;
+  --trn-route-b: #7650a3;
+  --trn-route-c: #a64a28;
+  --trn-route-return: #836013;
+  --trn-overlay: rgb(40 29 47 / 42%);
+  --trn-shadow-soft: 0 16px 40px rgb(40 29 47 / 18%);
+  --trn-shadow-paper: 0 12px 30px rgb(40 29 47 / 16%);
+  --trn-shadow-sheet: -12px 0 40px rgb(40 29 47 / 12%);
+  --trn-shadow-prompt: 0 20px 48px rgb(40 29 47 / 40%);
   --trn-content-wide: 1180px;
   --trn-content-reading: 760px;
-  --trn-route-a: #3f6075;
-  --trn-route-b: #6f4f65;
-  --trn-route-c: #754b39;
-  --trn-route-return: #6d5526;
-
-  /* Stable material roles. Palette tokens above remain available for tonal steps. */
-  --trn-surface-shell: var(--trn-shell-950);
-  --trn-surface-shell-navigation: var(--trn-shell-900);
-  --trn-surface-shell-instrument: var(--trn-shell-800);
-  --trn-surface-shell-raised: var(--trn-shell-raised);
-  --trn-surface-shell-raised-hover: var(--trn-shell-raised-hover);
-  --trn-surface-shell-raised-pressed: var(--trn-shell-raised-pressed);
-  --trn-surface-rules: var(--trn-paper);
-  --trn-surface-rules-raised: var(--trn-paper-raised);
-  --trn-surface-rules-muted: var(--trn-paper-muted);
-  --trn-surface-rules-margin: var(--trn-paper-margin);
-  --trn-text-on-shell: var(--trn-text-dark-primary);
-  --trn-text-on-shell-muted: var(--trn-text-dark-muted);
-  --trn-text-on-rules: var(--trn-text-paper-primary);
-  --trn-text-on-rules-muted: var(--trn-text-paper-muted);
-  --trn-border-on-shell: var(--trn-border-dark);
-  --trn-border-on-rules: var(--trn-border-paper);
-  --trn-border-on-rules-strong: var(--trn-border-paper-strong);
-
   --trn-font-ui: "Instrument Sans Variable", sans-serif;
   --trn-font-editorial: "Newsreader Variable", serif;
   --trn-motion-functional: 150ms ease;

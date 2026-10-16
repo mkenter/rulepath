@@ -3,7 +3,7 @@
 .header { display: grid; grid-template-columns: 1fr 0.64fr; align-items: end; gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--trn-border-on-rules-strong); }
 .eyebrow { margin: 0 0 24px; color: var(--trn-ink-accent); font-size: .6875rem; font-weight: 650; letter-spacing: .14em; text-transform: uppercase; }
 .header h1 { margin: 0 0 -14px; font-family: var(--trn-font-editorial); font-size: 7.5rem; font-weight: 500; letter-spacing: -.055em; line-height: 1; }
-.intro { padding-left: 24px; border-left: 3px solid var(--trn-forest); }
+.intro { padding-left: 24px; border-left: 3px solid var(--trn-surface-brand); }
 .summary { margin: 0; font-size: 1.5rem; line-height: 1.25; letter-spacing: -.025em; }
 .count { margin: 22px 0 0; color: var(--trn-text-on-rules-muted); font-size: .8125rem; }
 .count span { margin-right: 8px; color: var(--trn-ink-accent); font-weight: 650; font-variant-numeric: tabular-nums; }

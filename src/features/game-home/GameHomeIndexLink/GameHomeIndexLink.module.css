@@ -17,6 +17,6 @@
 
 .root { padding: 23px 18px 23px 20px; box-shadow: inset 4px 0 transparent; }
 .title { font-size: 1.625rem; }
-.root:hover, .root:focus-visible { background: #e3e9dc; box-shadow: inset 4px 0 var(--trn-ink-accent); }
+.root:hover, .root:focus-visible { background: var(--trn-ink-accent-soft); box-shadow: inset 4px 0 var(--trn-ink-accent); }
 .root:hover .title, .root:focus-visible .title { text-decoration: none; }
 .reference { padding: 16px 12px; }

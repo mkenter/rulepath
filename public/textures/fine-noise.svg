@@ -26,5 +26,5 @@
               0 0 0 0.04 0"
     />
   </filter>
-  <rect width="192" height="192" fill="#f7f1e7" filter="url(#cloth)" />
+  <rect width="192" height="192" fill="#f7f7fa" filter="url(#cloth)" />
 </svg>

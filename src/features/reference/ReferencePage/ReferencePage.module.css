@@ -4,18 +4,19 @@
   padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 32px) 64px;
 }
 .content {
+  --trn-focus-context: var(--trn-focus-on-rules);
   display: grid;
   gap: 28px;
   padding: clamp(24px, 5vw, 48px);
-  border: 1px solid var(--trn-border-paper);
-  background: var(--trn-paper);
-  color: var(--trn-text-paper-primary);
+  border: 1px solid var(--trn-border-on-rules);
+  background: var(--trn-surface-reference);
+  color: var(--trn-text-on-rules);
   box-shadow: var(--trn-shadow-paper);
 }
 .content > header {
   margin-bottom: 24px;
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--trn-border-paper-strong);
+  border-bottom: 1px solid var(--trn-border-on-rules-strong);
 }
 @media (max-width: 560px) {
   .root { padding-top: 24px; padding-bottom: 40px; }

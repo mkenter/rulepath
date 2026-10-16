@@ -1,8 +1,8 @@
 .root {
   position: relative;
   min-width: 0;
-  background: var(--trn-paper);
-  color: var(--trn-text-paper-primary);
+  background: var(--trn-surface-rules);
+  color: var(--trn-text-on-rules);
   scroll-margin-top: 112px;
 }
 
@@ -16,7 +16,7 @@
 
 .heading h2 {
   margin: 0;
-  color: var(--trn-text-paper-muted);
+  color: var(--trn-text-on-rules-muted);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -24,7 +24,7 @@
 }
 
 .heading > span {
-  color: var(--trn-text-paper-muted);
+  color: var(--trn-text-on-rules-muted);
   font-size: 0.8125rem;
 }
 
@@ -52,9 +52,9 @@
 .node {
   width: 100%;
   min-height: 54px;
-  border: 1px solid var(--trn-border-paper);
+  border: 1px solid var(--trn-border-on-rules-strong);
   border-radius: 3px;
-  background: var(--trn-paper-raised);
+  background: var(--trn-surface-rules-raised);
 }
 
 .body {
@@ -76,6 +76,12 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+.start .typeLabel,
+.decision .typeLabel,
+.end .typeLabel {
+  color: var(--trn-text-on-rules-muted);
 }
 
 .label {
@@ -106,19 +112,19 @@
   height: 6px;
   margin-right: 7px;
   border-radius: 50%;
-  background: var(--trn-ink-accent);
+  background: currentcolor;
   content: '';
 }
 
 .end {
   border: 0;
   border-top: 2px solid var(--trn-ink-accent);
-  background: var(--trn-paper-muted);
+  background: var(--trn-surface-rules-muted);
 }
 
 .decision {
-  border-color: var(--trn-border-paper-strong);
-  background: var(--trn-paper-muted);
+  border-color: var(--trn-border-on-rules-strong);
+  background: var(--trn-surface-rules-muted);
 }
 
 .decision .label {
@@ -139,8 +145,8 @@
   display: flex;
   min-height: 36px;
   align-items: stretch;
-  border-top: 1px solid var(--trn-border-paper);
-  background: var(--trn-paper-raised);
+  border-top: 1px solid var(--trn-border-on-rules);
+  background: var(--trn-surface-rules-raised);
   border-radius: 0 0 3px 3px;
 }
 
@@ -150,7 +156,7 @@
   flex: 1 1 0;
   place-items: center;
   padding: 8px 10px;
-  color: var(--trn-text-paper-muted);
+  color: var(--trn-text-on-rules-muted);
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.35;
@@ -158,7 +164,7 @@
 }
 
 .branch + .branch {
-  border-left: 1px solid var(--trn-border-paper);
+  border-left: 1px solid var(--trn-border-on-rules);
 }
 
 .left {
@@ -226,7 +232,7 @@
 
 .procedure:hover, .procedure:focus-within {
   border-color: var(--trn-ink-accent);
-  background: #dce7dc;
+  background: var(--trn-ink-accent-soft-hover);
   box-shadow: inset 3px 0 var(--trn-ink-accent);
 }
 
@@ -245,7 +251,8 @@
 }
 
 .procedure:has(.procedureLink:active) {
-  background: #ceddce;
+  color: var(--trn-ink-accent-pressed);
+  background: var(--trn-ink-accent-soft-pressed);
 }
 
 .unsupported {
@@ -253,7 +260,7 @@
   margin: 0;
   padding: 7px 10px;
   border-top: 1px solid var(--trn-error);
-  color: #7f302e;
+  color: var(--trn-error);
   font-size: 0.8125rem;
   line-height: 1.4;
 }
@@ -265,7 +272,7 @@
   width: 100%;
   height: 100%;
   overflow: visible;
-  color: var(--trn-border-paper-strong);
+  color: var(--trn-border-on-rules-strong);
   pointer-events: none;
 }
 
@@ -277,7 +284,7 @@
 }
 
 .casing {
-  stroke: var(--trn-paper);
+  stroke: var(--trn-surface-rules);
   stroke-width: 5;
 }
 
@@ -291,7 +298,7 @@
 }
 
 .markerNeutral path {
-  fill: var(--trn-border-paper-strong);
+  fill: var(--trn-border-on-rules-strong);
 }
 
 .markerRouteA path {
@@ -336,7 +343,7 @@
   font-size: 12px;
   font-weight: 600;
   paint-order: stroke;
-  stroke: var(--trn-paper);
+  stroke: var(--trn-surface-rules);
   stroke-linejoin: round;
   stroke-width: 5px;
 }
@@ -368,3 +375,7 @@
     padding-inline: 8px;
   }
 }
+
+.procedureLink:active { color: var(--trn-ink-accent-pressed); }
+
+.procedureLink .typeLabel { color: inherit; }

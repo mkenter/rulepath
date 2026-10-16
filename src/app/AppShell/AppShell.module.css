@@ -12,11 +12,11 @@
   padding: 10px 14px;
   border-radius: 8px;
   background: var(--trn-signal);
-  color: var(--trn-forest);
+  color: var(--trn-text-on-signal);
   font-weight: 700;
   transform: translateY(-150%);
 }
-.skipLink:focus { transform: translateY(0); }
+.skipLink:focus { transform: translateY(0); outline-color: var(--trn-focus-on-signal); }
 .topBar {
   position: sticky;
   z-index: 10;
@@ -25,7 +25,7 @@
   min-height: 64px;
   align-items: stretch;
   padding: 0 clamp(16px, 4vw, 32px);
-  border-bottom: 1px solid #4d6155;
+  border-bottom: 1px solid var(--trn-border-on-shell-subtle);
   background: var(--trn-navigation);
 }
 .brandLink {
@@ -54,17 +54,17 @@
   font-weight: 650;
   text-decoration: none;
 }
-.brandMark { width: 32px; height: 32px; flex-shrink: 0; overflow: visible; color: var(--trn-signal); stroke: currentcolor; stroke-width: 1.8; stroke-linecap: square; stroke-linejoin: round; }
+.brandMark { width: 32px; height: 32px; flex-shrink: 0; overflow: visible; color: var(--trn-accent-on-shell); stroke: currentcolor; stroke-width: 1.8; stroke-linecap: square; stroke-linejoin: round; }
 .brandMark circle { fill: var(--trn-navigation); }
 .main { width: 100%; }
 .brandLink, .primaryNav a { transition: background-color var(--trn-motion-functional), color var(--trn-motion-functional); }
-.primaryNav a[aria-current="page"] { color: var(--trn-signal); background: var(--trn-navigation-selected); }
+.primaryNav a[aria-current="page"] { color: var(--trn-accent-on-shell); background: var(--trn-navigation-selected); }
 .brandLink:hover, .brandLink:focus-visible,
-.primaryNav a:hover, .primaryNav a:focus-visible { background: var(--trn-navigation-hover); color: var(--trn-signal-hover); }
+.primaryNav a:hover, .primaryNav a:focus-visible { background: var(--trn-navigation-hover); color: var(--trn-accent-on-shell); }
 .brandLink:focus-visible, .primaryNav a:focus-visible { outline: 2px solid var(--trn-focus-on-shell); outline-offset: -2px; }
-.brandLink:active, .primaryNav a:active { background: var(--trn-navigation); color: var(--trn-signal); }
+.brandLink:active, .primaryNav a:active { background: var(--trn-navigation); color: var(--trn-accent-on-shell); }
 .primaryNav a::after { position: absolute; right: 16px; bottom: 0; left: 16px; height: 2px; background: transparent; content: ""; transition: background-color var(--trn-motion-functional); }
 .primaryNav a:hover::after, .primaryNav a:focus-visible::after { background: currentcolor; }
-.primaryNav a[aria-current="page"]::after { background: var(--trn-signal); }
+.primaryNav a[aria-current="page"]::after { background: var(--trn-accent-on-shell); }
 @media(max-width: 560px) { .topBar { min-height: 60px; } .primaryNav { gap: 2px; } .primaryNav a { padding-inline: 10px; } }
 @media(prefers-reduced-motion: reduce) { .brandLink, .primaryNav a, .primaryNav a::after { transition: none; } }
