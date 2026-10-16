@@ -18,7 +18,7 @@ test('registered games expose canonical contents, direct resource routes, and sc
       await expect(page.getByRole('heading', { level: 1, name: game.title, exact: true })).toBeVisible();
       const contents = page.getByRole('navigation', { name: `${game.title} contents`, exact: true });
       const resources = await contents.getByRole('link').evaluateAll(links => links.map(link => ({
-        path: link.getAttribute('href')!, title: link.textContent!,
+        path: link.getAttribute('href')!, title: link.getAttribute('aria-label')!,
       })));
       for (const resource of resources) {
         expect(resource.path).toMatch(new RegExp(`^${game.path}/(procedures|reference)/[a-z0-9]+(?:-[a-z0-9]+)*$`));

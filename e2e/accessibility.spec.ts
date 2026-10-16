@@ -60,8 +60,10 @@ test('library, contents, and scoped search remain keyboard operable', async ({ p
   await expect(page).toHaveURL(gamePath);
   const procedure = page.locator(`[data-game-home-entry][href="${entry.path}"]`);
   await focusByKeyboard(page, procedure);
-  await expect(procedure).toHaveCSS('outline-style', 'none');
-  await expect(procedure).toHaveCSS('background-color', 'rgb(41, 47, 46)');
+  await expect(procedure).toHaveCSS('outline-style', 'solid');
+  await expect(procedure).toHaveCSS('outline-width', '2px');
+  await expect(procedure).toHaveCSS('outline-color', 'rgb(109, 85, 38)');
+  await expect(procedure).toHaveCSS('background-color', 'rgb(255, 254, 250)');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(entry.path);
   await page.goBack();

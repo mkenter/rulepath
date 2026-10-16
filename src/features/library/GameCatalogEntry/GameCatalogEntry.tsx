@@ -5,36 +5,37 @@ import styles from './GameCatalogEntry.module.css';
 
 interface GameCatalogEntryProps {
   accent?: string;
+  number: number;
   procedureCount: number;
   publisher?: string;
   referenceCount: number;
+  summary?: string;
   title: string;
   to: string;
 }
 
-export function GameCatalogEntry({
-  accent,
-  procedureCount,
-  publisher,
-  referenceCount,
-  title,
-  to,
-}: GameCatalogEntryProps) {
-  const style = accent
-    ? ({ '--catalog-accent': accent } as CSSProperties)
-    : undefined;
+export function GameCatalogEntry({ accent, number, procedureCount, publisher, referenceCount, summary, title, to }: GameCatalogEntryProps) {
+  const style = accent ? ({ '--catalog-accent': accent } as CSSProperties) : undefined;
 
   return (
     <Link className={styles.root} data-library-game style={style} to={to}>
-      <span className={styles.identity}>
-        <span className={styles.title} data-game-title>{title}</span>
-        {publisher ? <span className={styles.publisher} data-game-publisher>{publisher}</span> : null}
+      <span className={styles.number} aria-hidden="true">{number.toString().padStart(2, '0')}</span>
+      <span className={styles.body}>
+        <span className={styles.identity}>
+          <span className={styles.title} data-game-title>{title}</span>
+          {publisher ? <span className={styles.publisher} data-game-publisher>{publisher}</span> : null}
+        </span>
+        {summary ? <span className={styles.summary}>{summary}</span> : null}
+        <span className={styles.footer}>
+          <span className={styles.counts} data-game-counts>
+            <span>{procedureCount} {procedureCount === 1 ? 'procedure' : 'procedures'}</span>
+            <span aria-hidden="true">/</span>
+            <span>{referenceCount} {referenceCount === 1 ? 'reference' : 'references'}</span>
+          </span>
+          <span className={styles.explore}>Explore game <span aria-hidden="true">↗</span></span>
+        </span>
       </span>
-      <span className={styles.counts} data-game-counts>
-        <span>{procedureCount} procedures</span>
-        <span className={styles.separator} aria-hidden="true">·</span>
-        <span>{referenceCount} references</span>
-      </span>
+      <span className={styles.arrow} aria-hidden="true">↗</span>
     </Link>
   );
 }

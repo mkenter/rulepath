@@ -1,87 +1,43 @@
 import { expect, test } from '@playwright/test';
 import { registry, scenarios } from './support/content';
 
-test('library presents a flat editorial catalog with tailored interaction states', async ({
-  page,
-}) => {
+test('library presents a paper catalog with forest entries and visible interaction states', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Library | Rulepath');
   await expect(page.getByRole('link', { name: 'Rulepath library' })).toBeVisible();
   const gameRow = page.locator('[data-library-game]').first();
-
-  const rest = await gameRow.evaluate((element) => {
+  await expect(gameRow).toHaveCSS('border-radius', '0px');
+  await expect(gameRow).toHaveCSS('background-color', 'rgb(38, 63, 55)');
+  await expect(gameRow.locator('[data-game-title]')).toBeVisible();
+  await expect(gameRow.locator('[data-game-counts]')).toBeVisible();
+  await expect(gameRow).toContainText('Explore game');
+  const accent = await gameRow.evaluate((element) => {
     const style = getComputedStyle(element);
-    const identity = getComputedStyle(element, '::before');
-    const rule = getComputedStyle(element, '::after');
     return {
-      background: style.backgroundColor,
-      borderRadius: style.borderRadius,
-      bottomRule: style.borderBottomColor,
-      identityColor: identity.backgroundColor,
-      accent: (style.getPropertyValue('--catalog-accent') || style.getPropertyValue('--trn-brass')).trim(),
-      identityHeight: identity.height,
-      identityWidth: identity.width,
-      ruleHeight: rule.height,
-      ruleTransform: rule.transform,
-      titleColor: getComputedStyle(
-        element.querySelector<HTMLElement>('[data-game-title]')!,
-      ).color,
+      token: (style.getPropertyValue('--catalog-accent') || style.getPropertyValue('--trn-brass')).trim(),
+      rule: getComputedStyle(element.firstElementChild!).borderTopColor,
     };
   });
-  expect(rest.borderRadius).toBe('0px');
-  expect(rest.bottomRule).toBe('rgb(77, 83, 83)');
-  const channels = rest.accent.slice(1).match(/.{2}/g)!.map(channel => Number.parseInt(channel, 16));
-  expect(rest.identityColor).toBe(`rgb(${channels.join(', ')})`);
-  expect(rest.identityHeight).toBe('24px');
-  expect(rest.identityWidth).toBe('2px');
-  expect(rest.ruleHeight).toBe('1px');
-  expect(rest.ruleTransform).not.toBe('none');
+  const channels = accent.token.slice(1).match(/.{2}/g)!.map(channel => Number.parseInt(channel, 16));
+  expect(accent.rule).toBe(`rgb(${channels.join(', ')})`);
 
   await gameRow.hover();
-  await expect.poll(() => gameRow.evaluate((element) =>
-    getComputedStyle(element, '::after').transform,
-  )).toBe('matrix(1, 0, 0, 1, 0, 0)');
-  await expect(gameRow).not.toHaveCSS('background-color', rest.background);
-  await expect.poll(() => gameRow.evaluate((element) =>
-    getComputedStyle(element, '::before').width,
-  )).toBe('3px');
-  await expect.poll(() => gameRow.locator('[data-game-title]').evaluate((element) =>
-    getComputedStyle(element).color,
-  )).not.toBe(rest.titleColor);
-
+  await expect(gameRow).toHaveCSS('background-color', 'rgb(48, 77, 66)');
   await page.mouse.down();
+  await expect(gameRow).toHaveCSS('background-color', 'rgb(29, 52, 43)');
   await page.mouse.move(0, 0);
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(24, 28, 28)');
   await page.mouse.up();
 
   await gameRow.focus();
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Tab');
   await expect(gameRow).toBeFocused();
-  await expect(gameRow).toHaveCSS('outline-style', 'none');
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(41, 47, 46)');
-  await expect.poll(() => gameRow.evaluate((element) => {
-    const identity = getComputedStyle(element, '::before');
-    return {
-      color: identity.backgroundColor,
-      height: identity.height,
-      width: identity.width,
-    };
-  })).toEqual({
-    color: 'rgb(228, 209, 154)',
-    height: '40px',
-    width: '4px',
-  });
-  await expect(gameRow.locator('[data-game-title]'))
-    .toHaveCSS('color', 'rgb(228, 209, 154)');
-  const focusRules = await gameRow.evaluate((element) => getComputedStyle(element).boxShadow);
-  expect(focusRules.match(/rgb\(228, 209, 154\)/g)).toHaveLength(2);
-  await expect.poll(() => gameRow.evaluate((element) =>
-    getComputedStyle(element, '::after').transform,
-  )).not.toBe('matrix(1, 0, 0, 1, 0, 0)');
+  await expect(gameRow).toHaveCSS('outline-style', 'solid');
+  await expect(gameRow).toHaveCSS('outline-width', '3px');
+  await expect(gameRow).toHaveCSS('outline-color', 'rgb(109, 85, 38)');
 });
 
-test('library catalog fixture scales to adjacent entries and long phone content', async ({ page }) => {
+test('library catalog fixture scales to spaced entries and long phone content', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
@@ -121,8 +77,8 @@ test('library catalog fixture scales to adjacent entries and long phone content'
       link.querySelector<HTMLElement>('[data-game-title]')!.getBoundingClientRect().height,
     );
     return {
-      adjacent: boxes.slice(1).every((box, index) =>
-        Math.abs(box.top - boxes[index]!.bottom) <= 1,
+      consistentGaps: boxes.slice(1).every((box, index) =>
+        Math.abs(box.top - boxes[index]!.bottom - 16) <= 1,
       ),
       sameWidth: boxes.every((box) => Math.abs(box.width - boxes[0]!.width) <= 1),
       touchTargets: boxes.every((box) => box.height >= 44),
@@ -130,7 +86,7 @@ test('library catalog fixture scales to adjacent entries and long phone content'
     };
   });
   expect(geometry).toEqual({
-    adjacent: true,
+    consistentGaps: true,
     sameWidth: true,
     touchTargets: true,
     wrapsLongTitle: true,
@@ -149,7 +105,7 @@ test('bundled fonts provide the editorial and UI type hierarchy without remote r
     return {
       body: style('body').fontFamily,
       gameTitle: style('[data-library-game] [data-game-title]').fontFamily,
-      pageTitle: style('[data-page-header] h1').fontFamily,
+      pageTitle: style('main h1').fontFamily,
       fontResources: performance
         .getEntriesByType('resource')
         .map((entry) => entry.name)

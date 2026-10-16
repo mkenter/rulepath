@@ -113,7 +113,7 @@ async function expectCenteredRailGeometry(page: Page) {
 }
 
 test.describe('Ironsworn authored integration and geometry regressions', () => {
-  test('game home is a flat dark editorial index with responsive columns and owned states', async ({
+  test('game home has a paper index, forest masthead, and responsive reference navigation', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1180, height: 820 });
@@ -128,20 +128,29 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     await expect(entries).toHaveCount(11);
     await expect(page.locator('[data-resource-kind="procedure"]')).toHaveCount(5);
     await expect(page.locator('[data-resource-kind="reference"]')).toHaveCount(6);
-    await expect(gameHome).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-    await expect(titleZone).toHaveCSS('border-bottom-color', 'rgb(77, 83, 83)');
-    await expect(page.locator('[data-game-home-sections]')).toHaveCSS('column-count', '2');
-    await expect(page.locator('[data-game-home-reference-list]')).toHaveCSS('column-count', '3');
+    await expect(gameHome).toHaveCSS('background-color', 'rgb(246, 244, 238)');
+    await expect(titleZone).toHaveCSS('background-color', 'rgb(38, 63, 55)');
+    const sectionColumns = page.locator('[data-game-home-sections]');
+    const mainRegion = sectionColumns.locator(':scope > div').first();
+    const referenceRegion = sectionColumns.locator(':scope > div').last();
+    await expect(referenceRegion).toHaveCSS('background-color', 'rgb(231, 235, 225)');
+    const mainBox = (await mainRegion.boundingBox())!;
+    const referenceBox = (await referenceRegion.boundingBox())!;
+    expect(referenceBox.x).toBeGreaterThan(mainBox.x + mainBox.width);
+    expect(Math.abs(referenceBox.y - mainBox.y)).toBeLessThanOrEqual(1);
+    expect(mainBox.width).toBeGreaterThan(referenceBox.width);
+    await expect(mainRegion).toContainText('2 procedures');
+    await expect(referenceRegion).toContainText('6 references');
 
     const restBackground = await procedure.evaluate((element) =>
       getComputedStyle(element).backgroundColor,
     );
     await procedure.hover();
     await expect(procedure).not.toHaveCSS('background-color', restBackground);
-    await expect(procedure).not.toHaveCSS('border-bottom-color', 'rgb(77, 83, 83)');
+    const hoverBackground = await procedure.evaluate((element) => getComputedStyle(element).backgroundColor);
 
     await page.mouse.down();
-    await expect(procedure).toHaveCSS('background-color', 'rgb(24, 28, 28)');
+    await expect(procedure).not.toHaveCSS('background-color', hoverBackground);
     await page.mouse.move(0, 0);
     await page.mouse.up();
 
@@ -149,10 +158,9 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     await page.keyboard.press('Shift+Tab');
     await page.keyboard.press('Tab');
     await expect(procedure).toBeFocused();
-    await expect(procedure).toHaveCSS('outline-style', 'none');
-    await expect(procedure).toHaveCSS('color', 'rgb(228, 209, 154)');
-    expect(await procedure.evaluate((element) => getComputedStyle(element).boxShadow))
-      .toContain('rgb(228, 209, 154)');
+    await expect(procedure).toHaveCSS('outline-style', 'solid');
+    await expect(procedure).toHaveCSS('outline-width', '2px');
+    await expect(procedure).toHaveCSS('outline-color', 'rgb(109, 85, 38)');
 
     for (const target of [procedure, reference]) {
       const box = await target.boundingBox();
@@ -160,8 +168,13 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await expect(page.locator('[data-game-home-sections]')).toHaveCSS('column-count', '1');
-    await expect(page.locator('[data-game-home-reference-list]')).toHaveCSS('column-count', '1');
+    const phoneMain = (await mainRegion.boundingBox())!;
+    const phoneReferences = (await referenceRegion.boundingBox())!;
+    expect(phoneReferences.y).toBeGreaterThanOrEqual(phoneMain.y + phoneMain.height);
+    expect(Math.abs(phoneReferences.width - phoneMain.width)).toBeLessThanOrEqual(1);
+    const sectionJump = page.getByRole('navigation', { name: 'On this page', exact: true });
+    await sectionJump.getByRole('link', { name: 'References', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'References', exact: true })).toBeFocused();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 
