@@ -21,6 +21,7 @@
   line-height: 1.5;
 }
 .links { display: grid; gap: 2px; padding-left: 0 !important; list-style: none; }
+.links li + li { border-top: 1px solid var(--trn-border-paper); }
 .links a {
   display: inline-flex;
   width: 100%;
@@ -28,7 +29,7 @@
   align-items: center;
   padding-inline: 7px;
   border-radius: 3px;
-  color: var(--trn-text-paper-primary);
+  color: var(--trn-ink-accent);
   font-weight: 620;
   text-decoration: none;
   text-underline-offset: 4px;
@@ -39,7 +40,7 @@
     box-shadow var(--trn-motion-functional);
 }
 .links a:hover,
-.links a:focus-visible { background: rgb(255 255 255 / 28%); color: #5f481c; }
+.links a:focus-visible { background: var(--trn-ink-accent-soft); color: var(--trn-ink-accent); }
 .links a:focus-visible {
   outline: 2px solid var(--trn-focus-on-rules);
   outline-offset: 2px;

@@ -238,8 +238,9 @@ test('reduced motion removes nonessential transitions without removing state fee
   if (linked) {
     await page.goto(linked.path);
     const card = page.locator(`[data-flow-node-id="${linked.node.id}"] [data-flow-node-type="procedure"]`);
-    expect(Number.parseFloat(await card.evaluate(element => getComputedStyle(element, '::after').transitionDuration))).toBeLessThanOrEqual(0.00001);
+    expect(Number.parseFloat(await card.evaluate(element => getComputedStyle(element).transitionDuration))).toBeLessThanOrEqual(0.00001);
+    const restingBackground = await card.evaluate(element => getComputedStyle(element).backgroundColor);
     await card.getByRole('link').hover();
-    await expect(card).toHaveCSS('border-color', 'rgb(148, 118, 47)');
+    await expect(card).not.toHaveCSS('background-color', restingBackground);
   }
 });

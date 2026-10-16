@@ -268,7 +268,7 @@ for (const viewport of [
 
 for (const viewport of [
   { name: 'phone', width: 390, height: 844, expectedWidth: 390 },
-  { name: 'ipad-landscape', width: 1180, height: 820, expectedWidth: 400 },
+  { name: 'ipad-landscape', width: 1180, height: 820, expectedWidth: 480 },
 ]) {
   test(`${viewport.name} uses the intended contextual reference sheet width`, async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });

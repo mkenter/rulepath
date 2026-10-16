@@ -69,7 +69,7 @@ export function ReferenceSheet() {
       >
         <header className={styles.header}>
           <div>
-            <p>Reference</p>
+            <p>{game.details.title} · Reference</p>
             <h1 id="reference-sheet-title">{reference.title}</h1>
           </div>
           <button ref={closeButtonRef} type="button" onClick={close} aria-label={`Close ${reference.title}`}>

@@ -117,13 +117,5 @@
 @media (max-width: 560px) {
   .topBar { min-height: 56px; }
   .brandLink { font-size: 1rem; }
-  .brandLink > span:last-child {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-  }
   .primaryNav a { padding-inline: 2px; }
 }

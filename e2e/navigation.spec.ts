@@ -67,3 +67,41 @@ test('search has removable scope and browser-history-safe results', async ({ pag
   await page.getByRole('searchbox').fill(absent);
   await expect(results.getByRole('link')).toHaveCount(0);
 });
+
+for (const width of [390, 820]) {
+  test(`${width}px section jumps preserve invocation history, keyboard focus, and sheet context`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const linked = scenarios.procedureLinks.find(entry => {
+      const target = entry.game.procedures.get(entry.node.target);
+      return target?.keyRules.length && target.references.length;
+    });
+    test.skip(!linked, 'No linked procedure with supporting rules and references.');
+    await page.goto(linked!.path);
+    await page.locator(`[data-flow-node-id="${linked!.node.id}"]`).getByRole('link').click();
+    const initialHistory = await page.evaluate(() => window.history.length);
+    const nav = page.getByRole('navigation', { name: 'On this page' });
+    await nav.getByRole('link', { name: 'Key rules', exact: true }).focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#key-rules')).toBeFocused();
+    const keyBounds = await page.locator('#key-rules').boundingBox();
+    const navBounds = await nav.boundingBox();
+    expect(keyBounds!.y).toBeGreaterThanOrEqual(navBounds!.y + navBounds!.height);
+    await nav.getByRole('link', { name: 'References', exact: true }).click();
+    await expect(page.locator('#references')).toBeFocused();
+    const referenceLink = page.locator('#references a').first();
+    await referenceLink.click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(dialog).toHaveCount(0);
+    await expect(referenceLink).toBeFocused();
+    await page.getByRole('link', { name: 'Back to procedure' }).click();
+    await expect(page.locator('#procedure-flow')).toBeFocused();
+    await expect(page).toHaveURL(linked!.targetPath);
+    // Closing the sheet goes Back to the original history entry; section jumps add none.
+    expect(await page.evaluate(() => window.history.length)).toBe(initialHistory + 1);
+    await page.goBack();
+    await expect(page).toHaveURL(linked!.path);
+  });
+}

@@ -21,6 +21,7 @@ export function InvocationPath({ path }: InvocationPathProps) {
   return (
     <>
       <nav className={`${styles.root} ${styles.wide}`} aria-label="Invocation path">
+        <span className={styles.caption}>Opened from</span>
         <ol><PathItems path={path} /></ol>
       </nav>
       <nav className={`${styles.root} ${styles.compact}`} aria-label="Procedure path controls">

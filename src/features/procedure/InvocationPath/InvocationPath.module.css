@@ -1,8 +1,21 @@
 .root {
-  margin: -8px 0 16px;
-  color: var(--trn-text-dark-muted);
+  margin: -8px 0 20px;
+  color: var(--trn-text-paper-muted);
   font-size: 0.875rem;
 }
+
+.wide {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.caption {
+  font-size: 0.75rem;
+  color: var(--trn-text-paper-muted);
+}
+
 .root ol {
   display: flex;
   flex-wrap: wrap;
@@ -12,99 +25,102 @@
   padding: 0;
   list-style: none;
 }
+
 .wide li:not(:last-child)::after {
   margin-left: 8px;
-  color: var(--trn-border-dark);
-  content: "/";
+  color: var(--trn-text-paper-muted);
+  content: '→';
 }
+
 .root a {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
-  color: var(--trn-text-dark-primary);
+  color: var(--trn-ink-accent);
   text-underline-offset: 4px;
-  transition:
-    border-color var(--trn-motion-functional),
-    background-color var(--trn-motion-functional),
-    color var(--trn-motion-functional),
-    box-shadow var(--trn-motion-functional);
 }
-.root a:hover { color: var(--trn-brass-strong); }
-.root a:active { color: var(--trn-brass); }
-.root [aria-current="page"] { color: var(--trn-brass-strong); font-weight: 700; }
-.compact { display: none; }
+
+.root a:hover {
+  color: var(--trn-text-paper-primary);
+}
+
+.root [aria-current='page'] {
+  color: var(--trn-text-paper-primary);
+  font-weight: 600;
+}
+
+.compact {
+  display: none;
+}
 
 @media (max-width: 560px) {
-  .wide { display: none; }
+  .wide {
+    display: none;
+  }
   .compact {
     display: flex;
-    min-height: 48px;
+    min-height: 44px;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    margin-bottom: 12px;
   }
   .backLink {
-    overflow: hidden;
-    max-width: calc(100% - 80px);
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    min-width: 0;
+    gap: 6px;
   }
-  .menu { position: relative; }
+  .menu {
+    position: relative;
+    flex: 0 0 auto;
+  }
   .menu summary {
     display: grid;
     min-width: 56px;
     min-height: 44px;
     place-items: center;
-    border: 1px solid var(--trn-border-dark);
-    border-radius: 9px;
-    color: var(--trn-text-dark-primary);
+    border: 1px solid var(--trn-border-paper);
+    border-radius: 4px;
+    color: var(--trn-ink-accent);
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 600;
     list-style: none;
-    transition:
-      border-color var(--trn-motion-functional),
-      background-color var(--trn-motion-functional),
-      color var(--trn-motion-functional),
-      box-shadow var(--trn-motion-functional);
   }
-  .menu summary::-webkit-details-marker { display: none; }
-  .menu summary:focus-visible {
-    border-color: var(--trn-focus-on-shell);
-    box-shadow: inset 0 0 0 2px var(--trn-focus-on-shell);
-    outline: none;
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu summary:hover {
+    background: var(--trn-ink-accent-soft);
   }
   .sheet {
     position: absolute;
-    z-index: 5;
+    z-index: 6;
     top: calc(100% + 8px);
     right: 0;
-    width: min(320px, calc(100vw - 32px));
+    width: min(320px, calc(100vw - 40px));
     padding: 16px;
-    border: 1px solid var(--trn-border-paper-strong);
-    border-radius: 12px;
-    background: var(--trn-paper);
-    box-shadow: 0 16px 36px rgb(0 0 0 / 32%);
-    color: var(--trn-text-paper-primary);
+    border: 1px solid var(--trn-border-paper);
+    border-radius: 4px;
+    background: var(--trn-paper-raised);
+    box-shadow: var(--trn-shadow-soft);
   }
   .sheet p {
     margin: 0 0 8px;
-    color: var(--trn-text-paper-muted);
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-  .sheet ol { display: grid; align-items: stretch; gap: 0; }
-  .sheet li + li { border-top: 1px solid var(--trn-border-paper); }
-  .sheet a,
-  .sheet [aria-current="page"] {
+  .sheet ol {
+    display: grid;
+    align-items: stretch;
+    gap: 0;
+  }
+  .sheet li + li {
+    border-top: 1px solid var(--trn-border-paper);
+  }
+  .sheet a, .sheet [aria-current='page'] {
     display: flex;
     min-height: 44px;
     align-items: center;
-    color: var(--trn-text-paper-primary);
-  }
-  .sheet a:focus-visible {
-    outline: 2px solid var(--trn-focus-on-rules);
-    outline-offset: 2px;
   }
 }

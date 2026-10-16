@@ -517,8 +517,8 @@ function FlowConnectors({
             id={`${markerId}-${tone}`}
             key={tone}
             data-flow-marker-tone={tone}
-            markerHeight="7"
-            markerWidth="7"
+            markerHeight="5"
+            markerWidth="5"
             orient="auto-start-reverse"
             refX="6"
             refY="3.5"
@@ -565,6 +565,7 @@ function NodeCard({
   routeTones,
 }: NodeCardProps) {
   const targetTitle = node.type === 'procedure' ? procedureTitles.get(node.target) : undefined;
+  const labelParts = node.label.match(/^([^:]{1,60}:)([\s\S]*)$/);
   const currentEntry: InvocationEntry = {
     gameId,
     procedureId: procedure.id,
@@ -613,10 +614,23 @@ function NodeCard({
               }),
             }}
           >
-            {node.label} <span aria-hidden="true">→</span>
+            <span>
+              <span className={styles.typeLabel} aria-hidden="true">Open procedure</span>
+              {node.label}
+            </span>
+            <span className={styles.linkArrow} aria-hidden="true">↗</span>
           </Link>
         ) : (
-          <p className={styles.label} data-flow-node-label>{node.label}</p>
+          <>
+            {node.type !== 'step' ? (
+              <span className={styles.typeLabel} aria-hidden="true">
+                {node.type === 'start' ? 'Start' : node.type === 'end' ? 'Finish' : 'Decision'}
+              </span>
+            ) : null}
+            <p className={styles.label} data-flow-node-label>
+              {labelParts ? <><strong>{labelParts[1]}</strong>{labelParts[2]}</> : node.label}
+            </p>
+          </>
         )}
       </div>
       {node.type === 'decision' && decisionBranches.length > 3 ? (
@@ -682,7 +696,11 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
   const flowStyle = { '--flow-gutter': `${gutterWidth}px` } as CSSProperties;
 
   return (
-    <section className={styles.root} data-procedure-diagram aria-label={`${procedure.title} procedure flow`}>
+    <section className={styles.root} id="procedure-flow" tabIndex={-1} data-procedure-diagram aria-label={`${procedure.title} procedure flow`}>
+      <div className={styles.heading}>
+        <h2>Procedure</h2>
+        <span>Follow the arrows</span>
+      </div>
       <ol className={styles.list} data-flow-list data-rail-depth={railDepth} ref={listRef} style={flowStyle}>
         <FlowConnectors
           containerRef={listRef}
