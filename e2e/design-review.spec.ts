@@ -1,7 +1,10 @@
 import { mkdir } from "node:fs/promises";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
-const outputDir = "artifacts/screenshots";
+const outputDir = process.env.SCREENSHOT_DIR ?? "artifacts/screenshots";
+
+// Avoid capturing a section jump or locator auto-scroll halfway through motion.
+test.use({ reducedMotion: 'reduce' });
 
 const viewports = {
   phone: { width: 390, height: 844 },
@@ -70,6 +73,17 @@ test("Ironsworn authored visual review: capture the known graph and sheet scenar
       await page.goto(route!);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       await capture(page, `${name}-${viewportName}`, viewport);
+      if (route!.includes('/procedures/')) {
+        await page.screenshot({
+          path: `${outputDir}/${name}-${viewportName}-full.png`,
+          fullPage: true,
+          animations: 'disabled',
+        });
+        await page.locator('[data-procedure-diagram]').screenshot({
+          path: `${outputDir}/${name}-${viewportName}-flow.png`,
+          animations: 'disabled',
+        });
+      }
     }
     await page.goto("/games/ironsworn/procedures/gather-information");
     await page.getByRole("link", { name: "Momentum", exact: true }).click();
@@ -82,4 +96,10 @@ test("Ironsworn authored visual review: capture the known graph and sheet scenar
   await capture(page, "procedure-hover", viewports.ipadLandscape);
   await focusByKeyboard(page, link);
   await capture(page, "procedure-focus", viewports.ipadLandscape);
+  await link.click();
+  await page.getByRole('heading', { level: 1, name: 'Action Roll', exact: true }).waitFor();
+  await capture(page, 'invocation-desktop', viewports.desktop);
+  await capture(page, 'invocation-phone', viewports.phone);
+  await page.getByRole('navigation', { name: 'On this page' }).getByRole('link', { name: 'References' }).click();
+  await capture(page, 'support-phone', viewports.phone);
 });
