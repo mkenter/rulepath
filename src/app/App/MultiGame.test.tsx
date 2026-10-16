@@ -8,7 +8,9 @@ import { combinedSources } from '../../../tests/fixtures/sources';
 import { testRegisteredGameRoutes } from '../../../tests/registered-game-routes';
 
 vi.mock('../../content/bundled-content', () => ({ contentRegistry: registry }));
-const registry = loadContentRegistry(combinedSources);
+const loaded = loadContentRegistry(combinedSources);
+// Exercise the same contracts with a different library order.
+const registry = { ...loaded, games: [...loaded.games].reverse() };
 const { AppRoutes } = await import('./AppRoutes');
 
 function renderRoute(route: string) {
@@ -18,7 +20,7 @@ function renderRoute(route: string) {
 
 testRegisteredGameRoutes(registry, renderRoute);
 
-describe('multi-game application routes', () => {
+describe('Clockwork and Ironsworn collision integration regressions', () => {
   it('lists both games and resolves each section to its own resources', async () => {
     const user = userEvent.setup();
     renderRoute('/');

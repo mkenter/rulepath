@@ -52,7 +52,7 @@ test.beforeAll(async () => {
   await mkdir(outputDir, { recursive: true });
 });
 
-test("capture application screenshots", async ({ page }) => {
+test("Ironsworn authored visual review: capture the known graph and sheet scenarios", async ({ page }) => {
   test.setTimeout(120_000);
   const routes = [
     ["library", "/"],

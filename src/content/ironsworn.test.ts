@@ -4,6 +4,18 @@ import { resolveSource } from './registry';
 import { createSearchIndex, searchContent } from '../features/search/searchIndex';
 
 describe('Ironsworn sample regressions', () => {
+  const index = createSearchIndex(contentRegistry);
+  it('ranks exact titles before supporting-text matches', () => {
+    expect(searchContent(index, 'Action Roll', 'ironsworn')[0]).toMatchObject({ kind: 'Procedure', path: '/games/ironsworn/procedures/action-roll' });
+    expect(searchContent(index, 'Momentum', 'ironsworn')[0]).toMatchObject({ kind: 'Reference', title: 'Momentum' });
+  });
+  it('indexes game titles, summaries, key rules, and node labels', () => {
+    expect(searchContent(index, 'Ironsworn')[0]?.kind).toBe('Game');
+    expect(searchContent(index, 'magnitude').some(result => result.title === 'Momentum')).toBe(true);
+    expect(searchContent(index, 'precision').some(result => result.title === 'Secure an Advantage')).toBe(true);
+    expect(searchContent(index, 'canceled').some(result => result.title === 'Action Roll')).toBe(true);
+  });
+
   it('preserves the Ironsworn SRD sample and lists its resources exactly once', () => {
     expect(contentRegistry.getGame('ironsworn')).toBeDefined();
     const game = contentRegistry.getGame('ironsworn')!;

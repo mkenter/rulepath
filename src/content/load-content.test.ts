@@ -15,7 +15,7 @@ const fixtureCrosslinks = Object.keys(fixtureSources.crosslinks)[0]!;
 const fixtureProcedure = Object.keys(fixtureSources.procedures).find(name => name.endsWith('/gather-information.yaml'))!;
 
 // The same maps that Vite discovers in production, with a separate test-only directory added.
-describe('multi-game content loading', () => {
+describe('Clockwork and Ironsworn loading fixture regressions', () => {
   it('discovers, parses, and validates both directories through the production loader', () => {
     const registry = loadContentRegistry(combinedSources);
     expect(registry.games.map(game => game.details.id)).toEqual(expect.arrayContaining(['clockwork', 'ironsworn']));

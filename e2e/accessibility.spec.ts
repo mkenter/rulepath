@@ -1,20 +1,17 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
-
-const gatherUrl = '/games/ironsworn/procedures/gather-information';
-const momentumUrl = '/games/ironsworn/reference/momentum';
+import { registry, scenarios } from './support/content';
 
 async function focusByKeyboard(page: Page, target: Locator) {
   await expect(target).toBeVisible();
-
-  for (let press = 0; press < 80; press += 1) {
+  const limit = await page.locator('a[href], button, input, summary, [tabindex]').count() + 1;
+  for (let press = 0; press < limit; press += 1) {
     await page.keyboard.press('Tab');
-    if (await target.evaluate((element) => document.activeElement === element)) {
+    if (await target.evaluate(element => document.activeElement === element)) {
       await expect(target).toBeFocused();
       return;
     }
   }
-
   throw new Error('Target was not reached through forward keyboard traversal');
 }
 
@@ -23,109 +20,105 @@ async function expectNoAxeViolations(page: Page, context?: string) {
   expect(results.violations, context).toEqual([]);
 }
 
-test('representative routes and the contextual reference sheet have no axe violations', async ({
-  page,
-}) => {
-  for (const route of [
-    '/',
-    '/games/ironsworn',
-    '/search?game=ironsworn&q=gather',
-    '/games/ironsworn/procedures/gather-information',
-    momentumUrl,
-  ]) {
+test('representative registered routes and source disclosures have no axe violations', async ({ page }) => {
+  const game = registry.games[0]!;
+  const procedure = scenarios.procedures[0];
+  const reference = scenarios.references[0];
+  const routes = ['/', `/games/${game.details.id}`, `/search?${new URLSearchParams({ game: game.details.id, q: game.details.title })}`];
+  if (procedure) routes.push(procedure.path);
+  if (reference) routes.push(reference.path);
+  for (const route of routes) {
     await page.goto(route);
     await expectNoAxeViolations(page, route);
-    if (route.includes('/procedures/') || route === momentumUrl) {
-      await page.getByText('Source and license').click();
+    if (route === procedure?.path || route === reference?.path) {
+      await page.getByText('Source and license', { exact: true }).click();
       await expectNoAxeViolations(page, `${route} source disclosure`);
     }
   }
+});
 
-  await page.goto(gatherUrl);
-  await page.getByRole('link', { name: /^Momentum/ }).click();
-  await expect(page.getByRole('dialog', { name: 'Momentum' })).toBeVisible();
+test('a registered contextual reference sheet and its disclosure have no axe violations', async ({ page }) => {
+  const entry = scenarios.referenceLinks[0]!;
+  test.skip(!entry, 'No registered procedure links to a reference; fixture-only React tests cover the sheet contract.');
+  await page.goto(entry.path);
+  await page.locator(`[href="${entry.referencePath}"]`).click();
+  const dialog = page.getByRole('dialog', { name: entry.reference.title, exact: true });
+  await expect(dialog).toBeVisible();
   await expectNoAxeViolations(page, 'contextual reference sheet');
-  await page.getByRole('dialog').getByText('Source and license').click();
+  await dialog.getByText('Source and license', { exact: true }).click();
   await expectNoAxeViolations(page, 'contextual reference sheet source disclosure');
 });
 
-test('primary journeys remain keyboard operable with modal focus containment and restoration', async ({
-  page,
-}) => {
+test('library, contents, and scoped search remain keyboard operable', async ({ page }) => {
+  const entry = scenarios.procedures[0]!;
+  test.skip(!entry, 'No registered procedures to exercise this journey.');
+  const gamePath = `/games/${entry.game.details.id}`;
+  const query = entry.procedure.title;
   await page.goto('/');
-
-  const libraryGame = page.locator('[data-library-game][href="/games/ironsworn"]');
-  await focusByKeyboard(page, libraryGame);
+  await focusByKeyboard(page, page.locator(`[data-library-game][href="${gamePath}"]`));
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL('/games/ironsworn');
-
-  const gameHomeProcedure = page.getByRole('link', { name: 'Gather Information' });
-  await focusByKeyboard(page, gameHomeProcedure);
-  await expect(gameHomeProcedure).toHaveCSS('outline-style', 'none');
-  await expect(gameHomeProcedure).toHaveCSS(
-    'background-color',
-    'rgb(41, 47, 46)',
-  );
+  await expect(page).toHaveURL(gamePath);
+  const procedure = page.locator(`[data-game-home-entry][href="${entry.path}"]`);
+  await focusByKeyboard(page, procedure);
+  await expect(procedure).toHaveCSS('outline-style', 'none');
+  await expect(procedure).toHaveCSS('background-color', 'rgb(41, 47, 46)');
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL('/games/ironsworn/procedures/gather-information');
+  await expect(page).toHaveURL(entry.path);
   await page.goBack();
-  await expect(page).toHaveURL('/games/ironsworn');
-
-  const topSearch = page.getByRole('navigation', { name: 'Primary navigation' })
-    .getByRole('link', { name: 'Search' });
+  await expect(page).toHaveURL(gamePath);
+  const topSearch = page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Search', exact: true });
   await focusByKeyboard(page, topSearch);
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL('/search?game=ironsworn');
-
-  const searchInput = page.getByRole('searchbox', {
-    name: 'Search games, procedures, and references',
-  });
-  await expect(searchInput).toBeFocused();
-  await searchInput.fill('gather');
-
-  const clearSearch = page.getByRole('button', { name: 'Clear search' });
-  await focusByKeyboard(page, clearSearch);
+  await expect(page).toHaveURL(`/search?game=${entry.game.details.id}`);
+  const input = page.getByRole('searchbox', { name: 'Search games, procedures, and references' });
+  await expect(input).toBeFocused();
+  await input.fill(query);
+  await focusByKeyboard(page, page.getByRole('button', { name: 'Clear search', exact: true }));
   await page.keyboard.press('Enter');
-  await expect(searchInput).toHaveValue('');
-  await expect(searchInput).toBeFocused();
-
-  await searchInput.fill('gather');
-  const removeScope = page.getByRole('button', {
-    name: 'Remove Ironsworn filter and search all games',
-  });
-  await focusByKeyboard(page, removeScope);
+  await expect(input).toHaveValue('');
+  await expect(input).toBeFocused();
+  await input.fill(query);
+  await focusByKeyboard(page, page.getByRole('button', { name: `Remove ${entry.game.details.title} filter and search all games`, exact: true }));
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL('/search?q=gather');
-
-  const result = page.getByRole('link', {
-    name: 'Procedure Gather Information in Ironsworn',
-  });
+  await expect(page).toHaveURL(`/search?${new URLSearchParams({ q: query })}`);
+  const result = page.getByRole('region', { name: /^\d+ results?$/ }).locator(`[href="${entry.path}"]`);
   await focusByKeyboard(page, result);
   await expect(result).toHaveCSS('outline-offset', '2px');
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL('/games/ironsworn/procedures/gather-information');
+  await expect(page).toHaveURL(entry.path);
+});
 
-  await page.goto('/games/ironsworn/procedures/gather-information');
-  const procedureLink = page.getByLabel('Procedure link: Action Roll (+wits)').getByRole('link');
-  await focusByKeyboard(page, procedureLink);
+test('registered procedure links are keyboard operable', async ({ page }) => {
+  const linked = scenarios.procedureLinks[0]!;
+  test.skip(!linked, 'No registered procedure links; synthetic renderer and React tests cover this contract.');
+  await page.goto(linked.path);
+  const link = page.locator(`[data-flow-node-id="${linked.node.id}"] [data-flow-node-type="procedure"]`).getByRole('link');
+  await focusByKeyboard(page, link);
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL('/games/ironsworn/procedures/action-roll');
+  await expect(page).toHaveURL(linked.targetPath);
+});
 
-  await page.goto(gatherUrl);
-  const decision = page.getByLabel('Decision · read only: What is the action roll result?');
+test('registered decisions remain read only', async ({ page }) => {
+  const choice = scenarios.decisions[0]!;
+  test.skip(!choice, 'No registered decision; synthetic renderer tests cover read-only decisions.');
+  await page.goto(choice.path);
+  const decision = page.locator(`[data-flow-node-id="${choice.node.id}"] [data-flow-node-type="decision"]`);
   await expect(decision).not.toHaveAttribute('tabindex');
   await expect(decision.getByRole('button')).toHaveCount(0);
+});
 
-  const momentumLink = page.getByRole('link', { name: /^Momentum/ });
-  await focusByKeyboard(page, momentumLink);
+test('reference sheets contain keyboard focus and restore it on Escape', async ({ page }) => {
+  const entry = scenarios.referenceLinks[0]!;
+  test.skip(!entry, 'No registered reference links; fixture-only React tests cover modal focus.');
+  await page.goto(entry.path);
+  const link = page.locator(`[href="${entry.referencePath}"]`);
+  await focusByKeyboard(page, link);
   await page.keyboard.press('Enter');
-
-  const dialog = page.getByRole('dialog', { name: 'Momentum' });
-  const close = page.getByRole('button', { name: 'Close Momentum' });
+  const dialog = page.getByRole('dialog', { name: entry.reference.title, exact: true });
+  const close = dialog.getByRole('button', { name: `Close ${entry.reference.title}`, exact: true });
   await expect(dialog).toBeVisible();
   await expect(close).toBeFocused();
   await expect(page.locator('[data-route-content]')).toHaveAttribute('inert', '');
-
   await page.keyboard.press('Shift+Tab');
   await expect(dialog.locator('summary')).toBeFocused();
   await page.keyboard.press('Tab');
@@ -137,49 +130,44 @@ test('primary journeys remain keyboard operable with modal focus containment and
   await page.keyboard.press('Tab');
   await expect(close).toBeFocused();
   await page.keyboard.press('Escape');
-
   await expect(dialog).toHaveCount(0);
-  await expect(momentumLink).toBeFocused();
-
-  await page.goto(momentumUrl);
+  await expect(link).toBeFocused();
+  await page.goto(entry.referencePath);
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  await expect(page.getByRole('heading', { name: 'Momentum' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: entry.reference.title, exact: true })).toBeVisible();
 });
 
 test('primary controls retain the stronger 44px touch-target standard', async ({ page }) => {
-  const expectMinimumTarget = async (target: Locator) => {
+  const minimum = async (target: Locator) => {
     const box = await target.boundingBox();
     expect(box?.width).toBeGreaterThanOrEqual(44);
     expect(box?.height).toBeGreaterThanOrEqual(44);
   };
-
   await page.goto('/');
-  await expectMinimumTarget(
-    page.getByRole('navigation', { name: 'Primary navigation' })
-      .getByRole('link', { name: 'Search' }),
-  );
-  await expectMinimumTarget(page.locator('[data-library-game][href="/games/ironsworn"]'));
-
-  await page.goto('/games/ironsworn');
-  await expectMinimumTarget(page.getByRole('link', { name: 'Gather Information' }));
-  await expectMinimumTarget(page.getByRole('link', { name: 'Momentum' }));
-
-  await page.goto('/search?game=ironsworn&q=gather');
-  await expectMinimumTarget(page.getByRole('button', { name: 'Clear search' }));
-  await expectMinimumTarget(page.getByRole('button', {
-    name: 'Remove Ironsworn filter and search all games',
-  }));
-
-  await page.goto('/games/ironsworn/procedures/gather-information');
-  await expectMinimumTarget(
-    page.getByLabel('Procedure link: Action Roll (+wits)').getByRole('link'),
-  );
-
-  await page.goto(gatherUrl);
-  await page.getByRole('link', { name: /^Momentum/ }).click();
-  await expectMinimumTarget(page.getByRole('button', { name: 'Close Momentum' }));
+  await minimum(page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Search', exact: true }));
+  await minimum(page.locator('[data-library-game]').first());
+  const entry = scenarios.procedures[0];
+  if (entry) {
+    await page.goto(`/games/${entry.game.details.id}`);
+    await minimum(page.locator(`[data-game-home-entry][href="${entry.path}"]`));
+    await page.goto(`/search?${new URLSearchParams({ game: entry.game.details.id, q: entry.procedure.title })}`);
+    await minimum(page.getByRole('button', { name: 'Clear search', exact: true }));
+    await minimum(page.getByRole('button', { name: `Remove ${entry.game.details.title} filter and search all games`, exact: true }));
+  }
+  const linked = scenarios.procedureLinks[0];
+  if (linked) {
+    await page.goto(linked.path);
+    await minimum(page.locator(`[data-flow-node-id="${linked.node.id}"] [data-flow-node-type="procedure"]`).getByRole('link'));
+  }
+  const reference = scenarios.referenceLinks[0];
+  if (reference) {
+    await page.goto(`/games/${reference.game.details.id}`);
+    await minimum(page.locator(`[data-game-home-entry][href="${reference.referencePath}"]`));
+    await page.goto(reference.path);
+    await page.locator(`[href="${reference.referencePath}"]`).click();
+    await minimum(page.getByRole('button', { name: `Close ${reference.reference.title}`, exact: true }));
+  }
 });
-
 test('Field Atlas text and focus roles meet their required contrast ratios', async ({ page }) => {
   await page.goto('/');
 
@@ -229,40 +217,29 @@ test('Field Atlas text and focus roles meet their required contrast ratios', asy
   expect(ratios.focusOnRulesRaised).toBeGreaterThanOrEqual(3);
 });
 
-test('reduced motion removes nonessential transitions without removing state feedback', async ({
-  page,
-}) => {
+test('reduced motion removes nonessential transitions without removing state feedback', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-
-  const game = page.locator('[data-library-game][href="/games/ironsworn"]');
-  const transitionDuration = await game.evaluate((element) =>
-    getComputedStyle(element, '::after').transitionDuration,
-  );
-  expect(Number.parseFloat(transitionDuration)).toBeLessThanOrEqual(0.00001);
-
-  const restBackground = await game.evaluate((element) => getComputedStyle(element).backgroundColor);
+  const game = page.locator('[data-library-game]').first();
+  expect(Number.parseFloat(await game.evaluate(element => getComputedStyle(element, '::after').transitionDuration))).toBeLessThanOrEqual(0.00001);
+  const rest = await game.evaluate(element => getComputedStyle(element).backgroundColor);
   await game.hover();
-  await expect(game).not.toHaveCSS('background-color', restBackground);
-
-  await page.goto('/games/ironsworn');
-  const gameHomeEntry = page.getByRole('link', { name: 'Gather Information' });
-  const gameHomeTransition = await gameHomeEntry.evaluate((element) =>
-    getComputedStyle(element).transitionDuration,
-  );
-  expect(Number.parseFloat(gameHomeTransition)).toBeLessThanOrEqual(0.00001);
-  const gameHomeRest = await gameHomeEntry.evaluate((element) =>
-    getComputedStyle(element).backgroundColor,
-  );
-  await gameHomeEntry.hover();
-  await expect(gameHomeEntry).not.toHaveCSS('background-color', gameHomeRest);
-
-  await page.goto('/games/ironsworn/procedures/gather-information');
-  const procedure = page.getByLabel('Procedure link: Action Roll (+wits)');
-  const procedureTransition = await procedure.evaluate((element) =>
-    getComputedStyle(element, '::after').transitionDuration,
-  );
-  expect(Number.parseFloat(procedureTransition)).toBeLessThanOrEqual(0.00001);
-  await procedure.getByRole('link').hover();
-  await expect(procedure).toHaveCSS('border-color', 'rgb(148, 118, 47)');
+  await expect(game).not.toHaveCSS('background-color', rest);
+  const entry = scenarios.procedures[0];
+  if (entry) {
+    await page.goto(`/games/${entry.game.details.id}`);
+    const row = page.locator(`[data-game-home-entry][href="${entry.path}"]`);
+    expect(Number.parseFloat(await row.evaluate(element => getComputedStyle(element).transitionDuration))).toBeLessThanOrEqual(0.00001);
+    const background = await row.evaluate(element => getComputedStyle(element).backgroundColor);
+    await row.hover();
+    await expect(row).not.toHaveCSS('background-color', background);
+  }
+  const linked = scenarios.procedureLinks[0];
+  if (linked) {
+    await page.goto(linked.path);
+    const card = page.locator(`[data-flow-node-id="${linked.node.id}"] [data-flow-node-type="procedure"]`);
+    expect(Number.parseFloat(await card.evaluate(element => getComputedStyle(element, '::after').transitionDuration))).toBeLessThanOrEqual(0.00001);
+    await card.getByRole('link').hover();
+    await expect(card).toHaveCSS('border-color', 'rgb(148, 118, 47)');
+  }
 });

@@ -10,26 +10,25 @@ function fixture(procedureId: keyof typeof topology): Procedure {
 }
 
 describe('procedure flow topology', () => {
-  it('orders the Ironsworn procedures without dropping nodes or forward edges', () => {
-    const game = contentRegistry.getGame('ironsworn');
-    expect(game).toBeDefined();
+  for (const game of contentRegistry.games) {
+    for (const procedure of game.procedures.values()) {
+      it(`orders ${game.details.id}/${procedure.id} without dropping nodes or forward edges`, () => {
+        const flow = analyzeProcedureFlow(procedure);
+        const presentation = deriveProcedurePresentationOrder(procedure, flow.loopEdges);
+        const indexes = new Map(presentation.map((node, index) => [node.id, index]));
 
-    for (const procedure of game!.procedures.values()) {
-      const flow = analyzeProcedureFlow(procedure);
-      const presentation = deriveProcedurePresentationOrder(procedure, flow.loopEdges);
-      const indexes = new Map(presentation.map((node, index) => [node.id, index]));
-
-      expect(new Set(presentation.map((node) => node.id)).size, procedure.id).toBe(
-        procedure.nodes.length,
-      );
-      expect(
-        procedure.edges
-          .filter((edge) => !flow.loopEdges.has(edge))
-          .every((edge) => (indexes.get(edge.from) ?? -1) < (indexes.get(edge.to) ?? -1)),
-        procedure.id,
-      ).toBe(true);
+        expect(new Set(presentation.map((node) => node.id)).size, procedure.id).toBe(
+          procedure.nodes.length,
+        );
+        expect(
+          procedure.edges
+            .filter((edge) => !flow.loopEdges.has(edge))
+            .every((edge) => (indexes.get(edge.from) ?? -1) < (indexes.get(edge.to) ?? -1)),
+          procedure.id,
+        ).toBe(true);
+      });
     }
-  });
+  }
 
   it('recognizes exclusive work that rejoins a direct continuation', () => {
     const testFlow = analyzeProcedureFlow(fixture('detour'));

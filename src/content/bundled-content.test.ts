@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { combinedSources } from '../../tests/fixtures/sources';
+import { combinedSources, fixtureSources } from '../../tests/fixtures/sources';
 import { createSearchIndex, searchContent } from '../features/search/searchIndex';
 import { contentRegistry } from './bundled-content';
 import { loadContentRegistry } from './load-content';
@@ -10,6 +10,7 @@ import { resolveSource } from './registry';
 describe.each([
   { name: 'production content', registry: contentRegistry },
   { name: 'production content with a synthetic game', registry: loadContentRegistry(combinedSources) },
+  { name: 'replacement library with only synthetic content', registry: loadContentRegistry(fixtureSources) },
 ])('$name', ({ registry }) => {
   const index = createSearchIndex(registry);
 
