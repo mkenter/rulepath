@@ -1,0 +1,30 @@
+schemaVersion: 1
+game:
+  id: clockwork
+  title: Clockwork Lantern
+  publisher: Imaginary Workshop
+  summary: Fictional signal puzzles in a copper archive.
+  source:
+    publication:
+      title: Clockwork Lantern Test Rules
+      edition: Synthetic 1
+      url: https://example.com/clockwork-rules
+      creator: Imaginary Workshop
+    licensing:
+      copyright: Copyright 2026 Imaginary Workshop (fictional)
+      license:
+        name: Synthetic Test License
+        url: https://example.com/clockwork-license
+      attribution: Original synthetic rules by Imaginary Workshop.
+      adaptation: Written solely for Rulepath tests.
+sections:
+  - id: procedures
+    title: Procedures
+    items:
+      - procedure: gather-information
+      - procedure: decode-signal
+      - procedure: momentum
+  - id: references
+    title: References
+    items:
+      - reference: momentum

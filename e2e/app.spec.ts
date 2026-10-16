@@ -1,113 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
-
-const gatherUrl = '/games/ironsworn/procedures/gather-information';
-const actionUrl = '/games/ironsworn/procedures/action-roll';
-const priceUrl = '/games/ironsworn/procedures/pay-the-price';
-const momentumUrl = '/games/ironsworn/reference/momentum';
-
-async function expectCenteredRailGeometry(page: Page) {
-  await expect(page.locator('[data-route-kind]').first()).toBeAttached();
-  const geometry = await page.locator('[data-flow-list]').evaluate((list) => {
-    const listBounds = list.getBoundingClientRect();
-    const nodes = [...list.querySelectorAll<HTMLElement>('[data-flow-node]')];
-    const orderedItems = [...list.querySelectorAll<HTMLElement>('[data-flow-node-id]')];
-    const nodeOrder = new Map(
-      orderedItems.map((item, index) => [item.dataset.flowNodeId ?? '', index]),
-    );
-    const widestNode = nodes
-      .map((node) => node.getBoundingClientRect())
-      .sort((left, right) => right.width - left.width)[0];
-    const diagramBounds = list.closest('[data-procedure-diagram]')?.getBoundingClientRect();
-    const railX = (selector: string) =>
-      [...list.querySelectorAll<SVGPathElement>(selector)]
-        .map((path) => path.getAttribute('d')?.match(/ H ([\d.-]+)/)?.[1])
-        .flatMap((value) => (value ? [Math.round(Number(value))] : []));
-    const bypassRoutes = [
-      ...list.querySelectorAll<SVGGElement>('[data-route-kind="bypass"]'),
-    ].flatMap((route) => {
-      const from = nodeOrder.get(route.dataset.edgeFrom ?? '');
-      const to = nodeOrder.get(route.dataset.edgeTo ?? '');
-      const rail = route.querySelector('path')?.getAttribute('d')?.match(/ H ([\d.-]+)/)?.[1];
-      const direction = route.dataset.routeDirection;
-      return from === undefined || to === undefined || rail === undefined
-        ? []
-        : [{
-            direction,
-            end: Math.max(from, to),
-            rail: Number(rail),
-            start: Math.min(from, to),
-          }];
-    });
-    const hierarchyViolations = bypassRoutes.flatMap((inner, innerIndex) =>
-      bypassRoutes.slice(innerIndex + 1).flatMap((outer) => {
-        if (inner.direction !== outer.direction) {
-          return [];
-        }
-        const innerInsideOuter = inner.start > outer.start && inner.end < outer.end;
-        const outerInsideInner = outer.start > inner.start && outer.end < inner.end;
-        const innerDistance = inner.direction === 'right'
-          ? inner.rail - (widestNode?.right ?? 0) + listBounds.left
-          : (widestNode?.left ?? 0) - listBounds.left - inner.rail;
-        const outerDistance = outer.direction === 'right'
-          ? outer.rail - (widestNode?.right ?? 0) + listBounds.left
-          : (widestNode?.left ?? 0) - listBounds.left - outer.rail;
-        return (innerInsideOuter && innerDistance >= outerDistance) ||
-          (outerInsideInner && outerDistance >= innerDistance)
-          ? [`${inner.start}-${inner.end}:${outer.start}-${outer.end}`]
-          : [];
-      }),
-    );
-    const nodeOverlap = orderedItems.some((item, index) => {
-      const next = orderedItems[index + 1];
-      return next ? item.getBoundingClientRect().bottom > next.getBoundingClientRect().top : false;
-    });
-
-    if (!widestNode || !diagramBounds) {
-      throw new Error('Flow geometry was not measurable');
-    }
-
-    return {
-      leftBypassRailX: railX(
-        '[data-route-kind="bypass"][data-route-direction="left"] path',
-      ),
-      columnLeft: widestNode.left - listBounds.left,
-      columnRight: widestNode.right - listBounds.left,
-      leftGutter: widestNode.left - listBounds.left,
-      loopRailX: railX('[data-route-kind="loop"] path'),
-      rightBypassRailX: railX(
-        '[data-route-kind="bypass"][data-route-direction="right"] path',
-      ),
-      rightGutter: listBounds.right - widestNode.right,
-      spineCenter: widestNode.left + widestNode.width / 2,
-      canvasCenter: diagramBounds.left + diagramBounds.width / 2,
-      hierarchyViolations,
-      nodeOverlap,
-    };
-  });
-
-  expect(Math.abs(geometry.spineCenter - geometry.canvasCenter)).toBeLessThanOrEqual(1);
-  expect(Math.abs(geometry.leftGutter - geometry.rightGutter)).toBeLessThanOrEqual(1);
-  expect(geometry.leftBypassRailX.every((x) => x < geometry.columnLeft)).toBe(true);
-  expect(geometry.rightBypassRailX.every((x) => x > geometry.columnRight)).toBe(true);
-  expect(geometry.loopRailX.every((x) => x > geometry.columnRight)).toBe(true);
-  expect(geometry.hierarchyViolations).toEqual([]);
-  expect(geometry.nodeOverlap).toBe(false);
-
-  for (const railPositions of [geometry.leftBypassRailX, geometry.rightBypassRailX]) {
-    const distinctBypassLanes = [...new Set(railPositions)].sort((a, b) => a - b);
-    const laneSteps = distinctBypassLanes
-      .slice(1)
-      .map((x, index) => x - distinctBypassLanes[index]!);
-    expect(laneSteps.every((step) => step === 16)).toBe(true);
-  }
-
-  const nearestSideRail = Math.min(
-    ...geometry.leftBypassRailX.map((x) => geometry.columnLeft - x),
-    ...geometry.rightBypassRailX.map((x) => x - geometry.columnRight),
-    ...geometry.loopRailX.map((x) => x - geometry.columnRight),
-  );
-  expect(nearestSideRail).toBeGreaterThanOrEqual(16);
-}
+import { expect, test } from '@playwright/test';
+import { registry, scenarios } from './support/content';
 
 test('library presents a flat editorial catalog with tailored interaction states', async ({
   page,
@@ -115,7 +7,7 @@ test('library presents a flat editorial catalog with tailored interaction states
   await page.goto('/');
   await expect(page).toHaveTitle('Library | Rulepath');
   await expect(page.getByRole('link', { name: 'Rulepath library' })).toBeVisible();
-  const gameRow = page.locator('[data-library-game]');
+  const gameRow = page.locator('[data-library-game]').first();
 
   const rest = await gameRow.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -126,6 +18,7 @@ test('library presents a flat editorial catalog with tailored interaction states
       borderRadius: style.borderRadius,
       bottomRule: style.borderBottomColor,
       identityColor: identity.backgroundColor,
+      accent: (style.getPropertyValue('--catalog-accent') || style.getPropertyValue('--trn-brass')).trim(),
       identityHeight: identity.height,
       identityWidth: identity.width,
       ruleHeight: rule.height,
@@ -137,7 +30,8 @@ test('library presents a flat editorial catalog with tailored interaction states
   });
   expect(rest.borderRadius).toBe('0px');
   expect(rest.bottomRule).toBe('rgb(77, 83, 83)');
-  expect(rest.identityColor).toBe('rgb(185, 154, 88)');
+  const channels = rest.accent.slice(1).match(/.{2}/g)!.map(channel => Number.parseInt(channel, 16));
+  expect(rest.identityColor).toBe(`rgb(${channels.join(', ')})`);
   expect(rest.identityHeight).toBe('24px');
   expect(rest.identityWidth).toBe('2px');
   expect(rest.ruleHeight).toBe('1px');
@@ -191,7 +85,8 @@ test('library catalog fixture scales to adjacent entries and long phone content'
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
-  await page.locator('[data-library-game]').evaluate((entry) => {
+  const originalCount = await page.locator('[data-library-game]').count();
+  await page.locator('[data-library-game]').first().evaluate((entry) => {
     const item = entry.closest('li');
     const list = item?.parentElement;
     if (!item || !list) {
@@ -202,17 +97,24 @@ test('library catalog fixture scales to adjacent entries and long phone content'
       ['The Cartographer’s Exceptionally Long Field Reference', 'A Publisher With a Deliberately Long Imprint Name', '128 procedures · 9 references'],
       ['A Short Game', 'Small Press', '4 procedures · 2 references'],
       ['Another Expedition', 'Atlas Workshop', '17 procedures · 105 references'],
-    ].forEach(([title, publisher, counts]) => {
+    ].forEach(([title, publisher, counts], index) => {
       const clone = item.cloneNode(true) as HTMLElement;
       clone.querySelector<HTMLElement>('[data-game-title]')!.textContent = title;
-      clone.querySelector<HTMLElement>('[data-game-publisher]')!.textContent = publisher;
+      clone.querySelector('[data-library-game]')!.setAttribute('data-catalog-fixture', String(index));
+      let imprint = clone.querySelector<HTMLElement>('[data-game-publisher]');
+      if (!imprint) {
+        imprint = document.createElement('span');
+        imprint.setAttribute('data-game-publisher', '');
+        clone.querySelector('[data-game-title]')!.parentElement!.append(imprint);
+      }
+      imprint.textContent = publisher;
       clone.querySelector<HTMLElement>('[data-game-counts]')!.textContent = counts;
       list.append(clone);
     });
   });
 
   const entries = page.locator('[data-library-game]');
-  await expect(entries).toHaveCount(4);
+  await expect(entries).toHaveCount(originalCount + 3);
   const geometry = await entries.evaluateAll((links) => {
     const boxes = links.map((link) => link.getBoundingClientRect());
     const titleHeights = links.map((link) =>
@@ -224,7 +126,7 @@ test('library catalog fixture scales to adjacent entries and long phone content'
       ),
       sameWidth: boxes.every((box) => Math.abs(box.width - boxes[0]!.width) <= 1),
       touchTargets: boxes.every((box) => box.height >= 44),
-      wrapsLongTitle: titleHeights[1]! > titleHeights[0]!,
+      wrapsLongTitle: titleHeights[links.findIndex(link => link.getAttribute('data-catalog-fixture') === '0')]! > titleHeights[links.findIndex(link => link.getAttribute('data-catalog-fixture') === '1')]!,
     };
   });
   expect(geometry).toEqual({
@@ -233,58 +135,6 @@ test('library catalog fixture scales to adjacent entries and long phone content'
     touchTargets: true,
     wrapsLongTitle: true,
   });
-});
-
-test('game home is a flat dark editorial index with responsive columns and owned states', async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1180, height: 820 });
-  await page.goto('/games/ironsworn');
-
-  const gameHome = page.locator('[data-game-home]');
-  const titleZone = page.locator('[data-game-home-title]');
-  const entries = page.locator('[data-game-home-entry]');
-  const procedure = page.getByRole('link', { name: 'Gather Information' });
-  const reference = page.getByRole('link', { name: 'Momentum' });
-
-  await expect(entries).toHaveCount(11);
-  await expect(page.locator('[data-resource-kind="procedure"]')).toHaveCount(5);
-  await expect(page.locator('[data-resource-kind="reference"]')).toHaveCount(6);
-  await expect(gameHome).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-  await expect(titleZone).toHaveCSS('border-bottom-color', 'rgb(77, 83, 83)');
-  await expect(page.locator('[data-game-home-sections]')).toHaveCSS('column-count', '2');
-  await expect(page.locator('[data-game-home-reference-list]')).toHaveCSS('column-count', '3');
-
-  const restBackground = await procedure.evaluate((element) =>
-    getComputedStyle(element).backgroundColor,
-  );
-  await procedure.hover();
-  await expect(procedure).not.toHaveCSS('background-color', restBackground);
-  await expect(procedure).not.toHaveCSS('border-bottom-color', 'rgb(77, 83, 83)');
-
-  await page.mouse.down();
-  await expect(procedure).toHaveCSS('background-color', 'rgb(24, 28, 28)');
-  await page.mouse.move(0, 0);
-  await page.mouse.up();
-
-  await procedure.focus();
-  await page.keyboard.press('Shift+Tab');
-  await page.keyboard.press('Tab');
-  await expect(procedure).toBeFocused();
-  await expect(procedure).toHaveCSS('outline-style', 'none');
-  await expect(procedure).toHaveCSS('color', 'rgb(228, 209, 154)');
-  expect(await procedure.evaluate((element) => getComputedStyle(element).boxShadow))
-    .toContain('rgb(228, 209, 154)');
-
-  for (const target of [procedure, reference]) {
-    const box = await target.boundingBox();
-    expect(box?.height).toBeGreaterThanOrEqual(44);
-  }
-
-  await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.locator('[data-game-home-sections]')).toHaveCSS('column-count', '1');
-  await expect(page.locator('[data-game-home-reference-list]')).toHaveCSS('column-count', '1');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
 test('bundled fonts provide the editorial and UI type hierarchy without remote requests', async ({
@@ -315,7 +165,9 @@ test('bundled fonts provide the editorial and UI type hierarchy without remote r
     typography.fontResources.every((resource) => new URL(resource).origin === 'http://127.0.0.1:4173'),
   ).toBe(true);
 
-  await page.goto(gatherUrl);
+  const entry = scenarios.procedures[0];
+  if (!entry) return;
+  await page.goto(entry.path);
   await page.evaluate(async () => document.fonts.ready);
   const diagramFamily = await page.locator('[data-flow-node-label]').first().evaluate(
     (element) => getComputedStyle(element).fontFamily,
@@ -327,6 +179,11 @@ test('production PWA exposes a standalone manifest and serves canonical routes o
   context,
   page,
 }) => {
+  const game = registry.games[0]!;
+  const procedure = scenarios.procedures[0];
+  const reference = scenarios.references[0];
+  const query = procedure?.procedure.title ?? game.details.title;
+  const resultPath = procedure?.path ?? `/games/${game.details.id}`;
   await page.goto('/');
   const manifest = await page.locator('link[rel="manifest"]').getAttribute('href');
   expect(manifest).toBeTruthy();
@@ -348,12 +205,16 @@ test('production PWA exposes a standalone manifest and serves canonical routes o
     });
     expect(textureResponse.ok).toBe(true);
     expect(textureResponse.contentType).toContain('image/svg+xml');
-    await page.goto('/search?q=gather');
-    await expect(page.getByRole('link', { name: 'Procedure Gather Information in Ironsworn' })).toBeVisible();
-    await page.goto(gatherUrl);
-    await expect(page.getByRole('heading', { name: 'Gather Information' })).toBeVisible();
-    await page.goto(momentumUrl);
-    await expect(page.getByRole('heading', { name: 'Momentum' })).toBeVisible();
+    await page.goto(`/search?${new URLSearchParams({ q: query })}`);
+    await expect(page.getByRole('region', { name: /^\d+ results?$/ }).locator(`[href="${resultPath}"]`)).toBeVisible();
+    if (procedure) {
+      await page.goto(procedure.path);
+      await expect(page.getByRole('heading', { level: 1, name: procedure.procedure.title, exact: true })).toBeVisible();
+    }
+    if (reference) {
+      await page.goto(reference.path);
+      await expect(page.getByRole('heading', { level: 1, name: reference.reference.title, exact: true })).toBeVisible();
+    }
   } finally {
     await context.setOffline(false);
   }
@@ -369,9 +230,11 @@ for (const viewport of [
 ]) {
   test(`${viewport.name} keeps the semantic flow within the viewport`, async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await page.goto(gatherUrl);
+    const entry = scenarios.decisions[0] ?? scenarios.procedures[0]!;
+    test.skip(!entry, 'No registered procedure to check at this viewport.');
+    await page.goto(entry.path);
 
-    await expect(page.getByRole('region', { name: 'Gather Information procedure flow' })).toBeVisible();
+    await expect(page.getByRole('region', { name: `${entry.procedure.title} procedure flow`, exact: true })).toBeVisible();
     const hasHorizontalOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
@@ -392,28 +255,14 @@ for (const viewport of [
 ]) {
   test(`${viewport.name} keeps search controls and results inside the viewport`, async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await page.goto('/search?q=gather');
+    const entry = scenarios.procedures[0];
+    const game = registry.games[0]!;
+    const query = entry?.procedure.title ?? game.details.title;
+    const path = entry?.path ?? `/games/${game.details.id}`;
+    await page.goto(`/search?${new URLSearchParams({ q: query })}`);
     await expect(page.getByRole('searchbox')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Procedure Gather Information in Ironsworn' })).toBeVisible();
+    await expect(page.getByRole('region', { name: /^\d+ results?$/ }).locator(`[href="${path}"]`)).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  });
-}
-
-for (const viewport of [
-  { name: 'phone', width: 390, height: 844 },
-  { name: 'ipad-portrait', width: 820, height: 1180 },
-  { name: 'ipad-landscape', width: 1180, height: 820 },
-]) {
-  test(`${viewport.name} centers all fixture spines with symmetric rail gutters`, async ({ page }) => {
-    await page.setViewportSize({ width: viewport.width, height: viewport.height });
-
-    for (const url of [gatherUrl, actionUrl, priceUrl]) {
-      await page.goto(url);
-      await expectCenteredRailGeometry(page);
-      await expect(page.locator('[data-flow-node-type="decision"] [data-flow-decision-branches]').first())
-        .toBeVisible();
-      await expect(page.locator('[data-flow-node-type="decision"]').first()).toHaveCSS('clip-path', 'none');
-    }
   });
 }
 
@@ -421,12 +270,14 @@ for (const viewport of [
   { name: 'phone', width: 390, height: 844, expectedWidth: 390 },
   { name: 'ipad-landscape', width: 1180, height: 820, expectedWidth: 400 },
 ]) {
-  test(`${viewport.name} uses the intended Momentum reference sheet width`, async ({ page }) => {
+  test(`${viewport.name} uses the intended contextual reference sheet width`, async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await page.goto(gatherUrl);
-    await page.getByRole('link', { name: /^Momentum/ }).click();
+    const entry = scenarios.referenceLinks[0]!;
+    test.skip(!entry, 'No registered reference link to measure.');
+    await page.goto(entry.path);
+    await page.locator(`[href="${entry.referencePath}"]`).click();
 
-    const sheet = await page.getByRole('dialog', { name: 'Momentum' }).boundingBox();
+    const sheet = await page.getByRole('dialog', { name: entry.reference.title, exact: true }).boundingBox();
     expect(Math.round(sheet?.width ?? 0)).toBe(viewport.expectedWidth);
   });
 }

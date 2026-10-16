@@ -1,0 +1,17 @@
+id: decode-signal
+title: Decode Signal
+summary: Translate a fictional signal strip into a clue.
+source:
+  section: Signal Strips
+nodes:
+  - id: start
+    type: start
+    label: Read the marks on the strip.
+  - id: end
+    type: end
+    label: Write down a clue.
+edges:
+  - from: start
+    to: end
+references: [momentum]
+related: [gather-information]

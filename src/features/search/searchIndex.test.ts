@@ -1,30 +1,34 @@
 import { describe, expect, it } from 'vitest';
-import { contentRegistry } from '../../content/bundled-content';
+import { fixtureSources } from '../../../tests/fixtures/sources';
+import { loadContentRegistry } from '../../content/load-content';
 import { createSearchIndex, searchContent } from './searchIndex';
 
-const index = createSearchIndex(contentRegistry);
-describe('local search index', () => {
-  it('ranks exact titles before supporting-text matches', () => {
-    expect(searchContent(index, 'Action Roll')[0]).toMatchObject({ kind: 'Procedure', path: '/games/ironsworn/procedures/action-roll' });
-    expect(searchContent(index, 'Momentum')[0]).toMatchObject({ kind: 'Reference', title: 'Momentum' });
-  });
-  it('indexes game titles, summaries, key rules, and node labels', () => {
-    expect(searchContent(index, 'Ironsworn')[0]?.kind).toBe('Game');
-    expect(searchContent(index, 'magnitude').some(result => result.title === 'Momentum')).toBe(true);
-    expect(searchContent(index, 'precision').some(result => result.title === 'Secure an Advantage')).toBe(true);
-    expect(searchContent(index, 'canceled').some(result => result.title === 'Action Roll')).toBe(true);
+// Controlled synthetic content exercises search semantics without requiring a production game.
+const registry = loadContentRegistry(fixtureSources);
+const game = registry.games[0]!;
+const procedure = [...game.procedures.values()][0]!;
+const reference = [...game.references.values()][0]!;
+const index = createSearchIndex(registry);
+
+describe('search contracts with synthetic content', () => {
+  it('ranks an exact title before another resource mentioning that title', () => {
+    const augmented = { ...registry, games: [{ ...game, references: new Map([
+      ...game.references, [reference.id, { ...reference, summary: procedure.title }],
+    ]) }] };
+    const results = searchContent(createSearchIndex(augmented), procedure.title);
+    expect(results[0]).toMatchObject({ kind: 'Procedure', path: `/games/${game.details.id}/procedures/${procedure.id}` });
+    expect(results).toContainEqual(expect.objectContaining({ kind: 'Reference', path: `/games/${game.details.id}/reference/${reference.id}` }));
   });
   it('ranks aliases and normalizes punctuation and case', () => {
-    const game = contentRegistry.games[0]!;
-    const registry = { ...contentRegistry, games: [{ ...game, procedures: new Map([
-      ...game.procedures, ['gather-information', { ...game.procedures.get('gather-information')!, aliases: ['Investigation'] }],
+    const augmented = { ...registry, games: [{ ...game, procedures: new Map([
+      ...game.procedures, [procedure.id, { ...procedure, aliases: ['Investigation'] }],
     ]) }] };
-    expect(searchContent(createSearchIndex(registry), 'INVESTIGATION!')[0]?.title).toBe('Gather Information');
+    expect(searchContent(createSearchIndex(augmented), 'INVESTIGATION!')[0]?.path).toBe(`/games/${game.details.id}/procedures/${procedure.id}`);
   });
   it('returns no results for empty or unmatched input and respects scope', () => {
     expect(searchContent(index, '  ')).toEqual([]);
     expect(searchContent(index, 'not in this library')).toEqual([]);
-    expect(searchContent(index, 'gather', 'ironsworn')).not.toHaveLength(0);
-    expect(searchContent(index, 'gather', 'another-game')).toEqual([]);
+    expect(searchContent(index, procedure.title, game.details.id)).toContainEqual(expect.objectContaining({ title: procedure.title }));
+    expect(searchContent(index, procedure.title, 'unregistered-test-game')).toEqual([]);
   });
 });

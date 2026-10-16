@@ -1,0 +1,40 @@
+id: momentum
+title: Calibrate Lantern
+summary: Align the imaginary lantern with a copper mark.
+source:
+  section: Lantern Calibration
+nodes:
+  - id: start
+    type: start
+    label: Place the lantern beside a copper mark.
+  - id: color
+    type: decision
+    label: Which imaginary color appears?
+  - id: amber
+    type: end
+    label: Record amber light.
+  - id: blue
+    type: end
+    label: Record blue light.
+  - id: green
+    type: end
+    label: Record green light.
+  - id: violet
+    type: end
+    label: Record violet light.
+edges:
+  - from: start
+    to: color
+  - from: color
+    to: amber
+    label: Amber
+  - from: color
+    to: blue
+    label: Blue
+  - from: color
+    to: green
+    label: Green
+  - from: color
+    to: violet
+    label: Violet
+references: [momentum]

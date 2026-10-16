@@ -1,0 +1,29 @@
+id: gather-information
+title: Gather Information
+aliases: [Inspect the Copper Archive]
+summary: Inspect a fictional copper archive for a signal.
+source:
+  section: Copper Archive
+nodes:
+  - id: start
+    type: start
+    label: Open the copper archive.
+  - id: clue
+    type: step
+    label: Find a paper signal strip.
+  - id: link
+    type: procedure
+    label: Decode the signal strip.
+    target: decode-signal
+  - id: end
+    type: end
+    label: Keep the decoded clue.
+edges:
+  - from: start
+    to: clue
+  - from: clue
+    to: link
+  - from: link
+    to: end
+references: [momentum]
+related: [decode-signal]

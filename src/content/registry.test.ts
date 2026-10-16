@@ -101,6 +101,18 @@ describe('content registry', () => {
     expect(() =>
       createContentRegistry([bundle({ procedures: [procedure, procedure] })]),
     ).toThrow(/duplicate procedure ID/);
+    expect(() => createContentRegistry([bundle({ references: [reference, reference] })])).toThrow(/duplicate reference ID/);
+  });
+
+  it('allows the same ID for different resource types within one game', () => {
+    const sharedReference = { ...reference, id: procedure.id };
+    const sharedProcedure = { ...procedure, references: [sharedReference.id] };
+    const sharedGame = { ...game, sections: [{ id: 'contents', title: 'Contents', items: [
+      { procedure: procedure.id }, { reference: sharedReference.id },
+    ] }] };
+    const registry = createContentRegistry([bundle({ game: sharedGame, procedures: [sharedProcedure], references: [sharedReference] })]);
+    expect(registry.getProcedure('fixture', 'overview')).toBe(sharedProcedure);
+    expect(registry.getReference('fixture', 'overview')).toBe(sharedReference);
   });
 
   it('rejects broken edges and unreachable nodes', () => {

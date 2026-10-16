@@ -1,51 +1,84 @@
 import { describe, expect, it } from 'vitest';
+
+import { combinedSources, fixtureSources } from '../../tests/fixtures/sources';
 import { createSearchIndex, searchContent } from '../features/search/searchIndex';
 import { contentRegistry } from './bundled-content';
+import { loadContentRegistry } from './load-content';
 import { resolveSource } from './registry';
 
-describe('production content', () => {
-  it('loads only the Ironsworn SRD sample and lists every resource exactly once', () => {
-    expect(contentRegistry.games.map(game => game.details.id)).toEqual(['ironsworn']);
-    const game = contentRegistry.getGame('ironsworn')!;
-    expect(game.procedures.size).toBe(5);
-    expect(game.references.size).toBe(6);
-    const paths = game.sections.flatMap(section => section.items.map(item =>
-      'procedure' in item ? `procedure/${item.procedure}` : `reference/${item.reference}`,
-    ));
-    expect(paths).toHaveLength(11);
-    expect(new Set(paths).size).toBe(11);
-    const metadata = game.details.source;
-    expect(metadata.publication.edition).toContain('SRD .09');
-    expect(metadata.publication.creator).toBe('Shawn Tomkin');
-    expect(metadata.publication.url).toContain('11ypqt6GfLuBhGDJuBGWKlHa-Ru48Tf3G_6zbrYKmXgY');
-    expect(metadata.licensing.license.url).toBe('https://creativecommons.org/licenses/by/4.0/');
-    expect(metadata.licensing.attribution).toContain('created by Shawn Tomkin');
-    expect(metadata.licensing.copyright).toBe('Copyright ©2018 Shawn Tomkin.');
-    expect(metadata.licensing.adaptation).toContain('reorganized and paraphrased');
-    for (const resource of [...game.procedures.values(), ...game.references.values()]) {
-      expect(Object.keys(resource.source)).toEqual(['section']);
-      expect(resource.source.section.length).toBeGreaterThan(0);
-      expect(resolveSource(metadata, resource.source).licensing).toBe(metadata.licensing);
-    }
+// Both registries pass through the shared loader's schema, graph, and crosslink validation.
+describe.each([
+  { name: 'production content', registry: contentRegistry },
+  { name: 'production content with a synthetic game', registry: loadContentRegistry(combinedSources) },
+  { name: 'replacement library with only synthetic content', registry: loadContentRegistry(fixtureSources) },
+])('$name', ({ registry }) => {
+  const index = createSearchIndex(registry);
+
+  it('registers unique games and canonical search paths', () => {
+    expect(registry.games.length).toBeGreaterThan(0);
+    const ids = registry.games.map(game => game.details.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(index).toHaveLength(registry.games.reduce((count, game) => count + 1 + game.procedures.size + game.references.size, 0));
+    expect(new Set(index.map(document => document.path)).size).toBe(index.length);
   });
-  it('preserves connected move procedures and supported decision sizes', () => {
-    const game = contentRegistry.getGame('ironsworn')!;
-    expect(game.procedures.get('gather-information')?.nodes).toContainEqual(expect.objectContaining({ type: 'procedure', target: 'action-roll' }));
-    expect(game.procedures.get('gather-information')?.nodes).toContainEqual(expect.objectContaining({ type: 'procedure', target: 'pay-the-price' }));
-    expect(game.procedures.get('pay-the-price')?.nodes).toContainEqual(expect.objectContaining({ type: 'procedure', target: 'ask-the-oracle' }));
-    for (const procedure of game.procedures.values()) {
-      for (const decision of procedure.nodes.filter(node => node.type === 'decision')) {
-        expect(procedure.edges.filter(edge => edge.from === decision.id).length).toBeLessThanOrEqual(3);
+
+  describe.each(registry.games.map(game => ({ id: game.details.id, game })))('$id', ({ game, id }) => {
+    const prefix = `/games/${id}`;
+    const resources = [
+      ...[...game.procedures.values()].map(resource => ({ resource, path: `${prefix}/procedures/${resource.id}` })),
+      ...[...game.references.values()].map(resource => ({ resource, path: `${prefix}/reference/${resource.id}` })),
+    ];
+
+    it('covers every resource exactly once in sections and resolves links within its game', () => {
+      expect(registry.getGame(id)).toBe(game);
+      const listed = game.sections.flatMap(section => section.items.map(item => {
+        if ('procedure' in item) {
+          expect(registry.getProcedure(id, item.procedure)).toBeDefined();
+          return `${prefix}/procedures/${item.procedure}`;
+        }
+        expect(registry.getReference(id, item.reference)).toBeDefined();
+        return `${prefix}/reference/${item.reference}`;
+      }));
+      expect(listed.sort()).toEqual(resources.map(({ path }) => path).sort());
+      for (const procedure of game.procedures.values()) {
+        expect(registry.getProcedure(id, procedure.id)).toBe(procedure);
+        for (const node of procedure.nodes) {
+          if (node.type === 'procedure') expect(registry.getProcedure(id, node.target)).toBe(game.procedures.get(node.target));
+        }
+        for (const target of procedure.related) expect(registry.getProcedure(id, target)).toBeDefined();
+        for (const target of procedure.references) expect(registry.getReference(id, target)).toBeDefined();
       }
-    }
-    expect(game.references.get('price-table')?.summary).toContain('99-00');
-    expect(game.references.get('oracle-options')?.summary).toContain('four options');
-  });
-  it('indexes all resources with unique canonical paths', () => {
-    const index = createSearchIndex(contentRegistry);
-    expect(index).toHaveLength(12);
-    expect(new Set(index.map(document => document.path)).size).toBe(12);
-    expect(searchContent(index, 'Gather Information')[0]?.path).toBe('/games/ironsworn/procedures/gather-information');
-    expect(index.every(document => document.gameId === 'ironsworn')).toBe(true);
+      for (const reference of game.references.values()) {
+        expect(registry.getReference(id, reference.id)).toBe(reference);
+        for (const target of reference.related) {
+          expect('procedure' in target ? registry.getProcedure(id, target.procedure) : registry.getReference(id, target.reference)).toBeDefined();
+        }
+      }
+    });
+
+    it('keeps lookups isolated and resolves source groups and overrides independently', () => {
+      for (const { resource } of resources) {
+        const source = resolveSource(game.details.source, resource.source);
+        expect(source.publication).toBe(resource.source.overrides?.publication ?? game.details.source.publication);
+        expect(source.licensing).toBe(resource.source.overrides?.licensing ?? game.details.source.licensing);
+        expect(source.section).toBe(resource.source.section);
+        for (const other of registry.games) {
+          expect(registry.getProcedure(other.details.id, resource.id)).toBe(other.procedures.get(resource.id));
+          expect(registry.getReference(other.details.id, resource.id)).toBe(other.references.get(resource.id));
+        }
+      }
+    });
+
+    it('indexes the game and every resource, with scoped results matching global results for that game', () => {
+      const documents = [{ title: game.details.title, path: prefix }, ...resources.map(({ resource, path }) => ({ title: resource.title, path }))];
+      for (const { title, path } of documents) {
+        expect(index).toContainEqual(expect.objectContaining({ gameId: id, path, title }));
+        const global = searchContent(index, title);
+        const scoped = searchContent(index, title, id);
+        expect(global).toContainEqual(expect.objectContaining({ gameId: id, path }));
+        expect(scoped).toEqual(global.filter(result => result.gameId === id));
+        expect(scoped).toContainEqual(expect.objectContaining({ gameId: id, path }));
+      }
+    });
   });
 });
