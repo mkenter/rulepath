@@ -80,7 +80,7 @@ export function ProcedurePage() {
                     return reference ? (
                       <li key={reference.id}>
                         <Link to={`/games/${gameId}/reference/${reference.id}`} state={{ backgroundLocation: location }}>
-                          {reference.title}<span aria-hidden="true">↗</span>
+                          {reference.title}
                         </Link>
                       </li>
                     ) : null;
@@ -94,7 +94,7 @@ export function ProcedurePage() {
                 <ul className={styles.links}>
                   {relatedProcedures.map((related) => (
                     <li key={related.id}>
-                      <Link to={`/games/${gameId}/procedures/${related.id}`}>{related.title}<span aria-hidden="true">→</span></Link>
+                      <Link to={`/games/${gameId}/procedures/${related.id}`}>{related.title}</Link>
                     </li>
                   ))}
                 </ul>
@@ -106,7 +106,7 @@ export function ProcedurePage() {
             </section>
           </aside>
         </div>
-        <a className={styles.backToFlow} href="#procedure-flow" onClick={jumpToSection}>↑ Back to procedure</a>
+        <a className={styles.backToFlow} href="#procedure-flow" onClick={jumpToSection}>Back to procedure</a>
       </div>
     </div>
   );

@@ -47,6 +47,7 @@ async function capture(
   await page.screenshot({
     path: `${outputDir}/${name}.png`,
     fullPage: false,
+    ...(process.env.SCREENSHOT_MODE === 'quick' ? { scale: 'css' as const } : {}),
     animations: "disabled",
   });
 }
@@ -57,6 +58,23 @@ test.beforeAll(async () => {
 
 test("Ironsworn authored visual review: capture the known graph and sheet scenarios", async ({ page }) => {
   test.setTimeout(120_000);
+  if (process.env.SCREENSHOT_MODE === 'quick') {
+    const quickRoutes = [
+      ['library', '/'],
+      ['game', '/games/ironsworn'],
+      ['search', '/search?game=ironsworn&q=gather'],
+      ['procedure', '/games/ironsworn/procedures/gather-information'],
+    ] as const;
+    for (const [viewportName, viewport] of [['desktop', viewports.desktop], ['tablet', viewports.ipadPortrait]] as const) {
+      for (const [name, route] of quickRoutes) {
+        await page.setViewportSize(viewport);
+        await page.goto(route);
+        await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+        await capture(page, `${name}-${viewportName}`, viewport);
+      }
+    }
+    return;
+  }
   const routes = [
     ["library", "/"],
     ["game", "/games/ironsworn"],

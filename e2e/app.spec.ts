@@ -11,15 +11,9 @@ test('library presents a paper catalog with forest entries and visible interacti
   await expect(gameRow.locator('[data-game-title]')).toBeVisible();
   await expect(gameRow.locator('[data-game-counts]')).toBeVisible();
   await expect(gameRow).toContainText('Explore game');
-  const accent = await gameRow.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return {
-      token: (style.getPropertyValue('--catalog-accent') || style.getPropertyValue('--trn-brass')).trim(),
-      rule: getComputedStyle(element.firstElementChild!).borderTopColor,
-    };
-  });
-  const channels = accent.token.slice(1).match(/.{2}/g)!.map(channel => Number.parseInt(channel, 16));
-  expect(accent.rule).toBe(`rgb(${channels.join(', ')})`);
+  const cta = gameRow.getByText('Explore game');
+  await expect(cta).toHaveCSS('background-color', 'rgb(212, 231, 128)');
+  await expect(cta).toHaveCSS('color', 'rgb(38, 63, 55)');
 
   await gameRow.hover();
   await expect(gameRow).toHaveCSS('background-color', 'rgb(48, 77, 66)');
@@ -78,7 +72,7 @@ test('library catalog fixture scales to spaced entries and long phone content', 
     );
     return {
       consistentGaps: boxes.slice(1).every((box, index) =>
-        Math.abs(box.top - boxes[index]!.bottom - 16) <= 1,
+        Math.abs(box.top - boxes[index]!.bottom - 24) <= 1,
       ),
       sameWidth: boxes.every((box) => Math.abs(box.width - boxes[0]!.width) <= 1),
       touchTargets: boxes.every((box) => box.height >= 44),

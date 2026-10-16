@@ -133,7 +133,7 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     const sectionColumns = page.locator('[data-game-home-sections]');
     const mainRegion = sectionColumns.locator(':scope > div').first();
     const referenceRegion = sectionColumns.locator(':scope > div').last();
-    await expect(referenceRegion).toHaveCSS('background-color', 'rgb(231, 235, 225)');
+    await expect(referenceRegion).toHaveCSS('background-color', 'rgb(223, 230, 216)');
     const mainBox = (await mainRegion.boundingBox())!;
     const referenceBox = (await referenceRegion.boundingBox())!;
     expect(referenceBox.x).toBeGreaterThan(mainBox.x + mainBox.width);

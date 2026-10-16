@@ -28,6 +28,7 @@ export function AppShell({ children }: PropsWithChildren) {
           <span>Rulepath</span>
         </Link>
         <nav className={styles.primaryNav} aria-label="Primary navigation">
+          <NavLink to="/" end>Library</NavLink>
           <NavLink to={searchPath}><SearchIcon /> Search</NavLink>
         </nav>
       </header>

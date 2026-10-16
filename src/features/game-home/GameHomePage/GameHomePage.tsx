@@ -83,7 +83,7 @@ export function GameHomePage() {
         <div className={styles.breadcrumbs}>
           <Breadcrumbs items={[{ label: 'Library', to: '/' }, { label: game.details.title }]} />
         </div>
-        <header className={styles.titleZone} data-game-home-title>
+        <div className={styles.masthead}><header className={styles.titleZone} data-game-home-title>
           <p className={styles.eyebrow}>Game guide</p>
           <h1>{game.details.title}</h1>
           {game.details.summary ? <p className={styles.summary}>{game.details.summary}</p> : null}
@@ -96,10 +96,11 @@ export function GameHomePage() {
           <nav className={styles.jumpNav} aria-label="On this page">
             <span className={styles.jumpLabel}>On this page</span>
             {indexedSections.map((section) => (
-              <a key={section.id} href={`#${section.id}`}>{section.title}</a>
+              <a key={section.id} href={`#${section.id}`}><span aria-hidden="true">{section.number.toString().padStart(2, '0')}</span>{section.title}</a>
             ))}
           </nav>
         ) : null}
+        </div>
         <nav className={styles.contents} aria-label={`${game.details.title} contents`}>
           <div className={`${styles.sectionColumns}${mainSections.length && referenceSections.length ? ` ${styles.hasReferences}` : ''}`} data-game-home-sections>
             {mainSections.length ? <div className={styles.mainSections}>{mainSections.map(renderSection)}</div> : null}

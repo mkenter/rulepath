@@ -57,3 +57,26 @@
 }
 
 @media (prefers-reduced-motion: reduce) { .jumpNav a { transition: none; } }
+
+.masthead { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(230px, 1fr); }
+.titleZone { min-width: 0; padding: 32px 36px 0; }
+.titleZone h1 { font-size: 4.75rem; letter-spacing: -.045em; }
+.eyebrow { color: var(--trn-signal); }
+.summary { max-width: 600px; }
+.metadata { margin-top: 32px; }
+.jumpNav { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 0; padding: 28px; border: 0; background: var(--trn-signal); }
+.jumpLabel { margin: 0 0 18px; color: #30483c; font-size: .6875rem; letter-spacing: .12em; }
+.jumpNav a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 14px 0; border-top: 1px solid #a4b662; color: #263f37; font-size: .9375rem; text-decoration: none; }
+.jumpNav a > span { padding-top: 2px; font-size: .6875rem; font-variant-numeric: tabular-nums; }
+.jumpNav a:hover, .jumpNav a:focus-visible { background: #e2f19c; text-decoration: underline; text-underline-offset: 4px; }
+.contents { padding-top: 40px; }
+.sectionHeading { grid-template-columns: 42px minmax(0,1fr) auto; gap: 16px; padding-bottom: 16px; border-bottom: 2px solid var(--trn-forest); }
+.ordinal { align-self: stretch; display: flex; align-items: center; justify-content: center; min-height: 38px; background: var(--trn-forest); color: var(--trn-signal); font-size: .8125rem; }
+.section h2 { font-size: 2rem; }
+.referenceSections { padding: 26px; background: #dfe6d8; border-top: 4px solid var(--trn-forest); }
+.referenceSections .sectionHeading { grid-template-columns: 28px minmax(0,1fr); border-bottom-width: 1px; }
+.referenceSections .ordinal { min-height: 28px; font-size: .6875rem; }
+.referenceSections .sectionCount { grid-column: 2; margin-left: 0; }
+.referenceSections h2 { font-size: 1.75rem; }
+@media(max-width: 900px) { .titleZone { padding: 30px 28px 0; } .titleZone h1 { font-size: 3.75rem; } .masthead { grid-template-columns: minmax(0,1.5fr) minmax(220px,1fr); } .jumpNav { padding: 24px; } .hasReferences { grid-template-columns: minmax(0,1fr); gap: 36px; } .referenceSections { grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); } }
+@media(max-width: 680px) { .masthead { grid-template-columns: 1fr; } .titleZone { padding: 26px 24px 0; } .titleZone h1 { font-size: 3.25rem; } .jumpNav { padding: 22px 24px; } .jumpLabel { flex-basis: auto; margin-bottom: 12px; } .jumpNav a { padding-block: 10px; } .sectionHeading { grid-template-columns: 36px minmax(0,1fr); gap: 10px; } .section h2 { font-size: 1.75rem; } .sectionCount { grid-column: 2; } .referenceSections { grid-template-columns: 1fr; padding: 22px; } }

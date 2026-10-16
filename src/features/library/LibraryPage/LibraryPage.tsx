@@ -18,9 +18,8 @@ export function LibraryPage() {
           <div>
             <p className={styles.eyebrow}>Rulepath / Game library</p>
             <h1>Library</h1>
-            <p className={styles.summary}>Choose a game to browse its rules.</p>
           </div>
-          <p className={styles.count}><span>{gameCount.toString().padStart(2, '0')}</span> {gameCount === 1 ? 'game' : 'games'} available</p>
+          <div className={styles.intro}><p className={styles.summary}>Your next move<br />starts here.</p><p className={styles.count}><span>{gameCount.toString().padStart(2, '0')}</span> {gameCount === 1 ? 'game' : 'games'} available</p></div>
         </header>
         <section className={styles.index} aria-label="Games">
           <ul className={gameCount === 1 ? styles.singleGame : undefined}>

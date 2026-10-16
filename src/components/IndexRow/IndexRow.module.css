@@ -62,3 +62,10 @@
 @media (max-width: 560px) {
   .search { align-items: flex-start; min-height: 92px; }
 }
+
+.search { padding: 24px 20px; border-radius: 0; box-shadow: inset 4px 0 transparent; }
+.search .title { font-family: var(--trn-font-editorial); font-size: 1.75rem; font-weight: 500; letter-spacing: -.02em; }
+.search .summary { margin-top: 8px; font-size: .9375rem; line-height: 1.5; }
+.search .meta { color: var(--trn-ink-accent); margin-top: 12px; font-size: .6875rem; letter-spacing: .08em; }
+.search:hover, .search:focus-visible { background: #e3e9dc; box-shadow: inset 4px 0 var(--trn-ink-accent); }
+.search .summary { max-width: 78ch; }

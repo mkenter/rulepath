@@ -29,7 +29,7 @@
 .wide li:not(:last-child)::after {
   margin-left: 8px;
   color: var(--trn-text-paper-muted);
-  content: '→';
+  content: '/';
 }
 
 .root a {

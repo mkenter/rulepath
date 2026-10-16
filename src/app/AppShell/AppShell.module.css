@@ -138,3 +138,14 @@
 @media (prefers-reduced-motion: reduce) {
   .brandLink, .primaryNav a, .primaryNav a::after { transition: none; }
 }
+
+.topBar { min-height: 64px; background: #1d302a; border-color: #4d6155; }
+.brandLink { font-size: 1.1875rem; letter-spacing: -.025em; gap: 12px; }
+.brandMark { width: 32px; height: 32px; color: var(--trn-signal); }
+.brandMark circle { fill: #1d302a; }
+.primaryNav { gap: 12px; }
+.primaryNav a { padding-inline: 16px; font-size: .8125rem; }
+.primaryNav a[aria-current="page"] { color: var(--trn-signal); background: #30483c; }
+.primaryNav a[aria-current="page"]::after { background: var(--trn-signal); bottom: 0; left: 16px; right: 16px; }
+.brandLink:hover, .primaryNav a:hover { color: var(--trn-signal); }
+@media(max-width: 560px) { .topBar { min-height: 60px; } .primaryNav { gap: 2px; } .primaryNav a { padding-inline: 10px; } }

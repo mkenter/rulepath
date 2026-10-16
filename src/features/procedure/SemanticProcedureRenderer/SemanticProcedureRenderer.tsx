@@ -618,7 +618,7 @@ function NodeCard({
               <span className={styles.typeLabel} aria-hidden="true">Open procedure</span>
               {node.label}
             </span>
-            <span className={styles.linkArrow} aria-hidden="true">↗</span>
+            <span className={styles.linkArrow} aria-hidden="true">→</span>
           </Link>
         ) : (
           <>

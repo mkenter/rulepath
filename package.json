@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "deploy": "wrangler deploy",
-    "screenshots": "npm run build && playwright test e2e/design-review.spec.ts --workers=1"
+    "screenshots": "npm run build && node scripts/screenshots.mjs",
+    "screenshots:full": "npm run build && node scripts/screenshots.mjs full"
   },
   "dependencies": {
     "@fontsource-variable/instrument-sans": "^5.3.0",
