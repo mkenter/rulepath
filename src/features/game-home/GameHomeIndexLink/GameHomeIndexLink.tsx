@@ -21,7 +21,6 @@ export function GameHomeIndexLink({ kind, showKind, summary, title, to }: GameHo
         <span className={styles.title}>{title}</span>
         {summary ? <span className={styles.summary} id={summaryId}>{summary}</span> : null}
       </span>
-      <span className={styles.arrow} aria-hidden="true">↗</span>
     </Link>
   );
 }

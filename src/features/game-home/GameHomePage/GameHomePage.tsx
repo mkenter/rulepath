@@ -96,7 +96,7 @@ export function GameHomePage() {
           <nav className={styles.jumpNav} aria-label="On this page">
             <span className={styles.jumpLabel}>On this page</span>
             {indexedSections.map((section) => (
-              <a key={section.id} href={`#${section.id}`}>{section.title}<span aria-hidden="true">↓</span></a>
+              <a key={section.id} href={`#${section.id}`}>{section.title}</a>
             ))}
           </nav>
         ) : null}

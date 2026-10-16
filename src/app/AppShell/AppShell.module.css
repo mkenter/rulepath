@@ -51,6 +51,7 @@
   align-items: center;
   gap: 18px;
   margin-left: auto;
+  margin-right: -10px;
 }
 
 .primaryNav a {
@@ -59,19 +60,20 @@
   min-height: 44px;
   align-items: center;
   gap: 7px;
-  padding: 8px 2px;
+  padding: 8px 10px;
   color: var(--trn-text-on-shell-muted);
   font-size: 0.9375rem;
   font-weight: 650;
   text-decoration: none;
 }
 
-.primaryNav a:hover { color: var(--trn-text-on-shell); }
+.primaryNav a:hover,
+.primaryNav a:focus-visible { background: var(--trn-surface-shell-raised-hover); color: var(--trn-brass-strong); }
 .primaryNav a[aria-current="page"] { color: var(--trn-brass-strong); }
 .primaryNav a:focus-visible {
   border-radius: 2px;
-  outline-color: var(--trn-focus-on-shell);
-  outline-offset: 4px;
+  outline: 2px solid var(--trn-focus-on-shell);
+  outline-offset: -2px;
 }
 
 .brandMark {
@@ -115,23 +117,22 @@
 
 .primaryNav a::after {
   position: absolute;
-  right: 0;
-  bottom: 3px;
-  left: 0;
+  right: 10px;
+  bottom: 5px;
+  left: 10px;
   height: 1px;
   background: transparent;
   content: "";
   transition: background-color var(--trn-motion-functional);
 }
 
-.primaryNav a:hover::after,
-.primaryNav a[aria-current="page"]::after { background: var(--trn-brass); }
+.primaryNav a:hover::after { background: var(--trn-brass); }
+.primaryNav a[aria-current="page"]::after { height: 2px; background: var(--trn-brass-strong); }
 .primaryNav a:focus-visible::after { height: 2px; background: currentcolor; }
 
 @media (max-width: 560px) {
   .topBar { min-height: 56px; }
   .brandLink { font-size: 1rem; }
-  .primaryNav a { padding-inline: 2px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

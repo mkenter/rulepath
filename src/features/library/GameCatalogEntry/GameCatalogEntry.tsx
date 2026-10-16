@@ -33,10 +33,12 @@ export function GameCatalogEntry({ accent, compact = false, number, procedureCou
             <span aria-hidden="true">/</span>
             <span>{referenceCount} {referenceCount === 1 ? 'reference' : 'references'}</span>
           </span>
-          <span className={styles.explore}>Explore game <span aria-hidden="true">↗</span></span>
+          <span className={styles.explore}>Explore game</span>
         </span>
       </span>
-      <span className={styles.arrow} aria-hidden="true">↗</span>
+      <svg className={styles.arrow} viewBox="0 0 80 80" fill="none" aria-hidden="true">
+        <path d="M10 40H66M46 20L66 40L46 60" />
+      </svg>
     </Link>
   );
 }
