@@ -9,11 +9,15 @@
 .summary { max-width: 690px; margin: 18px 0 0; color: #e0e3d8; font-size: 1.0625rem; line-height: 1.6; }
 .metadata { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px 24px; margin-top: 26px; padding: 16px 0; border-top: 1px solid #65776b; color: #c8d2c8; font-size: 0.8125rem; line-height: 1.5; }
 .separator { padding: 0 8px; color: var(--trn-brass-strong); }
-.jumpNav { display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px; padding: 12px 0; border-bottom: 1px solid var(--trn-border-on-rules); }
-.jumpLabel { margin-right: 4px; color: var(--trn-text-on-rules-muted); font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; }
-.jumpNav a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--trn-ink-accent); font-size: 0.8125rem; font-weight: 600; text-decoration: none; }
-.jumpNav a:hover { text-decoration: underline; text-underline-offset: 4px; }
-.jumpNav a:focus-visible { outline-color: var(--trn-focus-on-rules); }
+.jumpNav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 16px 0; border-bottom: 1px solid var(--trn-border-on-rules); }
+.jumpLabel { margin-right: 10px; color: var(--trn-text-on-rules-muted); font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; }
+.jumpNav a { display: inline-flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; min-width: 0; max-width: 100%; padding: 9px 13px; border: 1px solid var(--trn-border-on-rules); color: var(--trn-ink-accent); font-size: 0.8125rem; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; text-decoration: none; transition: background-color var(--trn-motion-functional), border-color var(--trn-motion-functional), color var(--trn-motion-functional); }
+.jumpNav a > span { flex-shrink: 0; }
+.jumpNav a:hover,
+.jumpNav a:focus-visible { background: var(--trn-ink-accent); border-color: var(--trn-ink-accent); color: var(--trn-text-on-shell); }
+.jumpNav a:focus-visible { outline: 2px solid var(--trn-focus-on-rules); outline-offset: 3px; }
+.jumpNav a:active { background: #263f37; border-color: #263f37; color: var(--trn-text-on-shell); }
+
 .contents { padding-top: 36px; }
 .sectionColumns { display: grid; gap: 36px; }
 .hasReferences { grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); gap: 40px; align-items: start; }
@@ -41,8 +45,8 @@
   .titleZone h1 { font-size: 2.75rem; }
   .summary { margin-top: 16px; font-size: 1rem; }
   .metadata { flex-direction: column; gap: 6px; margin-top: 22px; padding: 16px 0; }
-  .jumpNav { gap: 0 20px; padding-top: 14px; }
-  .jumpLabel { flex-basis: 100%; margin-bottom: 2px; }
+  .jumpNav { gap: 8px; padding-top: 16px; }
+  .jumpLabel { flex-basis: 100%; margin: 0 0 4px; }
   .contents { padding-top: 28px; }
   .hasReferences { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .mainSections { gap: 30px; }
@@ -51,3 +55,5 @@
   .section h2 { font-size: 1.625rem; }
   .referenceSections { padding: 22px; }
 }
+
+@media (prefers-reduced-motion: reduce) { .jumpNav a { transition: none; } }

@@ -5,6 +5,7 @@ import styles from './GameCatalogEntry.module.css';
 
 interface GameCatalogEntryProps {
   accent?: string;
+  compact?: boolean;
   number: number;
   procedureCount: number;
   publisher?: string;
@@ -14,11 +15,11 @@ interface GameCatalogEntryProps {
   to: string;
 }
 
-export function GameCatalogEntry({ accent, number, procedureCount, publisher, referenceCount, summary, title, to }: GameCatalogEntryProps) {
+export function GameCatalogEntry({ accent, compact = false, number, procedureCount, publisher, referenceCount, summary, title, to }: GameCatalogEntryProps) {
   const style = accent ? ({ '--catalog-accent': accent } as CSSProperties) : undefined;
 
   return (
-    <Link className={styles.root} data-library-game style={style} to={to}>
+    <Link className={`${styles.root}${compact ? ` ${styles.compact}` : ''}`} data-library-game style={style} to={to}>
       <span className={styles.number} aria-hidden="true">{number.toString().padStart(2, '0')}</span>
       <span className={styles.body}>
         <span className={styles.identity}>

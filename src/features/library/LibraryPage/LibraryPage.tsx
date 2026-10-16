@@ -23,10 +23,11 @@ export function LibraryPage() {
           <p className={styles.count}><span>{gameCount.toString().padStart(2, '0')}</span> {gameCount === 1 ? 'game' : 'games'} available</p>
         </header>
         <section className={styles.index} aria-label="Games">
-          <ul>
+          <ul className={gameCount === 1 ? styles.singleGame : undefined}>
             {contentRegistry.games.map((game, index) => (
               <li key={game.details.id}>
                 <GameCatalogEntry
+                  compact={gameCount > 1}
                   accent={game.details.accent}
                   number={index + 1}
                   procedureCount={game.procedures.size}

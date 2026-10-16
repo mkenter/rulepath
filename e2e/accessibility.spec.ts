@@ -63,7 +63,7 @@ test('library, contents, and scoped search remain keyboard operable', async ({ p
   await expect(procedure).toHaveCSS('outline-style', 'solid');
   await expect(procedure).toHaveCSS('outline-width', '2px');
   await expect(procedure).toHaveCSS('outline-color', 'rgb(109, 85, 38)');
-  await expect(procedure).toHaveCSS('background-color', 'rgb(255, 254, 250)');
+  await expect(procedure).toHaveCSS('background-color', 'rgb(232, 238, 232)');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(entry.path);
   await page.goBack();

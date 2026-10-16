@@ -20,7 +20,11 @@ export function AppShell({ children }: PropsWithChildren) {
       <a className={styles.skipLink} href="#main-content">Skip to main content</a>
       <header className={styles.topBar}>
         <Link className={styles.brandLink} to="/" aria-label="Rulepath library">
-          <span className={styles.brandMark} aria-hidden="true">R</span>
+          <svg className={styles.brandMark} viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M7 27V5H18C22.4 5 25 7.5 25 11.5S22.4 18 18 18H7M16 18L26 27" />
+            <circle cx="7" cy="5" r="2.5" />
+            <circle cx="7" cy="18" r="2" />
+          </svg>
           <span>Rulepath</span>
         </Link>
         <nav className={styles.primaryNav} aria-label="Primary navigation">

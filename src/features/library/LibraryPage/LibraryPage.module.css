@@ -37,7 +37,14 @@
 .summary { margin: 16px 0 0; font-size: 1.125rem; line-height: 1.5; color: var(--trn-text-on-rules-muted); }
 .count { margin: 0 0 3px; color: var(--trn-text-on-rules-muted); font-size: 0.875rem; white-space: nowrap; }
 .count span { margin-right: 8px; color: var(--trn-ink-accent); font-variant-numeric: tabular-nums; font-weight: 650; }
-.index ul { display: grid; gap: 16px; margin: 24px 0 0; padding: 0; list-style: none; }
+.index ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 24px 0 0; padding: 0; list-style: none; }
+
+.index li { min-width: 0; }
+.index .singleGame { grid-template-columns: minmax(0, 1fr); }
+
+@media (max-width: 760px) {
+  .index ul { grid-template-columns: minmax(0, 1fr); }
+}
 
 @media (max-width: 560px) {
   .root { padding: 32px 20px 48px; }
