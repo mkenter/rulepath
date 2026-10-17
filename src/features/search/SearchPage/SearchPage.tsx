@@ -58,7 +58,7 @@ export function SearchPage() {
   return (
     <div className={styles.root}>
       <div className={styles.inner}><div className={styles.breadcrumbs}><Breadcrumbs items={[{ label: 'Library', to: '/' }, { label: 'Search' }]} /></div>
-      <div className={styles.masthead}><header><p className={styles.eyebrow}>The rule finder</p><h1>Search rules</h1></header>
+      <div className={styles.masthead}><header><h1>Search rules</h1><p className={styles.context}>Find a procedure, reference, or passage of rule text.</p></header>
       <form className={styles.form} role="search" onSubmit={submit}>
         <label className="visually-hidden" htmlFor="library-search">Search games, procedures, and references</label>
         <div className={styles.controls}>
@@ -86,6 +86,7 @@ export function SearchPage() {
         </div>
         {scopedGame ? (
           <div className={styles.scope} role="group" aria-label="Active search filters">
+            <span>Searching within</span>
             <button
               className={styles.scopePill}
               type="button"

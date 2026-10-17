@@ -5,7 +5,6 @@ import styles from './GameCatalogEntry.module.css';
 
 interface GameCatalogEntryProps {
   accent?: string;
-  compact?: boolean;
   number: number;
   procedureCount: number;
   publisher?: string;
@@ -15,18 +14,18 @@ interface GameCatalogEntryProps {
   to: string;
 }
 
-export function GameCatalogEntry({ accent, compact = false, number, procedureCount, publisher, referenceCount, summary, title, to }: GameCatalogEntryProps) {
+export function GameCatalogEntry({ accent, number, procedureCount, publisher, referenceCount, summary, title, to }: GameCatalogEntryProps) {
   const style = accent ? ({ '--catalog-accent': accent } as CSSProperties) : undefined;
 
   return (
-    <Link className={`${styles.root}${compact ? ` ${styles.compact}` : ''}`} data-library-game style={style} to={to}>
+    <Link className={styles.root} data-library-game style={style} to={to}>
+      <span className={styles.number} aria-hidden="true">{number.toString().padStart(2, '0')}</span>
       <span className={styles.identity}>
-        <span className={styles.number} aria-hidden="true">{number.toString().padStart(2, '0')} / Game guide</span>
         <span className={styles.title} data-game-title>{title}</span>
+        {publisher ? <span className={styles.publisher} data-game-publisher>{publisher}</span> : null}
       </span>
       <span className={styles.body}>
         <span className={styles.details}>
-          {publisher ? <span className={styles.publisher} data-game-publisher>{publisher}</span> : null}
           {summary ? <span className={styles.summary}>{summary}</span> : null}
           <span className={styles.counts} data-game-counts>
             <span>{procedureCount} {procedureCount === 1 ? 'procedure' : 'procedures'}</span>
@@ -34,8 +33,8 @@ export function GameCatalogEntry({ accent, compact = false, number, procedureCou
             <span>{referenceCount} {referenceCount === 1 ? 'reference' : 'references'}</span>
           </span>
         </span>
-        <span className={styles.explore}>Explore game <span aria-hidden="true">→</span></span>
       </span>
+      <span className={styles.explore}>Explore game <span aria-hidden="true">→</span></span>
     </Link>
   );
 }

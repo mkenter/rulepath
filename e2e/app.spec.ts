@@ -1,24 +1,26 @@
 import { expect, test } from '@playwright/test';
 import { registry, scenarios } from './support/content';
 
-test('library presents a paper catalog with forest entries and visible interaction states', async ({ page }) => {
+test('library presents ruled neutral catalog entries with visible interaction states', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Library | Rulepath');
   await expect(page.getByRole('link', { name: 'Rulepath library' })).toBeVisible();
   const gameRow = page.locator('[data-library-game]').first();
   await expect(gameRow).toHaveCSS('border-radius', '0px');
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(38, 63, 55)');
+  await expect(gameRow).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(gameRow.locator(':scope > span').first()).toHaveCSS('border-top-width', '4px');
+  await expect(gameRow.locator('xpath=..')).toHaveCSS('border-bottom-width', '1px');
   await expect(gameRow.locator('[data-game-title]')).toBeVisible();
   await expect(gameRow.locator('[data-game-counts]')).toBeVisible();
   await expect(gameRow).toContainText('Explore game');
   const cta = gameRow.getByText('Explore game');
-  await expect(cta).toHaveCSS('background-color', 'rgb(223, 205, 165)');
-  await expect(cta).toHaveCSS('color', 'rgb(38, 63, 55)');
+  await expect(cta).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(cta).toHaveCSS('color', 'rgb(41, 35, 49)');
 
   await gameRow.hover();
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(48, 77, 66)');
+  await expect(gameRow).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await page.mouse.down();
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(29, 52, 43)');
+  await expect(gameRow).toHaveCSS('background-color', 'rgb(236, 234, 241)');
   await page.mouse.move(0, 0);
   await page.mouse.up();
 
@@ -28,10 +30,10 @@ test('library presents a paper catalog with forest entries and visible interacti
   await expect(gameRow).toBeFocused();
   await expect(gameRow).toHaveCSS('outline-style', 'solid');
   await expect(gameRow).toHaveCSS('outline-width', '3px');
-  await expect(gameRow).toHaveCSS('outline-color', 'rgb(38, 63, 55)');
+  await expect(gameRow).toHaveCSS('outline-color', 'rgb(181, 54, 39)');
 });
 
-test('library catalog fixture scales to spaced entries and long phone content', async ({ page }) => {
+test('library catalog fixture retains uniform ruled entries and wraps long phone content', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
@@ -71,16 +73,18 @@ test('library catalog fixture scales to spaced entries and long phone content', 
       link.querySelector<HTMLElement>('[data-game-title]')!.getBoundingClientRect().height,
     );
     return {
-      consistentGaps: boxes.slice(1).every((box, index) =>
-        Math.abs(box.top - boxes[index]!.bottom - 24) <= 1,
+      consistentRules: boxes.slice(1).every((box, index) =>
+        Math.abs(box.top - boxes[index]!.bottom - 1) <= 1,
       ),
+      sameTreatment: links.every(link => link.className === links[0]!.className),
       sameWidth: boxes.every((box) => Math.abs(box.width - boxes[0]!.width) <= 1),
       touchTargets: boxes.every((box) => box.height >= 44),
       wrapsLongTitle: titleHeights[links.findIndex(link => link.getAttribute('data-catalog-fixture') === '0')]! > titleHeights[links.findIndex(link => link.getAttribute('data-catalog-fixture') === '1')]!,
     };
   });
   expect(geometry).toEqual({
-    consistentGaps: true,
+    consistentRules: true,
+    sameTreatment: true,
     sameWidth: true,
     touchTargets: true,
     wrapsLongTitle: true,

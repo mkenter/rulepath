@@ -113,7 +113,7 @@ async function expectCenteredRailGeometry(page: Page) {
 }
 
 test.describe('Ironsworn authored integration and geometry regressions', () => {
-  test('game home has a paper index, forest masthead, and responsive reference navigation', async ({
+  test('game home prioritizes procedures with neutral identity and responsive reference navigation', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1180, height: 820 });
@@ -128,12 +128,16 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     await expect(entries).toHaveCount(11);
     await expect(page.locator('[data-resource-kind="procedure"]')).toHaveCount(5);
     await expect(page.locator('[data-resource-kind="reference"]')).toHaveCount(6);
-    await expect(gameHome).toHaveCSS('background-color', 'rgb(246, 244, 238)');
-    await expect(titleZone).toHaveCSS('background-color', 'rgb(38, 63, 55)');
+    await expect(gameHome).toHaveCSS('background-color', 'rgb(247, 247, 250)');
+    await expect(titleZone).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    const jumpNav = page.getByRole('navigation', { name: 'On this page', exact: true });
+    await expect(jumpNav).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(jumpNav).toHaveCSS('border-top-width', '1px');
     const sectionColumns = page.locator('[data-game-home-sections]');
     const mainRegion = sectionColumns.locator(':scope > div').first();
     const referenceRegion = sectionColumns.locator(':scope > div').last();
-    await expect(referenceRegion).toHaveCSS('background-color', 'rgb(223, 230, 216)');
+    await expect(referenceRegion).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(referenceRegion).toHaveCSS('border-left-width', '1px');
     const mainBox = (await mainRegion.boundingBox())!;
     const referenceBox = (await referenceRegion.boundingBox())!;
     expect(referenceBox.x).toBeGreaterThan(mainBox.x + mainBox.width);
@@ -160,7 +164,7 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     await expect(procedure).toBeFocused();
     await expect(procedure).toHaveCSS('outline-style', 'solid');
     await expect(procedure).toHaveCSS('outline-width', '2px');
-    await expect(procedure).toHaveCSS('outline-color', 'rgb(38, 63, 55)');
+    await expect(procedure).toHaveCSS('outline-color', 'rgb(181, 54, 39)');
 
     for (const target of [procedure, reference]) {
       const box = await target.boundingBox();
