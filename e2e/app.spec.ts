@@ -1,26 +1,29 @@
 import { expect, test } from '@playwright/test';
 import { registry, scenarios } from './support/content';
 
-test('library presents ruled neutral catalog entries with visible interaction states', async ({ page }) => {
+test('library presents an open catalog with visible interaction states', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Library | Rulepath');
   await expect(page.getByRole('link', { name: 'Rulepath library' })).toBeVisible();
   const gameRow = page.locator('[data-library-game]').first();
   await expect(gameRow).toHaveCSS('border-radius', '0px');
   await expect(gameRow).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-  await expect(gameRow.locator(':scope > span').first()).toHaveCSS('border-top-width', '4px');
-  await expect(gameRow.locator('xpath=..')).toHaveCSS('border-bottom-width', '1px');
+  const catalog = page.getByRole('region', { name: 'Games' });
+  await expect(catalog).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(gameRow.getByRole('heading', { level: 2 })).toBeVisible();
   await expect(gameRow.locator('[data-game-title]')).toBeVisible();
   await expect(gameRow.locator('[data-game-counts]')).toBeVisible();
-  await expect(gameRow).toContainText('Explore game');
-  const cta = gameRow.getByText('Explore game');
+  await expect(gameRow).toContainText('Open game');
+  const cta = gameRow.getByText('Open game');
   await expect(cta).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
   await expect(cta).toHaveCSS('color', 'rgb(41, 35, 49)');
 
   await gameRow.hover();
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(gameRow).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(gameRow.locator('[data-game-title]')).toHaveCSS('text-decoration-line', 'underline');
+  const hoverBackground = await gameRow.evaluate(element => getComputedStyle(element).backgroundColor);
   await page.mouse.down();
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(236, 234, 241)');
+  await expect(gameRow).not.toHaveCSS('background-color', hoverBackground);
   await page.mouse.move(0, 0);
   await page.mouse.up();
 

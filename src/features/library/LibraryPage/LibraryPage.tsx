@@ -16,18 +16,17 @@ export function LibraryPage() {
       <div className={styles.inner}>
         <header className={styles.header}>
           <div>
-            <p className={styles.eyebrow}>Rulepath / Game library</p>
+            <p className={styles.eyebrow}>Game library</p>
             <h1>Library</h1>
           </div>
-          <div className={styles.intro}><p className={styles.summary}>Your next move<br />starts here.</p><p className={styles.count}><span>{gameCount.toString().padStart(2, '0')}</span> {gameCount === 1 ? 'game' : 'games'} available</p></div>
+          <p className={styles.count}>{gameCount} {gameCount === 1 ? 'game' : 'games'} available</p>
         </header>
         <section className={styles.index} aria-label="Games">
           <ul>
-            {contentRegistry.games.map((game, index) => (
+            {contentRegistry.games.map((game) => (
               <li key={game.details.id}>
                 <GameCatalogEntry
                   accent={game.details.accent}
-                  number={index + 1}
                   procedureCount={game.procedures.size}
                   publisher={game.details.publisher}
                   referenceCount={game.references.size}

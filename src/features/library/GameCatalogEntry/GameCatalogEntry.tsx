@@ -1,11 +1,10 @@
-import type { CSSProperties } from 'react';
+import { useId, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './GameCatalogEntry.module.css';
 
 interface GameCatalogEntryProps {
   accent?: string;
-  number: number;
   procedureCount: number;
   publisher?: string;
   referenceCount: number;
@@ -14,27 +13,25 @@ interface GameCatalogEntryProps {
   to: string;
 }
 
-export function GameCatalogEntry({ accent, number, procedureCount, publisher, referenceCount, summary, title, to }: GameCatalogEntryProps) {
+export function GameCatalogEntry({ accent, procedureCount, publisher, referenceCount, summary, title, to }: GameCatalogEntryProps) {
   const style = accent ? ({ '--catalog-accent': accent } as CSSProperties) : undefined;
 
+  const titleId = useId();
+
   return (
-    <Link className={styles.root} data-library-game style={style} to={to}>
-      <span className={styles.number} aria-hidden="true">{number.toString().padStart(2, '0')}</span>
-      <span className={styles.identity}>
-        <span className={styles.title} data-game-title>{title}</span>
-        {publisher ? <span className={styles.publisher} data-game-publisher>{publisher}</span> : null}
-      </span>
-      <span className={styles.body}>
-        <span className={styles.details}>
-          {summary ? <span className={styles.summary}>{summary}</span> : null}
-          <span className={styles.counts} data-game-counts>
-            <span>{procedureCount} {procedureCount === 1 ? 'procedure' : 'procedures'}</span>
-            <span aria-hidden="true">/</span>
-            <span>{referenceCount} {referenceCount === 1 ? 'reference' : 'references'}</span>
-          </span>
-        </span>
-      </span>
-      <span className={styles.explore}>Explore game <span aria-hidden="true">→</span></span>
+    <Link className={styles.root} aria-labelledby={titleId} data-library-game style={style} to={to}>
+      <div className={styles.identity}>
+        {publisher ? <p className={styles.publisher} data-game-publisher>{publisher}</p> : null}
+        <h2 className={styles.title} data-game-title id={titleId}>{title}</h2>
+      </div>
+      {summary ? <p className={styles.summary}>{summary}</p> : null}
+      <div className={styles.metadata}>
+        <div className={styles.counts} data-game-counts>
+          <span>{procedureCount} {procedureCount === 1 ? 'procedure' : 'procedures'}</span>
+          <span>{referenceCount} {referenceCount === 1 ? 'reference' : 'references'}</span>
+        </div>
+        <span className={styles.explore}>Open game</span>
+      </div>
     </Link>
   );
 }

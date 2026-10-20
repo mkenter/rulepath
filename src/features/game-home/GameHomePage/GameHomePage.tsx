@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, type CSSProperties } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Breadcrumbs } from '../../../components/Breadcrumbs';
@@ -36,9 +36,8 @@ export function GameHomePage() {
 
   if (!game) return <NotFoundPage />;
 
-  const indexedSections = game.sections.map((section, index) => ({
+  const indexedSections = game.sections.map((section) => ({
     ...section,
-    number: index + 1,
     referenceOnly: isReferenceSection(section.items),
     mixed: section.items.some((item) => 'procedure' in item) && section.items.some((item) => 'reference' in item),
   }));
@@ -52,7 +51,6 @@ export function GameHomePage() {
     return (
       <section className={styles.section} key={section.id} aria-labelledby={section.id}>
         <div className={styles.sectionHeading}>
-          <span className={styles.ordinal} aria-hidden="true">{section.number.toString().padStart(2, '0')}</span>
           <h2 id={section.id} tabIndex={-1}>{section.title}</h2>
           <span className={styles.sectionCount}>{count} {resourceKind}{count === 1 ? '' : 's'}</span>
         </div>
@@ -78,35 +76,40 @@ export function GameHomePage() {
   }
 
   return (
-    <div className={styles.root} data-game-home>
+    <div className={styles.root} data-game-home style={game.details.accent ? ({ '--game-accent': game.details.accent } as CSSProperties) : undefined}>
       <div className={styles.inner}>
         <div className={styles.breadcrumbs}>
           <Breadcrumbs items={[{ label: 'Library', to: '/' }, { label: game.details.title }]} />
         </div>
-        <div className={styles.masthead}><header className={styles.titleZone} data-game-home-title>
-          <p className={styles.eyebrow}>Game guide</p>
-          <h1>{game.details.title}</h1>
-          {game.details.summary ? <p className={styles.summary}>{game.details.summary}</p> : null}
-          <div className={styles.metadata}>
-            {game.details.publisher ? <span>{game.details.publisher}</span> : null}
-            <span>{game.procedures.size} {game.procedures.size === 1 ? 'procedure' : 'procedures'} <span className={styles.separator} aria-hidden="true">/</span> {game.references.size} {game.references.size === 1 ? 'reference' : 'references'}</span>
-          </div>
-        </header>
-        {indexedSections.length ? (
-          <nav className={styles.jumpNav} aria-label="On this page">
-            <span className={styles.jumpLabel}>On this page</span>
-            {indexedSections.map((section) => (
-              <a key={section.id} href={`#${section.id}`}><span aria-hidden="true">{section.number.toString().padStart(2, '0')}</span>{section.title}</a>
-            ))}
+        <div className={styles.folio}>
+          <header className={styles.identity} data-game-home-title>
+            <div className={styles.titleZone}>
+              {game.details.publisher ? <p className={styles.publisher}>{game.details.publisher}</p> : null}
+              <h1>{game.details.title}</h1>
+            </div>
+            <div className={styles.context}>
+              {game.details.summary ? <p className={styles.summary}>{game.details.summary}</p> : null}
+              <p className={styles.metadata}>
+                <span>{game.procedures.size} {game.procedures.size === 1 ? 'procedure' : 'procedures'}</span>
+                <span>{game.references.size} {game.references.size === 1 ? 'reference' : 'references'}</span>
+              </p>
+            </div>
+            {indexedSections.length ? (
+              <nav className={styles.jumpNav} aria-label="On this page">
+                <span className={styles.jumpLabel}>In this game</span>
+                {indexedSections.map((section) => (
+                  <a key={section.id} href={`#${section.id}`}>{section.title}</a>
+                ))}
+              </nav>
+            ) : null}
+          </header>
+          <nav className={styles.contents} aria-label={`${game.details.title} contents`}>
+            <div className={styles.sectionColumns} data-game-home-sections>
+              {mainSections.length ? <div className={styles.mainSections}>{mainSections.map(renderSection)}</div> : null}
+              {referenceSections.length ? <div className={styles.referenceSections}>{referenceSections.map(renderSection)}</div> : null}
+            </div>
           </nav>
-        ) : null}
         </div>
-        <nav className={styles.contents} aria-label={`${game.details.title} contents`}>
-          <div className={`${styles.sectionColumns}${mainSections.length && referenceSections.length ? ` ${styles.hasReferences}` : ''}`} data-game-home-sections>
-            {mainSections.length ? <div className={styles.mainSections}>{mainSections.map(renderSection)}</div> : null}
-            {referenceSections.length ? <div className={styles.referenceSections}>{referenceSections.map(renderSection)}</div> : null}
-          </div>
-        </nav>
       </div>
     </div>
   );
