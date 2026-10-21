@@ -129,7 +129,7 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     await expect(page.locator('[data-resource-kind="procedure"]')).toHaveCount(5);
     await expect(page.locator('[data-resource-kind="reference"]')).toHaveCount(6);
     await expect(gameHome).toHaveCSS('background-color', 'rgb(247, 247, 250)');
-    await expect(titleZone).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(titleZone).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     const jumpNav = page.getByRole('navigation', { name: 'On this page', exact: true });
     await expect(jumpNav).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     await expect(jumpNav).toHaveCSS('border-top-width', '1px');
@@ -137,12 +137,12 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     const mainRegion = sectionColumns.locator(':scope > div').first();
     const referenceRegion = sectionColumns.locator(':scope > div').last();
     await expect(referenceRegion).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-    await expect(referenceRegion).toHaveCSS('border-left-width', '1px');
+    await expect(referenceRegion).toHaveCSS('border-left-width', '0px');
     const mainBox = (await mainRegion.boundingBox())!;
     const referenceBox = (await referenceRegion.boundingBox())!;
-    expect(referenceBox.x).toBeGreaterThan(mainBox.x + mainBox.width);
-    expect(Math.abs(referenceBox.y - mainBox.y)).toBeLessThanOrEqual(1);
-    expect(mainBox.width).toBeGreaterThan(referenceBox.width);
+    expect(referenceBox.y).toBeGreaterThanOrEqual(mainBox.y + mainBox.height);
+    expect(Math.abs(referenceBox.x - mainBox.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(mainBox.width - referenceBox.width)).toBeLessThanOrEqual(1);
     await expect(mainRegion).toContainText('2 procedures');
     await expect(referenceRegion).toContainText('6 references');
 
