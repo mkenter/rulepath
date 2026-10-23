@@ -1,6 +1,6 @@
 .root {
   margin-bottom: 16px;
-  color: var(--trn-text-dark-muted);
+  color: var(--trn-text-context-muted);
   font-size: 0.8125rem;
 }
 
@@ -16,7 +16,7 @@
 
 .root li:not(:last-child)::after {
   margin-left: 6px;
-  color: var(--trn-border-dark);
+  color: var(--trn-border-context);
   content: "/";
 }
 
@@ -24,7 +24,7 @@
   display: inline-flex;
   min-height: 32px;
   align-items: center;
-  color: var(--trn-text-dark-primary);
+  color: var(--trn-text-context);
   text-decoration: none;
   transition:
     border-color var(--trn-motion-functional),
@@ -34,17 +34,17 @@
 }
 
 .root a:hover {
-  color: var(--trn-brass-strong);
+  color: var(--trn-accent-context);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 }
 .root a:focus-visible {
   border-radius: 2px;
-  outline-color: var(--trn-focus-on-shell);
+  outline-color: var(--trn-focus-context);
   outline-offset: 2px;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
-.root a:active { color: var(--trn-brass); }
+.root a:active { color: var(--trn-text-context); }

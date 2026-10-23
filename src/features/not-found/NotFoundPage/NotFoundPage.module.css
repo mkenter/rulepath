@@ -9,10 +9,10 @@
   align-items: center;
   justify-content: center;
   padding: 10px 18px;
-  border: 1px solid var(--trn-brass);
+  border: 1px solid var(--trn-accent-on-shell);
   border-radius: 10px;
-  background: var(--trn-shell-800);
-  color: var(--trn-text-dark-primary);
+  background: var(--trn-surface-shell-instrument);
+  color: var(--trn-text-on-shell);
   font-weight: 700;
   text-decoration: none;
 }

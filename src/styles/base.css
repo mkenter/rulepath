@@ -20,7 +20,7 @@ body {
 }
 
 ::selection {
-  background: var(--trn-brass);
+  background: var(--trn-signal);
   color: var(--trn-surface-shell);
 }
 
@@ -35,7 +35,7 @@ a {
 }
 
 :where(a, button, input, select, textarea, summary):focus-visible {
-  outline: 2px solid var(--trn-focus-on-shell);
+  outline: 2px solid var(--trn-focus-context);
   outline-offset: 3px;
 }
 

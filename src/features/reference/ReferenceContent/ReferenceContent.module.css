@@ -2,13 +2,13 @@
   max-width: 62ch;
   overflow-wrap: anywhere;
   margin: 0;
-  color: var(--trn-text-paper-primary);
+  color: var(--trn-text-on-rules);
   font-size: 1.0625rem;
   line-height: 1.65;
 }
 .page h2 {
   margin: 0;
-  color: var(--trn-text-paper-primary);
+  color: var(--trn-text-on-rules);
   font-size: 0.875rem;
   font-weight: 650;
   letter-spacing: 0.01em;
@@ -17,10 +17,11 @@
 .page ul {
   margin: 12px 0 0;
   padding-left: 17px;
-  color: var(--trn-text-paper-muted);
+  color: var(--trn-text-on-rules-muted);
   line-height: 1.5;
 }
 .links { display: grid; gap: 2px; padding-left: 0 !important; list-style: none; }
+.links li + li { border-top: 1px solid var(--trn-border-on-rules); }
 .links a {
   display: inline-flex;
   width: 100%;
@@ -28,7 +29,7 @@
   align-items: center;
   padding-inline: 7px;
   border-radius: 3px;
-  color: var(--trn-text-paper-primary);
+  color: var(--trn-ink-accent);
   font-weight: 620;
   text-decoration: none;
   text-underline-offset: 4px;
@@ -39,13 +40,13 @@
     box-shadow var(--trn-motion-functional);
 }
 .links a:hover,
-.links a:focus-visible { background: rgb(255 255 255 / 28%); color: #5f481c; }
+.links a:focus-visible { background: var(--trn-ink-accent-soft); color: var(--trn-ink-accent-hover); }
 .links a:focus-visible {
   outline: 2px solid var(--trn-focus-on-rules);
   outline-offset: 2px;
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
-.links a:active { background: rgb(98 95 88 / 14%); }
-.source { color: var(--trn-text-paper-muted); font-size: 0.8125rem; }
+.links a:active { background: var(--trn-ink-accent-soft-hover); }
+.source { color: var(--trn-text-on-rules-muted); font-size: 0.8125rem; }
 .source dl { margin-top: 12px; padding-top: 12px; }

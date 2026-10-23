@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Breadcrumbs } from '../../../components/Breadcrumbs';
 import { IndexRow } from '../../../components/IndexRow';
-import { PageHeader } from '../../../components/PageHeader';
 import { SearchIcon } from '../../../components/SearchIcon';
 import { contentRegistry } from '../../../content/bundled-content';
 import { createSearchIndex, searchContent } from '../searchIndex';
@@ -58,8 +57,8 @@ export function SearchPage() {
 
   return (
     <div className={styles.root}>
-      <Breadcrumbs items={[{ label: 'Library', to: '/' }, { label: 'Search' }]} />
-      <PageHeader title="Search rules" />
+      <div className={styles.inner}><div className={styles.breadcrumbs}><Breadcrumbs items={[{ label: 'Library', to: '/' }, { label: 'Search' }]} /></div>
+      <div className={styles.masthead}><header><h1>Search rules</h1><p className={styles.context}>Find a procedure, reference, or passage of rule text.</p></header>
       <form className={styles.form} role="search" onSubmit={submit}>
         <label className="visually-hidden" htmlFor="library-search">Search games, procedures, and references</label>
         <div className={styles.controls}>
@@ -87,6 +86,7 @@ export function SearchPage() {
         </div>
         {scopedGame ? (
           <div className={styles.scope} role="group" aria-label="Active search filters">
+            <span>Searching within</span>
             <button
               className={styles.scopePill}
               type="button"
@@ -102,7 +102,7 @@ export function SearchPage() {
         ) : (
           <p className={`${styles.scope} ${styles.globalScope}`}>Searching all games</p>
         )}
-      </form>
+      </form></div>
       <section className={styles.results} aria-labelledby="search-results-heading" aria-live="polite">
         <div className={styles.heading}>
           <h2 id="search-results-heading">
@@ -129,7 +129,7 @@ export function SearchPage() {
         ) : (
           <p className={styles.empty}>No bundled rules match “{query.trim()}”.</p>
         )}
-      </section>
+      </section></div>
     </div>
   );
 }

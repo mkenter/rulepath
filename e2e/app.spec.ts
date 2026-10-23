@@ -1,87 +1,42 @@
 import { expect, test } from '@playwright/test';
 import { registry, scenarios } from './support/content';
 
-test('library presents a flat editorial catalog with tailored interaction states', async ({
-  page,
-}) => {
+test('library presents an open catalog with visible interaction states', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Library | Rulepath');
   await expect(page.getByRole('link', { name: 'Rulepath library' })).toBeVisible();
   const gameRow = page.locator('[data-library-game]').first();
-
-  const rest = await gameRow.evaluate((element) => {
-    const style = getComputedStyle(element);
-    const identity = getComputedStyle(element, '::before');
-    const rule = getComputedStyle(element, '::after');
-    return {
-      background: style.backgroundColor,
-      borderRadius: style.borderRadius,
-      bottomRule: style.borderBottomColor,
-      identityColor: identity.backgroundColor,
-      accent: (style.getPropertyValue('--catalog-accent') || style.getPropertyValue('--trn-brass')).trim(),
-      identityHeight: identity.height,
-      identityWidth: identity.width,
-      ruleHeight: rule.height,
-      ruleTransform: rule.transform,
-      titleColor: getComputedStyle(
-        element.querySelector<HTMLElement>('[data-game-title]')!,
-      ).color,
-    };
-  });
-  expect(rest.borderRadius).toBe('0px');
-  expect(rest.bottomRule).toBe('rgb(77, 83, 83)');
-  const channels = rest.accent.slice(1).match(/.{2}/g)!.map(channel => Number.parseInt(channel, 16));
-  expect(rest.identityColor).toBe(`rgb(${channels.join(', ')})`);
-  expect(rest.identityHeight).toBe('24px');
-  expect(rest.identityWidth).toBe('2px');
-  expect(rest.ruleHeight).toBe('1px');
-  expect(rest.ruleTransform).not.toBe('none');
+  await expect(gameRow).toHaveCSS('border-radius', '0px');
+  await expect(gameRow).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  const catalog = page.getByRole('region', { name: 'Games' });
+  await expect(catalog).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(gameRow.getByRole('heading', { level: 2 })).toBeVisible();
+  await expect(gameRow.locator('[data-game-title]')).toBeVisible();
+  await expect(gameRow.locator('[data-game-counts]')).toBeVisible();
+  await expect(gameRow).toContainText('Open game');
+  const cta = gameRow.getByText('Open game');
+  await expect(cta).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(cta).toHaveCSS('color', 'rgb(41, 35, 49)');
 
   await gameRow.hover();
-  await expect.poll(() => gameRow.evaluate((element) =>
-    getComputedStyle(element, '::after').transform,
-  )).toBe('matrix(1, 0, 0, 1, 0, 0)');
-  await expect(gameRow).not.toHaveCSS('background-color', rest.background);
-  await expect.poll(() => gameRow.evaluate((element) =>
-    getComputedStyle(element, '::before').width,
-  )).toBe('3px');
-  await expect.poll(() => gameRow.locator('[data-game-title]').evaluate((element) =>
-    getComputedStyle(element).color,
-  )).not.toBe(rest.titleColor);
-
+  await expect(gameRow).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(gameRow.locator('[data-game-title]')).toHaveCSS('text-decoration-line', 'underline');
+  const hoverBackground = await gameRow.evaluate(element => getComputedStyle(element).backgroundColor);
   await page.mouse.down();
+  await expect(gameRow).not.toHaveCSS('background-color', hoverBackground);
   await page.mouse.move(0, 0);
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(24, 28, 28)');
   await page.mouse.up();
 
   await gameRow.focus();
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Tab');
   await expect(gameRow).toBeFocused();
-  await expect(gameRow).toHaveCSS('outline-style', 'none');
-  await expect(gameRow).toHaveCSS('background-color', 'rgb(41, 47, 46)');
-  await expect.poll(() => gameRow.evaluate((element) => {
-    const identity = getComputedStyle(element, '::before');
-    return {
-      color: identity.backgroundColor,
-      height: identity.height,
-      width: identity.width,
-    };
-  })).toEqual({
-    color: 'rgb(228, 209, 154)',
-    height: '40px',
-    width: '4px',
-  });
-  await expect(gameRow.locator('[data-game-title]'))
-    .toHaveCSS('color', 'rgb(228, 209, 154)');
-  const focusRules = await gameRow.evaluate((element) => getComputedStyle(element).boxShadow);
-  expect(focusRules.match(/rgb\(228, 209, 154\)/g)).toHaveLength(2);
-  await expect.poll(() => gameRow.evaluate((element) =>
-    getComputedStyle(element, '::after').transform,
-  )).not.toBe('matrix(1, 0, 0, 1, 0, 0)');
+  await expect(gameRow).toHaveCSS('outline-style', 'solid');
+  await expect(gameRow).toHaveCSS('outline-width', '3px');
+  await expect(gameRow).toHaveCSS('outline-color', 'rgb(181, 54, 39)');
 });
 
-test('library catalog fixture scales to adjacent entries and long phone content', async ({ page }) => {
+test('library catalog fixture retains uniform ruled entries and wraps long phone content', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
@@ -121,16 +76,18 @@ test('library catalog fixture scales to adjacent entries and long phone content'
       link.querySelector<HTMLElement>('[data-game-title]')!.getBoundingClientRect().height,
     );
     return {
-      adjacent: boxes.slice(1).every((box, index) =>
-        Math.abs(box.top - boxes[index]!.bottom) <= 1,
+      consistentRules: boxes.slice(1).every((box, index) =>
+        Math.abs(box.top - boxes[index]!.bottom - 1) <= 1,
       ),
+      sameTreatment: links.every(link => link.className === links[0]!.className),
       sameWidth: boxes.every((box) => Math.abs(box.width - boxes[0]!.width) <= 1),
       touchTargets: boxes.every((box) => box.height >= 44),
       wrapsLongTitle: titleHeights[links.findIndex(link => link.getAttribute('data-catalog-fixture') === '0')]! > titleHeights[links.findIndex(link => link.getAttribute('data-catalog-fixture') === '1')]!,
     };
   });
   expect(geometry).toEqual({
-    adjacent: true,
+    consistentRules: true,
+    sameTreatment: true,
     sameWidth: true,
     touchTargets: true,
     wrapsLongTitle: true,
@@ -149,7 +106,7 @@ test('bundled fonts provide the editorial and UI type hierarchy without remote r
     return {
       body: style('body').fontFamily,
       gameTitle: style('[data-library-game] [data-game-title]').fontFamily,
-      pageTitle: style('[data-page-header] h1').fontFamily,
+      pageTitle: style('main h1').fontFamily,
       fontResources: performance
         .getEntriesByType('resource')
         .map((entry) => entry.name)
@@ -268,7 +225,7 @@ for (const viewport of [
 
 for (const viewport of [
   { name: 'phone', width: 390, height: 844, expectedWidth: 390 },
-  { name: 'ipad-landscape', width: 1180, height: 820, expectedWidth: 400 },
+  { name: 'ipad-landscape', width: 1180, height: 820, expectedWidth: 480 },
 ]) {
   test(`${viewport.name} uses the intended contextual reference sheet width`, async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });

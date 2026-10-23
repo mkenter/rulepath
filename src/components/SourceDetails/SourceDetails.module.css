@@ -4,12 +4,12 @@
   gap: 8px 18px;
   margin: 24px 0 0;
   padding-top: 20px;
-  border-top: 1px solid var(--trn-border-paper);
+  border-top: 1px solid var(--trn-border-on-rules);
 }
 
 .root div { display: flex; gap: 6px; }
 .root dt {
-  color: var(--trn-text-paper-muted);
+  color: var(--trn-text-on-rules-muted);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;

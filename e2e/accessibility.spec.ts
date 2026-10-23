@@ -60,8 +60,10 @@ test('library, contents, and scoped search remain keyboard operable', async ({ p
   await expect(page).toHaveURL(gamePath);
   const procedure = page.locator(`[data-game-home-entry][href="${entry.path}"]`);
   await focusByKeyboard(page, procedure);
-  await expect(procedure).toHaveCSS('outline-style', 'none');
-  await expect(procedure).toHaveCSS('background-color', 'rgb(41, 47, 46)');
+  await expect(procedure).toHaveCSS('outline-style', 'solid');
+  await expect(procedure).toHaveCSS('outline-width', '2px');
+  await expect(procedure).toHaveCSS('outline-color', 'rgb(181, 54, 39)');
+  await expect(procedure).toHaveCSS('background-color', 'rgb(252, 232, 226)');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(entry.path);
   await page.goBack();
@@ -168,14 +170,37 @@ test('primary controls retain the stronger 44px touch-target standard', async ({
     await minimum(page.getByRole('button', { name: `Close ${reference.reference.title}`, exact: true }));
   }
 });
-test('Field Atlas text and focus roles meet their required contrast ratios', async ({ page }) => {
+test('shared plum header uses consistent hover and visible keyboard focus states', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const headerLinks = [
+    page.getByRole('link', { name: 'Rulepath library', exact: true }),
+    page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Library', exact: true }),
+    page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Search', exact: true }),
+  ];
+  for (const link of headerLinks) {
+    await link.hover();
+    await expect(link).toHaveCSS('color', 'rgb(255, 170, 150)');
+    await expect(link).toHaveCSS('background-color', 'rgb(56, 40, 63)');
+    await page.mouse.move(0, 100);
+    await focusByKeyboard(page, link);
+    await expect(link).toHaveCSS('color', 'rgb(255, 170, 150)');
+    await expect(link).toHaveCSS('background-color', 'rgb(56, 40, 63)');
+    await expect(link).toHaveCSS('outline-color', 'rgb(255, 170, 150)');
+    await expect(link).toHaveCSS('outline-width', '2px');
+  }
+});
+
+test('Rulepath text and focus roles meet their required contrast ratios', async ({ page }) => {
   await page.goto('/');
 
   const ratios = await page.evaluate(() => {
     const styles = getComputedStyle(document.documentElement);
     const token = (name: string) => styles.getPropertyValue(name).trim();
     const channels = (color: string) => {
-      const hex = color.slice(1);
+      const value = color.slice(1);
+      // Production CSS may shorten equivalent hexadecimal colors (for example #ffffff to #fff).
+      const hex = value.length === 3 ? [...value].map(channel => channel.repeat(2)).join('') : value;
       return [0, 2, 4].map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16) / 255);
     };
     const luminance = (color: string) => {
@@ -191,30 +216,35 @@ test('Field Atlas text and focus roles meet their required contrast ratios', asy
     };
 
     return {
-      brassOnShell: contrast(token('--trn-brass'), token('--trn-shell-raised')),
-      focusOnRules: contrast(token('--trn-focus-on-rules'), token('--trn-paper')),
-      focusOnRulesRaised: contrast(token('--trn-focus-on-rules'), token('--trn-paper-raised')),
-      focusOnShell: contrast(token('--trn-focus-on-shell'), token('--trn-shell-raised')),
-      focusOnShellHover: contrast(
-        token('--trn-focus-on-shell'),
-        token('--trn-shell-raised-hover'),
-      ),
-      shellMutedText: contrast(token('--trn-text-dark-muted'), token('--trn-shell-950')),
-      shellText: contrast(token('--trn-text-dark-primary'), token('--trn-shell-950')),
-      rulesMutedText: contrast(token('--trn-text-paper-muted'), token('--trn-paper')),
-      rulesText: contrast(token('--trn-text-paper-primary'), token('--trn-paper')),
+      text: {
+        shell: contrast(token('--trn-text-on-shell'), token('--trn-surface-shell')),
+        shellMuted: contrast(token('--trn-text-on-shell-muted'), token('--trn-surface-shell')),
+        shellHover: contrast(token('--trn-accent-on-shell'), token('--trn-navigation-hover')),
+        rules: contrast(token('--trn-text-on-rules'), token('--trn-surface-rules')),
+        rulesMuted: contrast(token('--trn-text-on-rules-muted'), token('--trn-surface-rules')),
+        accentOnRules: contrast(token('--trn-ink-accent'), token('--trn-surface-rules')),
+        brand: contrast(token('--trn-text-on-brand'), token('--trn-surface-brand')),
+        signal: contrast(token('--trn-text-on-signal'), token('--trn-signal')),
+      },
+      focus: {
+        shell: contrast(token('--trn-focus-on-shell'), token('--trn-surface-shell')),
+        shellHover: contrast(token('--trn-focus-on-shell'), token('--trn-navigation-hover')),
+        shellRaised: contrast(token('--trn-focus-on-shell'), token('--trn-surface-shell-raised-hover')),
+        rules: contrast(token('--trn-focus-on-rules'), token('--trn-surface-rules')),
+        rulesRaised: contrast(token('--trn-focus-on-rules'), token('--trn-surface-rules-raised')),
+        brand: contrast(token('--trn-focus-on-brand'), token('--trn-surface-brand')),
+        signal: contrast(token('--trn-focus-on-signal'), token('--trn-signal')),
+        signalHover: contrast(token('--trn-focus-on-signal'), token('--trn-signal-hover')),
+      },
     };
   });
 
-  expect(ratios.shellText).toBeGreaterThanOrEqual(4.5);
-  expect(ratios.shellMutedText).toBeGreaterThanOrEqual(4.5);
-  expect(ratios.rulesText).toBeGreaterThanOrEqual(4.5);
-  expect(ratios.rulesMutedText).toBeGreaterThanOrEqual(4.5);
-  expect(ratios.brassOnShell).toBeGreaterThanOrEqual(3);
-  expect(ratios.focusOnShell).toBeGreaterThanOrEqual(3);
-  expect(ratios.focusOnShellHover).toBeGreaterThanOrEqual(3);
-  expect(ratios.focusOnRules).toBeGreaterThanOrEqual(3);
-  expect(ratios.focusOnRulesRaised).toBeGreaterThanOrEqual(3);
+  for (const [role, ratio] of Object.entries(ratios.text)) {
+    expect(ratio, `${role} text contrast`).toBeGreaterThanOrEqual(4.5);
+  }
+  for (const [role, ratio] of Object.entries(ratios.focus)) {
+    expect(ratio, `${role} focus contrast`).toBeGreaterThanOrEqual(3);
+  }
 });
 
 test('reduced motion removes nonessential transitions without removing state feedback', async ({ page }) => {
@@ -238,8 +268,9 @@ test('reduced motion removes nonessential transitions without removing state fee
   if (linked) {
     await page.goto(linked.path);
     const card = page.locator(`[data-flow-node-id="${linked.node.id}"] [data-flow-node-type="procedure"]`);
-    expect(Number.parseFloat(await card.evaluate(element => getComputedStyle(element, '::after').transitionDuration))).toBeLessThanOrEqual(0.00001);
+    expect(Number.parseFloat(await card.evaluate(element => getComputedStyle(element).transitionDuration))).toBeLessThanOrEqual(0.00001);
+    const restingBackground = await card.evaluate(element => getComputedStyle(element).backgroundColor);
     await card.getByRole('link').hover();
-    await expect(card).toHaveCSS('border-color', 'rgb(148, 118, 47)');
+    await expect(card).not.toHaveCSS('background-color', restingBackground);
   }
 });
