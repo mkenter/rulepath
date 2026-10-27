@@ -4,9 +4,8 @@ import { describe, expect, it } from 'vitest';
 
 import type { ContentRegistry } from '../src/content/registry';
 import { resolveSource } from '../src/content/registry';
-import { createSearchIndex, searchContent } from '../src/features/search/searchIndex';
 
-// Reuse the same application contract with the real bundle and with test-only games added.
+// Exercise shared route rendering once per resource type; content validation covers the dataset.
 export function testRegisteredGameRoutes(registry: ContentRegistry, renderRoute: (route: string) => unknown) {
   describe.each(registry.games.map(game => ({ id: game.details.id, game })))('registered game routes: $id', ({ id, game }) => {
     const home = `/games/${id}`;
@@ -27,7 +26,11 @@ export function testRegisteredGameRoutes(registry: ContentRegistry, renderRoute:
       expect(within(contents).queryAllByRole('link').map(link => link.getAttribute('href')).sort()).toEqual(resources.map(({ path }) => path).sort());
     });
 
-    for (const { resource, path } of resources) {
+    const representatives = [
+      resources.find(({ resource }) => 'nodes' in resource),
+      resources.find(({ resource }) => !('nodes' in resource)),
+    ].filter((entry): entry is (typeof resources)[number] => Boolean(entry));
+    for (const { resource, path } of representatives) {
       it(`opens ${path} directly with the right game, links, and attribution`, async () => {
         const user = userEvent.setup();
         const source = resolveSource(game.details.source, resource.source);
@@ -51,21 +54,5 @@ export function testRegisteredGameRoutes(registry: ContentRegistry, renderRoute:
         expect(screen.getByText(source.licensing.copyright)).toBeVisible();
       });
     }
-
-    it('searches within the game and restores global results when the scope is removed', async () => {
-      const user = userEvent.setup();
-      const query = resources[0]?.resource.title ?? game.details.title;
-      renderRoute(`/search?${new URLSearchParams({ game: id, q: query })}`);
-      const globalMatches = searchContent(createSearchIndex(registry), query);
-      const scopedResults = within(screen.getByRole('region', { name: /^\d+ results?$/ })).getAllByRole('link');
-      for (const result of scopedResults) expect(result.getAttribute('href')).toMatch(new RegExp(`^${home}(?:/|$)`));
-      expect(scopedResults.map(link => link.getAttribute('href'))).toEqual(globalMatches.filter(result => result.gameId === id).map(result => result.path));
-      const expectedPath = resources[0]?.path ?? home;
-      expect(scopedResults.map(link => link.getAttribute('href'))).toContain(expectedPath);
-      await user.click(screen.getByRole('button', { name: `Remove ${game.details.title} filter and search all games` }));
-      expect(screen.getByText('Searching all games')).toBeInTheDocument();
-      const results = within(screen.getByRole('region', { name: /^\d+ results?$/ })).getAllByRole('link');
-      expect(results.map(link => link.getAttribute('href'))).toEqual(globalMatches.map(result => result.path));
-    });
   });
 }

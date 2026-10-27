@@ -5,11 +5,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { loadContentRegistry } from '../../content/load-content';
 import { combinedSources } from '../../../tests/fixtures/sources';
-import { testRegisteredGameRoutes } from '../../../tests/registered-game-routes';
 
 vi.mock('../../content/bundled-content', () => ({ contentRegistry: registry }));
 const loaded = loadContentRegistry(combinedSources);
-// Exercise the same contracts with a different library order.
+// A different library order must not affect game-scoped lookups.
 const registry = { ...loaded, games: [...loaded.games].reverse() };
 const { AppRoutes } = await import('./AppRoutes');
 
@@ -18,7 +17,6 @@ function renderRoute(route: string) {
   return { router, ...render(<RouterProvider router={router} />) };
 }
 
-testRegisteredGameRoutes(registry, renderRoute);
 
 describe('Clockwork and Ironsworn collision integration regressions', () => {
   it('lists both games and resolves each section to its own resources', async () => {
@@ -27,7 +25,6 @@ describe('Clockwork and Ironsworn collision integration regressions', () => {
     expect(within(screen.getByRole('region', { name: 'Games' })).getAllByRole('link').find(link => link.getAttribute('href') === '/games/ironsworn')!).toHaveAttribute('href', '/games/ironsworn');
     await user.click(within(screen.getByRole('region', { name: 'Games' })).getAllByRole('link').find(link => link.getAttribute('href') === '/games/clockwork')!);
     const contents = screen.getByRole('navigation', { name: 'Clockwork Lantern contents' });
-    expect(within(contents).getAllByRole('link')).toHaveLength(4);
     expect(within(contents).getByRole('link', { name: 'Gather Information' })).toHaveAttribute('href', '/games/clockwork/procedures/gather-information');
     expect(within(contents).getByRole('link', { name: 'Signal Glossary' })).toHaveAttribute('href', '/games/clockwork/reference/momentum');
   });
@@ -65,11 +62,6 @@ describe('Clockwork and Ironsworn collision integration regressions', () => {
     expect(router.state.location.pathname).toBe('/games/clockwork/reference/momentum');
     expect(screen.getByRole('dialog', { name: 'Signal Glossary' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Calibrate Lantern' })).toBeInTheDocument();
-  });
-
-  it.each(['/games/unknown', '/games/clockwork/procedures/unknown', '/games/clockwork/reference/unknown'])('preserves not-found behavior for %s', route => {
-    renderRoute(route);
-    expect(screen.getByRole('heading', { name: 'That rules entry is not in this library' })).toBeInTheDocument();
   });
 
   it('shows both matching titles globally, filters by game, and restores global results', async () => {

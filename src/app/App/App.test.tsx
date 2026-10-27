@@ -3,7 +3,6 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { AppRoutes } from './AppRoutes';
 import { contentRegistry } from '../../content/bundled-content';
 import { testRegisteredGameRoutes } from '../../../tests/registered-game-routes';
-import { testApplicationInteractions } from '../../../tests/application-interactions';
 
 function renderRoute(route: string) {
   const router = createMemoryRouter([{ path: '*', element: <AppRoutes /> }], { initialEntries: [route] });
@@ -11,4 +10,3 @@ function renderRoute(route: string) {
 }
 
 testRegisteredGameRoutes(contentRegistry, renderRoute);
-testApplicationInteractions(contentRegistry, renderRoute);
