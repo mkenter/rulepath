@@ -25,9 +25,9 @@ describe('semantic graph regression cases', () => {
       expect(within(screen.getByLabelText(`Procedure link: ${node.label}`)).getByRole('link')).toHaveAttribute('href', `/games/fixture/procedures/${node.target}`);
     }
   });
-  it('preserves distinct same-target outcomes and read-only decisions', () => {
+  it('preserves distinct same-target outcomes as in-page jump links', () => {
     renderGraph(procedureSchema.parse(topology.nested));
-    const decision = screen.getByLabelText('Decision · read only: Node drawn');
+    const decision = screen.getByLabelText('Decision: Node drawn');
     expect(decision).toHaveTextContent('Yes');
     expect(decision).toHaveTextContent('No');
     const connections = screen.getByRole('list', { name: 'Procedure connections' });
@@ -35,7 +35,10 @@ describe('semantic graph regression cases', () => {
     expect(connections).toHaveTextContent('No: Continue to Node hidden');
     expect(decision).toHaveAccessibleDescription('From “Node drawn”: Yes: Continue to Node hidden From “Node drawn”: No: Continue to Node hidden');
     expect(within(decision).queryByRole('button')).not.toBeInTheDocument();
-    expect(screen.getByRole('article', { name: 'Decision · read only: Node hidden' })).toBeInTheDocument();
+    const destination = screen.getByRole('article', { name: 'Decision: Node hidden' });
+    expect(within(decision).getByRole('link', { name: 'Yes: Go to Node hidden' })).toHaveAttribute('href', `#${destination.id}`);
+    expect(within(decision).getByRole('link', { name: 'No: Go to Node hidden' })).toHaveAttribute('href', `#${destination.id}`);
+    expect(destination).toHaveAttribute('tabindex', '-1');
   });
   it('retains all four canonical outcomes when visual presentation is unsupported', () => {
     const procedure = procedureSchema.parse({

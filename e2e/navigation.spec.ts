@@ -48,6 +48,10 @@ test('search has removable scope and browser-history-safe results', async ({ pag
   await page.getByRole('searchbox').fill(query);
   await page.getByRole('button', { name: `Remove ${entry.game.details.title} filter and search all games`, exact: true }).click();
   await expect(page).toHaveURL(`/search?${new URLSearchParams({ q: query })}`);
+  await expect(page.getByRole('searchbox')).toBeFocused();
+  await expect(page.getByRole('searchbox')).toHaveValue(query);
+  await expect(page.getByRole('button', { name: /filter and search all games$/ })).toHaveCount(0);
+  await expect(page.getByText('Searching all games', { exact: true })).toBeVisible();
   const results = page.getByRole('region', { name: /^\d+ results?$/ });
   await results.locator(`[href="${entry.path}"]`).click();
   await page.goBack();
@@ -74,14 +78,17 @@ for (const width of [390, 820]) {
     await expect(page.getByRole('heading', {
       level: 1, name: linked!.game.procedures.get(linked!.node.target)!.title, exact: true,
     })).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
     const initialHistory = await page.evaluate(() => window.history.length);
     const nav = page.getByRole('navigation', { name: 'On this page' });
     await nav.getByRole('link', { name: 'Key rules', exact: true }).focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#key-rules')).toBeFocused();
-    const keyBounds = await page.locator('#key-rules').boundingBox();
-    const navBounds = await nav.boundingBox();
-    expect(keyBounds!.y).toBeGreaterThanOrEqual(navBounds!.y + navBounds!.height);
+    await expect.poll(async () => {
+      const keyBounds = await page.locator('#key-rules').boundingBox();
+      const navBounds = await nav.boundingBox();
+      return !!keyBounds && !!navBounds && keyBounds.y >= navBounds.y + navBounds.height;
+    }).toBe(true);
     await nav.getByRole('link', { name: 'References', exact: true }).click();
     await expect(page.locator('#references')).toBeFocused();
     const referenceLink = page.locator('#references a').first();

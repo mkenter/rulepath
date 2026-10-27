@@ -49,12 +49,17 @@
 }
 
 .node {
+  position: relative;
   width: 100%;
   min-height: 54px;
   border: 1px solid var(--trn-border-on-rules-strong);
   border-radius: 3px;
   background: var(--trn-surface-rules-raised);
+  scroll-margin-block: 128px 24px;
 }
+
+.node:focus { outline: 2px solid var(--trn-focus-on-rules); outline-offset: 3px; }
+.arrivalCue { position: absolute; inset: 0; border-radius: inherit; background: color-mix(in srgb, var(--trn-route-b) 14%, transparent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--trn-route-b) 16%, transparent); opacity: 0; pointer-events: none; }
 
 .body {
   position: relative;
@@ -141,6 +146,8 @@
 }
 
 .branches {
+  position: relative;
+  z-index: 1;
   display: flex;
   min-height: 36px;
   align-items: stretch;
@@ -152,6 +159,7 @@
 .branch {
   display: grid;
   min-width: 0;
+  min-height: 44px;
   flex: 1 1 0;
   place-items: center;
   padding: 8px 10px;
@@ -160,7 +168,15 @@
   font-weight: 600;
   line-height: 1.35;
   overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: background-color var(--trn-motion-functional), text-decoration-color var(--trn-motion-functional);
 }
+
+.branch:is(:hover, :active) { background: var(--trn-surface-rules-muted); text-decoration-color: currentColor; }
+.branch:focus-visible { outline: 2px solid var(--trn-focus-on-rules); outline-offset: -3px; background: var(--trn-surface-rules-muted); text-decoration-color: currentColor; }
 
 .branch + .branch {
   border-left: 1px solid var(--trn-border-on-rules);
@@ -394,4 +410,6 @@
 .procedure:is(:hover, :focus-within) .linkArrow { transform: translateX(2px); }
 @media (forced-colors: active) {
   .procedure:focus-within { outline-color: Highlight; }
+  .node:focus, .branch:focus-visible { outline-color: Highlight; }
 }
+@media (prefers-reduced-motion: reduce) { .arrivalCue { display: none; } }
