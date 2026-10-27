@@ -1,14 +1,24 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { AnimatePresence, domAnimation, LazyMotion, useIsPresent, type Variants } from 'motion/react';
+import * as m from 'motion/react-m';
+import { forwardRef, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Breadcrumbs } from '../../../components/Breadcrumbs';
 import { IndexRow } from '../../../components/IndexRow';
 import { SearchIcon } from '../../../components/SearchIcon';
 import { contentRegistry } from '../../../content/bundled-content';
+import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion';
 import { createSearchIndex, searchContent } from '../searchIndex';
 import styles from './SearchPage.module.css';
 
 const searchIndex = createSearchIndex(contentRegistry);
+const scopeVariants: Variants = {
+  enter: { opacity: 0, y: 4 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.22, ease: [0.2, 0.6, 0.3, 1] } },
+  exit: { opacity: 0, y: -4, transition: { duration: 0.22, ease: [0.2, 0.6, 0.3, 1] } },
+  still: { opacity: 1, y: 0, transition: { duration: 0 } },
+  gone: { opacity: 0, y: 0, transition: { duration: 0 } },
+};
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,10 +42,11 @@ export function SearchPage() {
   }, [query, routeQuery, scopedGame?.details.id]);
 
   function updateRouteQuery(nextQuery: string) {
+    // A pending debounce must not restore a game scope that was just removed.
+    const nextParams = new URLSearchParams(window.location.search);
     const trimmed = nextQuery.trim();
-    const nextParams: Record<string, string> = {};
-    if (scopedGame) nextParams.game = scopedGame.details.id;
-    if (trimmed) nextParams.q = trimmed;
+    if (trimmed) nextParams.set('q', trimmed);
+    else nextParams.delete('q');
     setSearchParams(nextParams, { replace: true });
   }
 
@@ -85,24 +96,17 @@ export function SearchPage() {
             </button>
           ) : null}
         </div>
-        {scopedGame ? (
-          <div className={styles.scope} role="group" aria-label="Active search filters">
-            <span>Searching within</span>
-            <button
-              className={styles.scopePill}
-              type="button"
-              onClick={removeGameScope}
-              aria-label={`Remove ${scopedGame.details.title} filter and search all games`}
-            >
-              <span>{scopedGame.details.title}</span>
-              <span className={styles.remove} aria-hidden="true">
-                <svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 3.5l9 9m0-9l-9 9" /></svg>
-              </span>
-            </button>
-          </div>
-        ) : (
-          <p className={`${styles.scope} ${styles.globalScope}`}>Searching all games</p>
-        )}
+        <div className={styles.scope}>
+          <LazyMotion features={domAnimation} strict>
+            <AnimatePresence initial={false} mode="popLayout">
+              <SearchScope
+                key={scopedGame?.details.id ?? 'all-games'}
+                gameTitle={scopedGame?.details.title}
+                onRemove={removeGameScope}
+              />
+            </AnimatePresence>
+          </LazyMotion>
+        </div>
       </form></div>
       <p className="visually-hidden" role="status" aria-atomic="true">
         {query.trim() ? `${results.length} ${results.length === 1 ? 'result' : 'results'}${scopedGame ? ` in ${scopedGame.details.title}` : ' across all games'}.` : 'Enter a title, alias, or phrase from a rule.'}
@@ -137,3 +141,39 @@ export function SearchPage() {
     </div>
   );
 }
+
+const SearchScope = forwardRef<HTMLDivElement, { gameTitle?: string; onRemove: () => void }>(
+  function SearchScope({ gameTitle, onRemove }, ref) {
+    const isPresent = useIsPresent();
+    const reduceMotion = usePrefersReducedMotion();
+    return (
+      <m.div
+        ref={ref}
+        className={styles.scopeContent}
+        role={gameTitle ? 'group' : undefined}
+        aria-label={gameTitle ? 'Active search filters' : undefined}
+        aria-hidden={!isPresent || undefined}
+        inert={!isPresent}
+        variants={scopeVariants}
+        initial={reduceMotion ? false : 'enter'}
+        animate={reduceMotion ? 'still' : 'visible'}
+        exit={reduceMotion ? 'gone' : 'exit'}
+      >
+        {gameTitle ? <>
+          <span>Searching within</span>
+          <button
+            className={styles.scopePill}
+            type="button"
+            onClick={onRemove}
+            aria-label={`Remove ${gameTitle} filter and search all games`}
+          >
+            <span>{gameTitle}</span>
+            <span className={styles.remove} aria-hidden="true">
+              <svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 3.5l9 9m0-9l-9 9" /></svg>
+            </span>
+          </button>
+        </> : <p className={styles.globalScope}>Searching all games</p>}
+      </m.div>
+    );
+  },
+);

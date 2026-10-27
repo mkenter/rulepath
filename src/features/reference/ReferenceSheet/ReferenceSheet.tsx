@@ -1,22 +1,12 @@
 import { useIsPresent, type Variants } from 'motion/react';
 import * as m from 'motion/react-m';
-import { useId, useLayoutEffect, useRef, useSyncExternalStore, type KeyboardEvent, type MouseEvent } from 'react';
+import { useId, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion';
 import { ReferenceContent } from '../ReferenceContent';
 import { useReference } from '../useReference';
 import styles from './ReferenceSheet.module.css';
-
-const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
-function subscribeToMotionPreference(onChange: () => void) {
-  const query = window.matchMedia?.(reducedMotionQuery);
-  query?.addEventListener('change', onChange);
-  return () => query?.removeEventListener('change', onChange);
-}
-function prefersReducedMotion() {
-  return window.matchMedia?.(reducedMotionQuery).matches ?? true;
-}
-const reducedMotionOnServer = () => true;
 
 const sheetOffset = { x: 'var(--sheet-offset-x, 32px)', y: 'var(--sheet-offset-y, 0px)' };
 const sheetVariants: Variants = {
@@ -41,8 +31,7 @@ export function ReferenceSheet() {
   const backdropPressed = useRef(false);
   const closeRequested = useRef(false);
   const isPresent = useIsPresent();
-  // Subscribe so a preference change also stops motion in an already-open sheet.
-  const reduceMotion = useSyncExternalStore(subscribeToMotionPreference, prefersReducedMotion, reducedMotionOnServer);
+  const reduceMotion = usePrefersReducedMotion();
   const titleId = useId();
 
   useLayoutEffect(() => {

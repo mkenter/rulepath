@@ -17,4 +17,9 @@
 .root dd { margin: 0; }
 .root .verification { display: block; width: 100%; overflow-wrap: anywhere; }
 .verification dt { display: none; }
-.verification summary { cursor: pointer; }
+.verification summary { position: relative; display: flex; align-items: center; min-height: 44px; padding-left: 18px; cursor: pointer; list-style: none; }
+.verification summary::-webkit-details-marker { display: none; }
+.verification summary::before,
+.verification summary::after { content: ''; position: absolute; left: 0; top: 50%; width: 10px; border-top: 1.5px solid currentColor; }
+.verification summary::after { transform: rotate(90deg); transition: transform var(--trn-motion-functional); }
+.verification details[open] > summary::after { transform: rotate(0); }

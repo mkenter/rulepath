@@ -1,3 +1,4 @@
+import { useAnimate } from 'motion/react-mini';
 import {
   useEffect,
   useId,
@@ -5,6 +6,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type MouseEvent,
   type RefObject,
 } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,6 +14,7 @@ import { Link } from 'react-router-dom';
 import styles from './SemanticProcedureRenderer.module.css';
 
 import type { Procedure, ProcedureNode } from '../../../content/schema';
+import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion';
 import {
   appendInvocation,
   procedurePath,
@@ -33,6 +36,7 @@ interface SemanticProcedureRendererProps {
 interface NodeCardProps extends SemanticProcedureRendererProps {
   edgeDescriptionIds: ReadonlyMap<string, string>;
   node: ProcedureNode;
+  onJump: (event: MouseEvent<HTMLAnchorElement>, nodeId: string) => void;
   routeDirections: ReadonlyMap<string, RouteDirection>;
   routeTones: ReadonlyMap<string, RouteTone>;
 }
@@ -82,7 +86,7 @@ const nodeTypeLabel: Record<ProcedureNode['type'], string> = {
   start: 'Start',
   end: 'End',
   step: 'Step',
-  decision: 'Decision · read only',
+  decision: 'Decision',
   procedure: 'Procedure link',
 };
 
@@ -577,6 +581,7 @@ function NodeCard({
   gameId,
   invocationPath,
   node,
+  onJump,
   procedure,
   procedureTitles,
   routeDirections,
@@ -605,6 +610,7 @@ function NodeCard({
         direction,
         label,
         routeKey: group.key,
+        targetId: group.to,
         tone,
       }));
     })
@@ -616,10 +622,13 @@ function NodeCard({
   return (
     <article
       className={`${styles.node} ${nodeTypeClasses[node.type]}`} data-flow-node
+      id={`flow-${gameId}-${procedure.id}-${node.id}`}
+      tabIndex={-1}
       data-flow-node-type={node.type}
       aria-label={`${nodeTypeLabel[node.type]}: ${node.label}`}
       aria-describedby={edgeDescriptionIds.get(node.id)}
     >
+      <span className={styles.arrivalCue} data-flow-arrival-cue aria-hidden="true" />
       <div className={styles.body}>
         {node.type === 'procedure' && targetTitle ? (
           <Link
@@ -661,19 +670,22 @@ function NodeCard({
           {decisionBranches.length} outcomes require an authored presentation
         </p>
       ) : node.type === 'decision' && decisionBranches.length ? (
-        <div className={styles.branches} data-flow-decision-branches aria-hidden="true">
+        <div className={styles.branches} data-flow-decision-branches>
           {decisionBranches.map((branch) => (
-            <span
+            <a
               className={`${styles.branch} ${directionClasses[branch.direction]} ${toneClasses[branch.tone]}`} data-flow-decision-branch
               data-route-key={branch.routeKey}
+              href={`#flow-${gameId}-${procedure.id}-${branch.targetId}`}
+              onClick={(event) => onJump(event, branch.targetId)}
+              aria-label={`${branch.label}: ${branch.direction === 'return' ? 'Return' : 'Go'} to ${procedure.nodes.find(target => target.id === branch.targetId)?.label ?? branch.targetId}`}
               key={branch.key}
             >
-              {branch.direction === 'left' ? '← ' : null}
-              {branch.label}
-              {branch.direction === 'down' ? ' ↓' : null}
-              {branch.direction === 'right' ? ' →' : null}
-              {branch.direction === 'return' ? ' ↻' : null}
-            </span>
+              <span>
+                <span aria-hidden="true">{branch.direction === 'left' ? '← ' : null}</span>
+                {branch.label}
+                <span aria-hidden="true">{branch.direction === 'down' ? ' ↓' : branch.direction === 'right' ? ' →' : branch.direction === 'return' ? ' ↻' : null}</span>
+              </span>
+            </a>
           ))}
         </div>
       ) : null}
@@ -688,8 +700,14 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
     procedure.edges.flatMap((edge, index) => edge.from === node.id ? [`${descriptionId}-edge-${index}`] : []).join(' ') || undefined,
   ]).filter((entry): entry is [string, string] => entry[1] !== undefined));
   const [pointerEmphasis, setPointerEmphasis] = useState<{ nodeId?: string; routeKey?: string } | null>(null);
-  const [focusedNode, setFocusedNode] = useState<string | undefined>(undefined);
-  const listRef = useRef<HTMLOListElement>(null);
+  const [focusEmphasis, setFocusEmphasis] = useState<{ nodeId?: string; routeKey?: string } | null>(null);
+  const [listRef, animate] = useAnimate<HTMLOListElement>();
+  const cancelJump = useRef<() => void>(() => {});
+  const reduceMotion = usePrefersReducedMotion();
+  useEffect(() => {
+    cancelJump.current();
+    return () => cancelJump.current();
+  }, [procedure, reduceMotion]);
   const nodesById = new Map(procedure.nodes.map((node) => [node.id, node]));
   const flow = useMemo(() => analyzeProcedureFlow(procedure), [procedure]);
   const presentationNodes = useMemo(
@@ -720,6 +738,34 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
   const gutterWidth = railEdgeClearance + 8 + Math.max(0, railDepth - 1) * railLaneSpacing;
   const flowStyle = { '--flow-gutter': `${gutterWidth}px` } as CSSProperties;
 
+  function jumpToNode(event: MouseEvent<HTMLAnchorElement>, nodeId: string) {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const target = document.getElementById(`flow-${props.gameId}-${procedure.id}-${nodeId}`);
+    if (!target || !listRef.current?.contains(target)) return;
+    event.preventDefault();
+    cancelJump.current();
+    target.focus({ preventScroll: true });
+    const bounds = target.getBoundingClientRect();
+    const inView = bounds.top >= 128 && bounds.bottom <= window.innerHeight - 24;
+    const cue = target.querySelector<HTMLElement>('[data-flow-arrival-cue]');
+    let animation: ReturnType<typeof animate> | undefined;
+    const highlight = () => {
+      // A reader may have moved on or interrupted the scroll before arrival.
+      if (!reduceMotion && cue && document.activeElement === target) {
+        animation = animate(cue, { opacity: [0, 1, 0] }, { duration: 1, times: [0, 0.2, 1], ease: 'easeOut' });
+      }
+    };
+    cancelJump.current = () => {
+      document.removeEventListener('scrollend', highlight);
+      animation?.cancel();
+    };
+    // Wait for arrival so the cue is visible, rather than playing off screen.
+    const smooth = !reduceMotion && 'onscrollend' in document;
+    if (!inView && smooth) document.addEventListener('scrollend', highlight, { once: true });
+    if (!inView) target.scrollIntoView({ block: 'center', behavior: smooth ? 'smooth' : 'instant' });
+    if (inView || !smooth) highlight();
+  }
+
   return (
     <section className={styles.root} id="procedure-flow" tabIndex={-1} data-procedure-diagram aria-label={`${procedure.title} procedure flow`}>
       <div className={styles.heading}>
@@ -734,13 +780,17 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
           setPointerEmphasis(routeKey ? { routeKey } : nodeId ? { nodeId } : null);
         }}
         onPointerLeave={() => setPointerEmphasis(null)}
-        onFocusCapture={(event) => setFocusedNode(event.target.closest<HTMLElement>('[data-flow-node-id]')?.dataset.flowNodeId)}
+        onFocusCapture={(event) => {
+          const routeKey = event.target.closest<HTMLElement>('[data-route-key]')?.dataset.routeKey;
+          const nodeId = event.target.closest<HTMLElement>('[data-flow-node-id]')?.dataset.flowNodeId;
+          setFocusEmphasis(routeKey ? { routeKey } : nodeId ? { nodeId } : null);
+        }}
         onBlurCapture={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) setFocusedNode(undefined);
+          if (!event.currentTarget.contains(event.relatedTarget)) setFocusEmphasis(null);
         }}
       >
         <FlowConnectors
-          emphasis={pointerEmphasis ?? (focusedNode ? { nodeId: focusedNode } : null)}
+          emphasis={pointerEmphasis ?? focusEmphasis}
           containerRef={listRef}
           flow={flow}
           presentationIndexes={presentationIndexes}
@@ -758,6 +808,7 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
             <NodeCard
               edgeDescriptionIds={edgeDescriptionIds}
               node={node}
+              onJump={jumpToNode}
               routeDirections={railLayout.routeDirections}
               routeTones={railLayout.routeTones}
               {...props}
