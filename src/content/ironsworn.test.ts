@@ -3,7 +3,7 @@ import { contentRegistry } from './bundled-content';
 import { resolveSource } from './registry';
 import { createSearchIndex, searchContent } from '../features/search/searchIndex';
 
-describe('Ironsworn sample regressions', () => {
+describe('Ironsworn content regressions', () => {
   const index = createSearchIndex(contentRegistry);
   it('ranks exact titles before supporting-text matches', () => {
     expect(searchContent(index, 'Action Roll', 'ironsworn')[0]).toMatchObject({ kind: 'Procedure', path: '/games/ironsworn/procedures/action-roll' });
@@ -16,16 +16,16 @@ describe('Ironsworn sample regressions', () => {
     expect(searchContent(index, 'canceled').some(result => result.title === 'Action Roll')).toBe(true);
   });
 
-  it('preserves the Ironsworn SRD sample and lists its resources exactly once', () => {
+  it('preserves Ironsworn procedures and lists their supporting resources exactly once', () => {
     expect(contentRegistry.getGame('ironsworn')).toBeDefined();
     const game = contentRegistry.getGame('ironsworn')!;
-    expect(game.procedures.size).toBe(5);
-    expect(game.references.size).toBe(6);
+    expect(game.procedures.size).toBe(39);
+    expect(game.references.size).toBe(21);
     const paths = game.sections.flatMap(section => section.items.map(item =>
       'procedure' in item ? `procedure/${item.procedure}` : `reference/${item.reference}`,
     ));
-    expect(paths).toHaveLength(11);
-    expect(new Set(paths).size).toBe(11);
+    expect(paths).toHaveLength(game.procedures.size + game.references.size);
+    expect(new Set(paths).size).toBe(paths.length);
     const metadata = game.details.source;
     expect(metadata.publication.edition).toContain('SRD .09');
     expect(metadata.publication.creator).toBe('Shawn Tomkin');
@@ -35,9 +35,9 @@ describe('Ironsworn sample regressions', () => {
     expect(metadata.licensing.copyright).toBe('Copyright ©2018 Shawn Tomkin.');
     expect(metadata.licensing.adaptation).toContain('reorganized and paraphrased');
     for (const resource of [...game.procedures.values(), ...game.references.values()]) {
-      expect(Object.keys(resource.source)).toEqual(['section']);
       expect(resource.source.section.length).toBeGreaterThan(0);
-      expect(resolveSource(metadata, resource.source).licensing).toBe(metadata.licensing);
+      expect(resolveSource(metadata, resource.source).licensing.license.url).toBe(metadata.licensing.license.url);
+      expect(resolveSource(metadata, resource.source).publication.creator).toBe('Shawn Tomkin');
     }
   });
   it('preserves Ironsworn move relationships and its decisions of up to three outcomes', () => {
@@ -50,7 +50,9 @@ describe('Ironsworn sample regressions', () => {
         expect(procedure.edges.filter(edge => edge.from === decision.id).length).toBeLessThanOrEqual(3);
       }
     }
-    expect(game.references.get('price-table')?.summary).toContain('99-00');
+    expect(game.references.get('price-table')?.sections?.[0]?.table?.rows).toContainEqual([
+      '99-00', expect.stringContaining('Roll twice more'),
+    ]);
     expect(game.references.get('oracle-options')?.summary).toContain('four options');
   });
   it('finds the known Gather Information procedure', () => {

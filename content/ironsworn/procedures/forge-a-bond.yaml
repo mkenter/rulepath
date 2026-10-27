@@ -1,0 +1,144 @@
+id: forge-a-bond
+title: Forge a Bond
+summary: Spend significant time together, face hardships together, or sacrifice for a person or
+  community.
+source:
+  section: Forge a Bond
+nodes:
+- id: n1
+  type: start
+  label: Spend significant time together, face hardships together, or sacrifice for a person or
+    community.
+- id: n2
+  type: step
+  label: If this follows successfully fulfilling a vow to their benefit, you may reroll any dice.
+- id: n3
+  type: procedure
+  label: Action Roll (heart)
+  target: action-roll
+- id: n4
+  type: decision
+  label: What is the roll result?
+- id: n5
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n6
+  type: step
+  label: Note the bond and mark one tick on your bonds track.
+- id: n7
+  type: decision
+  label: Choose a benefit
+- id: n8
+  type: step
+  label: Continue after resolving the choice
+- id: n9
+  type: step
+  label: Take +1 spirit.
+- id: n10
+  type: step
+  label: Take +2 momentum.
+- id: n11
+  type: step
+  label: They ask something more of you.
+- id: n12
+  type: decision
+  label: Fulfill the request or swear to it?
+- id: n13
+  type: step
+  label: Continue after resolving the choice
+- id: n14
+  type: decision
+  label: Resolve the request
+- id: n15
+  type: step
+  label: Continue after resolving the choice
+- id: n16
+  type: step
+  label: Complete what they ask, then note the bond and mark one tick.
+- id: n17
+  type: procedure
+  label: Swear An Iron Vow
+  target: swear-an-iron-vow
+- id: n18
+  type: step
+  label: Note the bond and mark one tick.
+- id: n19
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: n20
+  type: step
+  label: They reject you.
+- id: n21
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n6
+  label: Strong hit
+  from: n4
+- to: n7
+  from: n6
+- to: n9
+  label: Renew resolve
+  from: n7
+- to: n8
+  from: n9
+- to: n10
+  label: Build momentum
+  from: n7
+- to: n8
+  from: n10
+- to: n5
+  from: n8
+- to: n11
+  label: Weak hit
+  from: n4
+- to: n12
+  from: n11
+- to: n14
+  label: Do it / swear
+  from: n12
+- to: n16
+  label: Do it
+  from: n14
+- to: n15
+  from: n16
+- to: n17
+  label: Swear
+  from: n14
+- to: n18
+  from: n17
+- to: n15
+  from: n18
+- to: n13
+  from: n15
+- to: n19
+  label: Refuse / fail
+  from: n12
+- to: n13
+  from: n19
+- to: n5
+  from: n13
+- to: n20
+  label: Miss
+  from: n4
+- to: n21
+  from: n20
+- to: n5
+  from: n21
+keyRules:
+- After successfully fulfilling a vow to their benefit, you may reroll any dice.
+- For allies bonding with an NPC/community, one rolls and all may mark the bond; only the acting
+  character takes the strong-hit resource reward. Allies can also bond with each other.
+references:
+- progress-tracks
+- companions
+related:
+- test-your-bond

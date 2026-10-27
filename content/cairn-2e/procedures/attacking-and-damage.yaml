@@ -1,0 +1,201 @@
+id: attacking-and-damage
+title: Attacking & Damage
+summary: Roll attack damage, apply armor and HP, then resolve scars or critical damage as required.
+source:
+  section: Combat / Attacking & Damage; Attack Modifiers; Critical Damage
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Resolve a declared attack
+- id: n2
+  type: decision
+  label: What damage dice apply?
+- id: n3
+  type: step
+  label: Roll the applicable damage dice. For two weapons or multiple attacks on one target, keep
+    only the single highest result.
+- id: n4
+  type: step
+  label: 'Impaired position or unarmed attack: use d4.'
+- id: n5
+  type: step
+  label: 'Enhanced position: use d12.'
+- id: n6
+  type: step
+  label: Use the weapon’s normal damage die.
+- id: n7
+  type: step
+  label: For blast, resolve every affected target separately. Subtract that target’s armor (maximum
+    3); damage cannot be negative.
+- id: n8
+  type: decision
+  label: Is there any damage after armor?
+- id: n9
+  type: end
+  label: No damage; do not generate a scar
+- id: n10
+  type: decision
+  label: Can the target use HP to avoid this attack’s harm?
+- id: n11
+  type: decision
+  label: Compare damage with remaining HP
+- id: n12
+  type: end
+  label: Reduce HP by damage. The target remains in the fight.
+- id: n13
+  type: decision
+  label: The attack takes HP exactly to 0. Is the target a PC?
+- id: n14
+  type: end
+  label: Apply the Scars entry equal to HP lost in this attack; record its effects and recovery
+    requirements.
+- id: n15
+  type: end
+  label: No PC scar. A lone foe at 0 HP must check morale.
+- id: n16
+  type: step
+  label: Set HP to 0; subtract only the excess from STR.
+- id: n17
+  type: step
+  label: The Warden’s fictional ruling bypasses HP; apply the attack’s damage to STR.
+- id: n18
+  type: decision
+  label: Is remaining STR 0?
+- id: n19
+  type: end
+  label: At 0 STR the target dies; a detachment is destroyed.
+- id: n20
+  type: procedure
+  label: Make a STR Save using the reduced score
+  target: save
+- id: n21
+  type: decision
+  label: Did the STR save succeed?
+- id: n22
+  type: end
+  label: Remain in the fight with reduced STR. Further STR damage requires another critical damage
+    save.
+- id: n23
+  type: step
+  label: Take critical damage. Apply any special critical-damage effect of the attack.
+- id: n24
+  type: decision
+  label: Who suffered critical damage?
+- id: n25
+  type: end
+  label: 'PC: only crawl weakly. Aid such as bandages stabilizes; without treatment, die within
+    an hour.'
+- id: n26
+  type: end
+  label: 'NPC or monster: the Warden may consider them dead.'
+- id: n27
+  type: end
+  label: 'Detachment: routed or significantly weakened.'
+edges:
+- to: n2
+  from: n1
+- to: n4
+  label: Impaired / unarmed
+  from: n2
+- to: n3
+  from: n4
+- to: n5
+  label: Enhanced
+  from: n2
+- to: n3
+  from: n5
+- to: n6
+  label: Normal
+  from: n2
+- to: n3
+  from: n6
+- to: n7
+  from: n3
+- to: n8
+  from: n7
+- to: n9
+  label: 'No'
+  from: n8
+- to: n10
+  label: 'Yes'
+  from: n8
+- to: n11
+  label: 'Yes'
+  from: n10
+- to: n12
+  label: Damage below HP
+  from: n11
+- to: n13
+  label: Damage equals HP
+  from: n11
+- to: n14
+  label: 'Yes'
+  from: n13
+- to: n15
+  label: 'No'
+  from: n13
+- to: n16
+  label: Damage exceeds HP
+  from: n11
+- to: n17
+  label: 'No'
+  from: n10
+- to: n18
+  from: n16
+- to: n18
+  from: n17
+- to: n19
+  label: 'Yes'
+  from: n18
+- to: n20
+  label: 'No'
+  from: n18
+- to: n21
+  from: n20
+- to: n22
+  label: 'Yes'
+  from: n21
+- to: n23
+  label: 'No'
+  from: n21
+- to: n24
+  from: n23
+- to: n25
+  label: PC
+  from: n24
+- to: n26
+  label: NPC / monster
+  from: n24
+- to: n27
+  label: Detachment
+  from: n24
+keyRules:
+- Attacks hit automatically; do not roll to hit. Declare all actions before resolving the side’s
+  results.
+- Blast affects all targets in an area, rolling separately for each. If how many are affected
+  is unclear, roll the damage die to determine the number.
+- Ranged weapons work within clear nearby sight; especially distant targets are impaired. Ordinary
+  ammunition is not tracked.
+- Individual attacks against detachments are impaired except blast. Detachments’ attacks against
+  individuals are enhanced and blast.
+- Only positive HP loss taking a PC to exactly 0 triggers a scar. Use actual HP lost in that attack,
+  not damage before armor.
+- HP represents protection from harm. Warden examples sometimes bypass HP for an unaware or defenseless
+  target; this is a contextual fictional ruling.
+- 'Outside-combat damage generally goes directly to an attribute, usually STR; follow the effect’s
+  specific rules. At 0 STR: death; 0 DEX: paralysis; 0 WIL: delirium.'
+references:
+- combat-rules
+- armor
+- scars
+- reactions-and-morale
+- warden-adjudication
+- recovery
+related: []

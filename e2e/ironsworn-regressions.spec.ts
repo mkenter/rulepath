@@ -1,7 +1,11 @@
 import { expect, test, type Page } from '@playwright/test';
+import { registry } from './support/content';
+import { resolveSource } from '../src/content/registry';
 
 // These integration fixtures intentionally protect Ironsworn's authored chain and rail topology,
-// its dense six-reference index, and sample attribution. Generic contracts live separately.
+// its supporting reference index, and attribution. Generic contracts live separately.
+const ironsworn = registry.getGame('ironsworn')!;
+const resourceCount = ironsworn.procedures.size + ironsworn.references.size;
 const gatherUrl = '/games/ironsworn/procedures/gather-information';
 const actionUrl = '/games/ironsworn/procedures/action-roll';
 const priceUrl = '/games/ironsworn/procedures/pay-the-price';
@@ -125,9 +129,9 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     const procedure = page.getByRole('link', { name: 'Gather Information' });
     const reference = page.getByRole('link', { name: 'Momentum' });
 
-    await expect(entries).toHaveCount(11);
-    await expect(page.locator('[data-resource-kind="procedure"]')).toHaveCount(5);
-    await expect(page.locator('[data-resource-kind="reference"]')).toHaveCount(6);
+    await expect(entries).toHaveCount(resourceCount);
+    await expect(page.locator('[data-resource-kind="procedure"]')).toHaveCount(ironsworn.procedures.size);
+    await expect(page.locator('[data-resource-kind="reference"]')).toHaveCount(ironsworn.references.size);
     await expect(gameHome).toHaveCSS('background-color', 'rgb(247, 247, 250)');
     await expect(titleZone).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     const jumpNav = page.getByRole('navigation', { name: 'On this page', exact: true });
@@ -143,8 +147,8 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     expect(referenceBox.y).toBeGreaterThanOrEqual(mainBox.y + mainBox.height);
     expect(Math.abs(referenceBox.x - mainBox.x)).toBeLessThanOrEqual(1);
     expect(Math.abs(mainBox.width - referenceBox.width)).toBeLessThanOrEqual(1);
-    await expect(mainRegion).toContainText('2 procedures');
-    await expect(referenceRegion).toContainText('6 references');
+    await expect(mainRegion).toContainText(`${ironsworn.sections[0]!.items.length} procedures`);
+    await expect(referenceRegion).toContainText(`${ironsworn.references.size} references`);
 
     const restBackground = await procedure.evaluate((element) =>
       getComputedStyle(element).backgroundColor,
@@ -225,17 +229,21 @@ test.describe('Ironsworn authored integration and geometry regressions', () => {
     await expect(page.getByRole('link', { name: 'Ironsworn System Reference Document' })).toHaveAttribute('href', 'https://docs.google.com/document/d/11ypqt6GfLuBhGDJuBGWKlHa-Ru48Tf3G_6zbrYKmXgY/edit');
   });
 
-  test('every sample resource is reachable and fits a phone viewport', async ({ page }) => {
+  test('every Ironsworn resource is reachable and fits a phone viewport', async ({ page }) => {
+    test.setTimeout(30_000 + resourceCount * 1000);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/games/ironsworn');
     const paths = await page.getByRole('navigation', { name: 'Ironsworn contents' }).getByRole('link').evaluateAll(links => links.map(link => link.getAttribute('href')!));
-    expect(paths).toHaveLength(11);
+    expect(paths).toHaveLength(resourceCount);
     for (const path of paths) {
       await page.goto(path);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await page.getByText('Source and license').click();
       await expect(page.getByRole('link', { name: /Creative Commons Attribution 4.0/ })).toBeVisible();
-      await expect(page.getByRole('link', { name: 'Ironsworn System Reference Document' })).toBeVisible();
+      const id = path.split('/').at(-1)!;
+      const resource = path.includes('/procedures/') ? ironsworn.procedures.get(id)! : ironsworn.references.get(id)!;
+      const source = resolveSource(ironsworn.details.source, resource.source);
+      await expect(page.getByRole('link', { name: source.publication.title, exact: true })).toHaveAttribute('href', source.publication.url);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), path).toBe(true);
     }
   });

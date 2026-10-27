@@ -1,13 +1,12 @@
 id: stats
 title: Stats
-summary: "Edge: quickness, agility, and ranged combat. Heart: courage,
-  willpower, empathy, sociability, and loyalty. Iron: physical strength,
-  endurance, aggression, and close combat. Shadow: sneakiness, deceptiveness,
-  and cunning. Wits: expertise, knowledge, and observation. Follow the move’s
-  instructions when choosing a stat or substituting a track. Secure an Advantage
-  specifies approaches for all five stats; Gather Information uses wits."
+summary: 'Edge: quickness, agility, and ranged combat. Heart: courage, willpower, empathy, sociability,
+  and loyalty. Iron: physical strength, endurance, aggression, and close combat. Shadow: sneakiness,
+  deceptiveness, and cunning. Wits: expertise, knowledge, and observation. Follow the move’s instructions
+  when choosing a stat or substituting a track. Secure an Advantage specifies approaches for all
+  five stats; Gather Information uses wits.'
 source:
-  section: "Stats; Secure an Advantage; Gather Information"
+  section: Stats; Secure an Advantage; Gather Information
 related:
-  - procedure: secure-an-advantage
-  - procedure: gather-information
+- procedure: secure-an-advantage
+- procedure: gather-information

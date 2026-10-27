@@ -1,0 +1,49 @@
+id: reach-a-milestone
+title: Reach a Milestone
+summary: Make significant progress by overcoming a critical obstacle in your quest.
+source:
+  section: Reach a Milestone
+nodes:
+- id: n1
+  type: start
+  label: Make significant progress by overcoming a critical obstacle in your quest.
+- id: n2
+  type: decision
+  label: Is this a significant challenge directly advancing the vow?
+- id: n3
+  type: step
+  label: Continue after resolving the choice
+- id: n4
+  type: step
+  label: Mark progress according to the quest’s rank.
+- id: n5
+  type: step
+  label: Continue the fiction without marking a milestone.
+- id: n6
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n4
+  label: 'Yes'
+  from: n2
+- to: n3
+  from: n4
+- to: n5
+  label: 'No'
+  from: n2
+- to: n3
+  from: n5
+- to: n6
+  from: n3
+keyRules:
+- Milestones include overcoming a critical obstacle, completing a perilous journey, solving a
+  complex mystery, defeating a powerful threat, gaining vital support or acquiring a crucial item.
+- 'Troublesome: 3 boxes; dangerous: 2; formidable: 1; extreme: 2 ticks; epic: 1 tick.'
+- Do not count easy tasks, unrelated events, or the initial obstacle from a miss on Swear an Iron
+  Vow.
+references:
+- progress-tracks
+related:
+- fulfill-your-vow

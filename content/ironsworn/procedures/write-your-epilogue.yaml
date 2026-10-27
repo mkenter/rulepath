@@ -1,0 +1,55 @@
+id: write-your-epilogue
+title: Write Your Epilogue
+summary: Retire from your life as Ironsworn after your vows are fulfilled or forsaken.
+source:
+  section: Write Your Epilogue
+nodes:
+- id: n1
+  type: start
+  label: Retire from your life as Ironsworn after your vows are fulfilled or forsaken.
+- id: n2
+  type: procedure
+  label: Progress Roll (bonds progress)
+  target: progress-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Things come to pass as you hoped.
+- id: n6
+  type: step
+  label: Life takes an unexpected turn, not necessarily for the worse. Envision where and with
+    whom you live.
+- id: n7
+  type: step
+  label: Your fears are realized.
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  label: Miss
+  from: n3
+- to: n4
+  from: n7
+keyRules:
+- Envision both what you hope for and what you fear before rolling. Make this move once, at retirement.
+references:
+- progress-tracks
+related:
+- ask-the-oracle

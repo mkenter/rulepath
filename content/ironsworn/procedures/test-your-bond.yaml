@@ -1,0 +1,122 @@
+id: test-your-bond
+title: Test Your Bond
+summary: Your bond is tested through conflict, betrayal, or circumstance.
+source:
+  section: Test Your Bond
+nodes:
+- id: n1
+  type: start
+  label: Your bond is tested through conflict, betrayal, or circumstance.
+- id: n2
+  type: procedure
+  label: Action Roll (heart)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: decision
+  label: The bond is stronger; choose one
+- id: n6
+  type: step
+  label: Continue after resolving the choice
+- id: n7
+  type: step
+  label: Take +1 spirit.
+- id: n8
+  type: step
+  label: Take +2 momentum.
+- id: n9
+  type: step
+  label: They require proof of loyalty.
+- id: n10
+  type: decision
+  label: Do you comply?
+- id: n11
+  type: step
+  label: Continue after resolving the choice
+- id: n12
+  type: step
+  label: Do what they ask or Swear an Iron Vow; retain the bond.
+- id: n13
+  type: step
+  label: Clear the bond and its tick.
+- id: n14
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: n15
+  type: step
+  label: Clear the bond and its tick.
+- id: n16
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: maintain
+  type: decision
+  label: Do you want to maintain this relationship?
+edges:
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n7
+  label: Renew resolve
+  from: n5
+- to: n6
+  from: n7
+- to: n8
+  label: Build momentum
+  from: n5
+- to: n6
+  from: n8
+- to: n4
+  from: n6
+- to: n9
+  label: Weak hit
+  from: n3
+- to: n10
+  from: n9
+- to: n12
+  label: Do it / swear
+  from: n10
+- to: n11
+  from: n12
+- to: n13
+  label: Refuse / fail
+  from: n10
+- to: n14
+  from: n13
+- to: n11
+  from: n14
+- to: n4
+  from: n11
+- to: n15
+  label: Miss
+  from: n3
+- to: n16
+  from: n15
+- to: n4
+  from: n16
+- from: n1
+  to: maintain
+- from: maintain
+  to: n2
+  label: 'Yes'
+- from: maintain
+  to: n13
+  label: 'No'
+keyRules:
+- If you have no interest in maintaining the relationship, clear the bond and Pay the Price without
+  rolling.
+- Test in their company/community. If impossible now, note it; if extended time passes unresolved,
+  clear the bond.
+references:
+- progress-tracks
+related:
+- swear-an-iron-vow
+- forge-a-bond

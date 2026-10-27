@@ -1,0 +1,45 @@
+id: advance
+title: Advance
+summary: Focus on skills, train, find inspiration, earn a reward, or gain a companion.
+source:
+  section: Advance
+nodes:
+- id: n1
+  type: start
+  label: Focus on skills, train, find inspiration, earn a reward, or gain a companion.
+- id: n2
+  type: decision
+  label: What does the fiction support?
+- id: n3
+  type: step
+  label: Continue after resolving the choice
+- id: n4
+  type: step
+  label: Meet its requirements and spend 3 experience. Mark the preset ability, or choose one
+    if none is preset.
+- id: n5
+  type: step
+  label: Spend 2 experience to mark one additional ability; meet any stated requirement.
+- id: n6
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n4
+  label: New asset
+  from: n2
+- to: n3
+  from: n4
+- to: n5
+  label: Upgrade asset
+  from: n2
+- to: n3
+  from: n5
+- to: n6
+  from: n3
+keyRules:
+- Let experience and events justify the new ability. Assets can specify different costs.
+references:
+- assets
+related: []

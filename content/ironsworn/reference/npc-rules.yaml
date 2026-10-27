@@ -1,0 +1,24 @@
+id: npc-rules
+title: NPCs, Foes and Packs
+summary: NPCs have a rank rather than character stats, assets or resource tracks.
+source:
+  section: NPCs, Foes and Packs
+sections:
+- heading: Rank and harm
+  paragraphs:
+  - Use the Progress Tracks and Ranks table for foe harm and progress per harm. Adjust ranks to
+    represent unusual power or fictional advantage. Foes can inflict stress equal to their rank
+    as well as physical harm.
+- heading: Packs
+  paragraphs:
+  - 'Combine troublesome or dangerous foes into a pack: about 3–5 increases rank by one, about
+    6–10 increases it by two. Divide larger groups into packs. Formidable, extreme and epic foes
+    each require their own track.'
+- heading: Creating NPCs
+  paragraphs:
+  - Describe features, drives and tactics to guide behavior; roll no NPC moves. Use fictional
+    positioning, physical harm, stress, lost momentum and complications to make threats varied.
+related:
+- reference: progress-tracks
+- procedure: enter-the-fray
+- procedure: ask-the-oracle

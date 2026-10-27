@@ -1,0 +1,103 @@
+id: undertake-a-journey
+title: Undertake a Journey
+summary: Travel across hazardous or unfamiliar lands.
+source:
+  section: Undertake a Journey
+nodes:
+- id: n1
+  type: start
+  label: Travel across hazardous or unfamiliar lands.
+- id: n2
+  type: step
+  label: Set a rank and track for a new journey; keep the current track if continuing.
+- id: n3
+  type: step
+  label: On the initial roll from a bonded community, add +1.
+- id: n4
+  type: procedure
+  label: Action Roll (wits)
+  target: action-roll
+- id: n5
+  type: decision
+  label: What is the roll result?
+- id: n6
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n7
+  type: step
+  label: Reach a waypoint; envision it if unknown.
+- id: n8
+  type: decision
+  label: How do you travel?
+- id: n9
+  type: step
+  label: Continue after resolving the choice
+- id: n10
+  type: step
+  label: Mark progress for the journey’s rank.
+- id: n11
+  type: step
+  label: Mark progress, take +1 momentum, suffer -1 supply.
+- id: n12
+  type: step
+  label: Reach a waypoint and mark progress; suffer -1 supply.
+- id: n13
+  type: step
+  label: A perilous event waylays you; do not mark progress.
+- id: n14
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n5
+  from: n4
+- to: n7
+  label: Strong hit
+  from: n5
+- to: n8
+  from: n7
+- to: n10
+  label: Conserve resources
+  from: n8
+- to: n9
+  from: n10
+- to: n11
+  label: Move at speed
+  from: n8
+- to: n9
+  from: n11
+- to: n6
+  from: n9
+- to: n12
+  label: Weak hit
+  from: n5
+- to: n6
+  from: n12
+- to: n13
+  label: Miss
+  from: n5
+- to: n14
+  from: n13
+- to: n6
+  from: n14
+keyRules:
+- Set the journey’s rank and a ten-box track when you begin. Roll once per segment. A waypoint
+  is not a fixed distance or day.
+- If setting off from a bonded community, add +1 to the initial roll only.
+- Allies share journey progress and supply; only the acting character gains momentum. Others may
+  Aid Your Ally.
+- Safe mundane travel needs no move. If merely a passenger, resolve travel in the fiction.
+references:
+- progress-tracks
+- resources
+related:
+- reach-your-destination
+- make-camp
+- resupply
+- aid-your-ally

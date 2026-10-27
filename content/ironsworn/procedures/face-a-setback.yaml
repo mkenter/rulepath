@@ -1,0 +1,51 @@
+id: face-a-setback
+title: Face a Setback
+summary: At minimum momentum (-6), suffer further -momentum.
+source:
+  section: Face a Setback
+nodes:
+- id: n1
+  type: start
+  label: At minimum momentum (-6), suffer further -momentum.
+- id: n2
+  type: decision
+  label: How do you absorb each excess point?
+- id: n3
+  type: step
+  label: Continue after resolving the choice
+- id: n4
+  type: step
+  label: Exchange each excess -momentum for any combination of -health, -spirit or -supply fitting
+    the fiction.
+- id: n5
+  type: step
+  label: Envision an event undermining a current quest, journey or fight. For each excess -momentum,
+    clear progress according to that track’s rank.
+- id: n6
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n4
+  label: Resources
+  from: n2
+- to: n3
+  from: n4
+- to: n5
+  label: Lost progress
+  from: n2
+- to: n3
+  from: n5
+- to: n6
+  from: n3
+keyRules:
+- If health, spirit and supply are all 0, you must lose progress.
+- Each excess point clears troublesome 3 boxes; dangerous 2 boxes; formidable 1 box; extreme 2
+  ticks; epic 1 tick.
+references:
+- momentum
+- progress-tracks
+- resources
+related:
+- out-of-supply

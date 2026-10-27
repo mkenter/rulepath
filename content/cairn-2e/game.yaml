@@ -1,0 +1,78 @@
+schemaVersion: 1
+game:
+  id: cairn-2e
+  title: Cairn Second Edition
+  publisher: Cairn Press
+  summary: Follow the game’s exploration cycles, combat, saves, casting and downtime procedures,
+    with supporting mechanical lookups. Unofficial; CC BY-SA 4.0.
+  source:
+    publication:
+      title: Cairn Second Edition — Player’s Guide and Warden’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+    licensing:
+      copyright: Cairn Second Edition text © Yochai Gal and contributors.
+      license:
+        name: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+        url: https://creativecommons.org/licenses/by-sa/4.0/
+      attribution: Based on Cairn Second Edition, Player’s Guide and Warden’s Guide, by Yochai
+        Gal and contributors, published by Cairn Press (https://cairnrpg.com/second-edition/),
+        licensed under CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
+      adaptation: Rules have been reorganized and paraphrased into procedure graphs and focused
+        supporting references, with lookup formatting normalized. The adapted content under content/cairn-2e/
+        is CC BY-SA 4.0. Rulepath application code and original assets remain MIT. No publisher
+        artwork, maps, logos, layouts or website code are included. This is unofficial and implies
+        no endorsement.
+sections:
+- id: core
+  title: Core Procedures
+  items:
+  - procedure: character-creation
+  - procedure: save
+  - procedure: combat
+  - procedure: attacking-and-damage
+  - procedure: cast-a-spell
+- id: exploration
+  title: Exploration Procedures
+  items:
+  - procedure: dungeon-exploration
+  - procedure: wilderness-exploration
+  - procedure: forest-exploration
+- id: downtime
+  title: Downtime
+  items:
+  - procedure: downtime
+- id: references
+  title: Supporting Rules
+  items:
+  - reference: attributes-and-saves
+  - reference: combat-rules
+  - reference: armor
+  - reference: inventory
+  - reference: conditions
+  - reference: recovery
+  - reference: scars
+  - reference: reactions-and-morale
+  - reference: magic
+  - reference: growth
+  - reference: warden-adjudication
+- id: exploration-reference
+  title: Exploration Lookups
+  items:
+  - reference: dungeon-actions
+  - reference: dungeon-events
+  - reference: wilderness-actions
+  - reference: travel
+  - reference: weather
+  - reference: wilderness-events
+  - reference: forestcrawl
+- id: downtime-reference
+  title: Downtime Reference
+  items:
+  - reference: downtime
+- id: attribution
+  title: Attribution
+  items:
+  - reference: credits

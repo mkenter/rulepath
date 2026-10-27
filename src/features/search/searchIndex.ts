@@ -54,7 +54,10 @@ export function createSearchIndex(registry: ContentRegistry): readonly SearchDoc
       kind: 'Reference',
       path: `${gamePath}/reference/${reference.id}`,
       summary: reference.summary,
-      supportingText: reference.summary,
+      supportingText: [reference.summary, ...(reference.sections ?? []).flatMap(section => [
+        section.heading, ...section.paragraphs, ...section.bullets,
+        ...(section.table?.columns ?? []), ...(section.table?.rows.flat() ?? []),
+      ])].flat().join(' '),
       title: reference.title,
     }));
 

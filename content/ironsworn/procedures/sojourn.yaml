@@ -1,0 +1,116 @@
+id: sojourn
+title: Sojourn
+summary: Spend time in a community seeking assistance.
+source:
+  section: Sojourn
+nodes:
+- id: n1
+  type: start
+  label: Spend time in a community seeking assistance.
+- id: n2
+  type: procedure
+  label: Action Roll (heart; add +1 if bonded)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: You and each ally choose two distinct Sojourn options; if bonded, choose one more.
+- id: n6
+  type: decision
+  label: Focus on one selected Recover action?
+- id: n7
+  type: step
+  label: Continue after resolving the choice
+- id: n8
+  type: procedure
+  label: 'Focus on recovery: Sojourn Focus'
+  target: sojourn-focus
+- id: n9
+  type: step
+  label: Keep the selected benefits.
+- id: n10
+  type: step
+  label: You and each ally choose one Sojourn option; if bonded, choose one more.
+- id: n11
+  type: decision
+  label: Focus on one selected Recover action?
+- id: n12
+  type: step
+  label: Continue after resolving the choice
+- id: n13
+  type: procedure
+  label: 'Focus on recovery: Sojourn Focus'
+  target: sojourn-focus
+- id: n14
+  type: step
+  label: Keep the selected benefits.
+- id: n15
+  type: step
+  label: Find no help here.
+- id: n16
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n6
+  from: n5
+- to: n8
+  label: 'Yes'
+  from: n6
+- to: n7
+  from: n8
+- to: n9
+  label: 'No'
+  from: n6
+- to: n7
+  from: n9
+- to: n4
+  from: n7
+- to: n10
+  label: Weak hit
+  from: n3
+- to: n11
+  from: n10
+- to: n13
+  label: 'Yes'
+  from: n11
+- to: n12
+  from: n13
+- to: n14
+  label: 'No'
+  from: n11
+- to: n12
+  from: n14
+- to: n4
+  from: n12
+- to: n15
+  label: Miss
+  from: n3
+- to: n16
+  from: n15
+- to: n4
+  from: n16
+keyRules:
+- Make this move once per community visit; aid takes hours or days.
+- One character rolls for the group; each ally chooses their own options and may make their own
+  focus roll.
+- Select each option only once. Focus applies only to a selected Recover action, not clearing
+  a condition or taking a quest.
+references:
+- sojourn-options
+- resources
+- debilities
+related:
+- swear-an-iron-vow

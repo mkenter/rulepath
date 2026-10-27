@@ -50,3 +50,10 @@
 .links a:active { background: var(--trn-ink-accent-soft-hover); }
 .source { color: var(--trn-text-on-rules-muted); font-size: 0.8125rem; }
 .source dl { margin-top: 12px; padding-top: 12px; }
+.section { min-width: 0; overflow-wrap: anywhere; }
+.section p, .section li { line-height: 1.65; }
+.tableScroll { max-width: 100%; overflow-x: auto; margin-top: 12px; }
+.tableScroll:focus-visible { outline: 2px solid var(--trn-focus-on-rules); outline-offset: 2px; }
+.tableScroll table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; line-height: 1.5; }
+.tableScroll caption { text-align: left; font-weight: 650; padding-bottom: 8px; }
+.tableScroll th, .tableScroll td { text-align: left; vertical-align: top; padding: 8px; border-bottom: 1px solid var(--trn-border-on-rules); min-width: 5ch; }

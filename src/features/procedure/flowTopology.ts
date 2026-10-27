@@ -113,31 +113,6 @@ export function deriveProcedurePresentationOrder(
   return ordered;
 }
 
-function canReach(
-  startId: string,
-  targetId: string,
-  edgesByFrom: ReadonlyMap<string, readonly ProcedureEdge[]>,
-) {
-  const pending = [startId];
-  const visited = new Set<string>();
-
-  while (pending.length) {
-    const currentId = pending.pop();
-    if (!currentId || visited.has(currentId)) {
-      continue;
-    }
-    if (currentId === targetId) {
-      return true;
-    }
-    visited.add(currentId);
-    for (const edge of edgesByFrom.get(currentId) ?? []) {
-      pending.push(edge.to);
-    }
-  }
-
-  return false;
-}
-
 function traceExclusiveBranch(
   procedure: Procedure,
   decisionId: string,
@@ -183,7 +158,6 @@ function traceExclusiveBranch(
 }
 
 export function analyzeProcedureFlow(procedure: Procedure): ProcedureFlowAnalysis {
-  const nodeIndexes = new Map(procedure.nodes.map((node, index) => [node.id, index]));
   const edgesByFrom = new Map<string, ProcedureEdge[]>();
   const edgesByTo = new Map<string, ProcedureEdge[]>();
 
@@ -192,18 +166,25 @@ export function analyzeProcedureFlow(procedure: Procedure): ProcedureFlowAnalysi
     edgesByTo.set(edge.to, [...(edgesByTo.get(edge.to) ?? []), edge]);
   }
 
-  const loopEdges = new Set(
-    procedure.edges.filter((edge) => {
-      const fromIndex = nodeIndexes.get(edge.from);
-      const toIndex = nodeIndexes.get(edge.to);
-      return (
-        fromIndex !== undefined &&
-        toIndex !== undefined &&
-        toIndex <= fromIndex &&
-        canReach(edge.to, edge.from, edgesByFrom)
-      );
-    }),
-  );
+  // Only an edge back into the active traversal closes a loop. Comparing
+  // author indexes mislabels ordinary branch joins when the larger procedure
+  // repeats, because those nodes can also reach one another around that cycle.
+  const loopEdges = new Set<ProcedureEdge>();
+  const visited = new Set<string>();
+  const active = new Set<string>();
+  const visit = (nodeId: string) => {
+    if (visited.has(nodeId)) return;
+    visited.add(nodeId);
+    active.add(nodeId);
+    for (const edge of edgesByFrom.get(nodeId) ?? []) {
+      if (active.has(edge.to)) loopEdges.add(edge);
+      else visit(edge.to);
+    }
+    active.delete(nodeId);
+  };
+  const start = procedure.nodes.find((node) => node.type === 'start');
+  if (start) visit(start.id);
+  for (const node of procedure.nodes) visit(node.id);
   const decisionKinds = new Map<string, DecisionFlowKind>();
   const detoursByDecision = new Map<string, ConditionalDetour>();
   const detourNodeIds = new Set<string>();

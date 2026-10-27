@@ -1,0 +1,58 @@
+id: turn-the-tide
+title: Turn the Tide
+summary: Once per fight, risk everything to steal initiative.
+source:
+  section: Turn the Tide
+nodes:
+- id: n1
+  type: start
+  label: Once per fight, risk everything to steal initiative.
+- id: n2
+  type: step
+  label: Take initiative. Make an appropriate move now, not a progress move. Add +1.
+- id: n3
+  type: decision
+  label: Result of that move?
+- id: n4
+  type: step
+  label: Continue after resolving the choice
+- id: n5
+  type: step
+  label: Apply that move’s result and take +1 momentum in addition.
+- id: n6
+  type: step
+  label: Apply that move’s miss and suffer a dire outcome.
+- id: n7
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: n8
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Miss
+  from: n3
+- to: n7
+  from: n6
+- to: n4
+  from: n7
+- to: n8
+  from: n4
+keyRules:
+- Use only once per fight; the initiative after the follow-up move follows its normal result.
+- The follow-up might be Strike or Secure an Advantage. Make its roll through that procedure.
+references:
+- initiative
+related:
+- strike
+- secure-an-advantage

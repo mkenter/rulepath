@@ -1,0 +1,49 @@
+id: progress-tracks
+title: Progress Tracks and Ranks
+summary: Use ten boxes to record progress on a vow, journey, or foe. Four ticks fill one box.
+source:
+  section: Progress Tracks and Ranks
+sections:
+- heading: Marking progress
+  paragraphs:
+  - Mark the rank-based amount for each journey waypoint or quest milestone; in combat, mark it
+    once for every harm inflicted. Never count a partially filled box as progress on a progress
+    roll.
+  table:
+    columns:
+    - Rank
+    - Progress per milestone, waypoint or harm
+    - Harm / stress
+    rows:
+    - - Troublesome
+      - 3 boxes
+      - '1'
+    - - Dangerous
+      - 2 boxes
+      - '2'
+    - - Formidable
+      - 1 box
+      - '3'
+    - - Extreme
+      - 2 ticks
+      - '4'
+    - - Epic
+      - 1 tick
+      - '5'
+- heading: Shared tracks and bonds
+  paragraphs:
+  - 'Allies share progress for a common vow, journey, or foe. Bonds use a separate personal track:
+    each bond is one tick, regardless of challenge rank. Forty bonds fill ten boxes. Clearing
+    a bond removes its tick.'
+- heading: Resolution
+  paragraphs:
+  - 'Progress 10 is not automatic success: challenge dice can roll 10. Make the appropriate progress
+    move when its fictional trigger is met. Momentum, stats and ordinary adds do not affect progress
+    rolls.'
+related:
+- procedure: progress-roll
+- procedure: reach-a-milestone
+- procedure: end-the-fight
+- procedure: reach-your-destination
+- procedure: fulfill-your-vow
+- procedure: forge-a-bond

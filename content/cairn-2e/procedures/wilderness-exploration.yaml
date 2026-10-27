@@ -1,0 +1,185 @@
+id: wilderness-exploration
+title: Wilderness Exploration
+summary: Choose actions for a watch, resolve their results and events, then record resources and
+  conditions.
+source:
+  section: Wilderness Exploration
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Begin a wilderness watch
+- id: n2
+  type: decision
+  label: Does this day need a weather roll?
+- id: n3
+  type: step
+  label: Roll d6 for the season’s weather. A second consecutive Extreme becomes Catastrophic.
+    Apply the Weather table to travel and Fatigue.
+- id: n4
+  type: step
+  label: Describe the current point or region, route, terrain and party condition. Explain their
+    effect on travel time; plot or adjust the course.
+- id: n5
+  type: decision
+  label: Each character chooses one action for this watch
+- id: n6
+  type: step
+  label: 'Travel: combine distance, path, terrain and weather costs in watches. Reveal obvious
+    nearby locations, features and terrain.'
+- id: n7
+  type: decision
+  label: Does the Travel getting-lost check indicate you are lost?
+- id: n8
+  type: step
+  label: You may need another Wilderness Action to recover the way. Establish the situation from
+    the fiction.
+- id: n9
+  type: step
+  label: Advance along the route; reach the next point when the required travel time is complete.
+- id: n10
+  type: decision
+  label: Explore or Supply?
+- id: n11
+  type: step
+  label: 'Explore: search a large area, scout ahead or tread carefully. Discover a location or
+    feature. Travel is still required to leave the area.'
+- id: n12
+  type: step
+  label: 'Supply: hunt, fish or forage for d4 Rations, each with 3 uses. Extra participants increase
+    the die one step, up to d12; relevant experience or gear may also improve yield.'
+- id: n13
+  type: step
+  label: 'Make Camp: each character and mount consumes a Ration use. Set a lookout rotation and
+    sleep. Small parties may need to risk sleeping unguarded or alternate sleep.'
+- id: n14
+  type: decision
+  label: Was this night travel?
+- id: n15
+  type: step
+  label: Roll twice on Wilderness Events and resolve both results.
+- id: n16
+  type: step
+  label: Roll once on Wilderness Events and resolve the result.
+- id: n17
+  type: decision
+  label: Did you Make Camp and get adequate rest without deprivation?
+- id: n18
+  type: step
+  label: Remove all Fatigue for characters who rested. HP recovery follows its normal requirements.
+- id: n19
+  type: step
+  label: Record travel progress, Ration uses, Fatigue, inventory and new conditions. A full inventory
+    reduces HP to 0.
+- id: n20
+  type: decision
+  label: Continue with another watch?
+- id: n21
+  type: end
+  label: Pause with location, time and resources recorded
+edges:
+- to: n2
+  from: n1
+- to: n3
+  label: 'Yes'
+  from: n2
+- to: n4
+  from: n3
+- to: n4
+  label: 'No'
+  from: n2
+- to: n5
+  from: n4
+- to: n6
+  label: Travel
+  from: n5
+- to: n7
+  from: n6
+- to: n8
+  label: 'Yes'
+  from: n7
+- to: n9
+  label: 'No'
+  from: n7
+- to: n10
+  label: Explore / Supply
+  from: n5
+- to: n11
+  label: Explore
+  from: n10
+- to: n12
+  label: Supply
+  from: n10
+- to: n13
+  label: Make Camp
+  from: n5
+- to: n14
+  from: n8
+- to: n14
+  from: n9
+- to: n14
+  from: n11
+- to: n14
+  from: n12
+- to: n14
+  from: n13
+- to: n15
+  label: 'Yes'
+  from: n14
+- to: n16
+  label: 'No'
+  from: n14
+- to: n17
+  from: n15
+- to: n17
+  from: n16
+- to: n18
+  label: 'Yes'
+  from: n17
+- to: n19
+  label: 'No'
+  from: n17
+- to: n19
+  from: n18
+- to: n20
+  from: n19
+- to: n2
+  label: 'Yes'
+  from: n20
+- to: n21
+  label: 'No'
+  from: n20
+keyRules:
+- The source defines morning, afternoon and night watches, each eight hours. Each character chooses
+  one wilderness action per watch; split groups are independent.
+- 'Travel: roads have no getting-lost check; trails 2-in-6; wilderness 3-in-6. Roll d6 where needed
+  and adjust for maps, guides, skills and conditions.'
+- 'Travel time: short 1, medium 2, long 3 watches; roads +0, trails +1, wilderness +2. Add terrain
+  and weather costs from the references.'
+- A group typically travels for two watches and camps in the third. If Make Camp is skipped, each
+  PC adds one Fatigue and is deprived. Travel while sleep-deprived increases terrain difficulty
+  by one step.
+- 'Supply die steps: d4, d6, d8, d10, d12. Each additional participant improves one step, to a
+  maximum d12.'
+- Interruptions beyond minor disruption can cancel sleep benefits. Resolve events before granting
+  recovery they prevent.
+- For close forest trails and small clusters of points, the source defines a forestcrawl using
+  dungeon cycles with Wilderness Events.
+references:
+- wilderness-events
+- wilderness-actions
+- travel
+- weather
+- conditions
+- inventory
+- recovery
+related:
+- forest-exploration
+- combat
+- save

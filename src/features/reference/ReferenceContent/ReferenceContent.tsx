@@ -25,6 +25,22 @@ export function ReferenceContent({
   return (
     <>
       <p className={styles.summary}>{reference.summary}</p>
+      {reference.sections?.map((section, index) => (
+        <section className={sectionClassName} key={index} aria-labelledby={`reference-section-${index}`}>
+          <h2 id={`reference-section-${index}`}>{section.heading}</h2>
+          {section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}
+          {section.bullets.length ? <ul>{section.bullets.map((bullet, bulletIndex) => <li key={bulletIndex}>{bullet}</li>)}</ul> : null}
+          {section.table ? (
+            <div className={styles.tableScroll} role="region" aria-label={section.heading} tabIndex={0}>
+              <table>
+                <caption>{section.heading}</caption>
+                <thead><tr>{section.table.columns.map((column, columnIndex) => <th scope="col" key={columnIndex}>{column}</th>)}</tr></thead>
+                <tbody>{section.table.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, cellIndex) => <td key={cellIndex}>{cell}</td>)}</tr>)}</tbody>
+              </table>
+            </div>
+          ) : null}
+        </section>
+      ))}
       {reference.related.length ? (
         <section className={sectionClassName} aria-labelledby="reference-related-heading">
           <h2 id="reference-related-heading">Related</h2>

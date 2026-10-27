@@ -1,74 +1,112 @@
 id: ask-the-oracle
-title: Ask the Oracle (Yes/No)
-summary: Use the yes/no option of Ask the Oracle to resolve uncertainty. The
-  other options are preserved in Oracle Options.
+title: Ask the Oracle
+summary: Resolve uncertainty, reveal details, decide NPC responses, or inspire events using a
+  conclusion, yes/no roll, two options, or a prompt.
 source:
-  section: "Ask the Oracle"
+  section: Ask the Oracle
 nodes:
-  - id: start
-    type: start
-    label: Ask a yes/no question and envision the situation
-  - id: odds
-    type: step
-    label: "Choose the odds of yes: almost certain, likely, 50/50, unlikely, or
-      small chance"
-  - id: roll
-    type: step
-    label: Roll two ten-sided oracle dice as a number from 1 to 100 (00 means 100)
-  - id: answer
-    type: decision
-    label: Is the roll at or above the threshold for your chosen odds?
-  - id: yes
-    type: step
-    label: "Yes: the proposed answer is true"
-  - id: no
-    type: step
-    label: "No: the proposed answer is false"
-  - id: match
-    type: decision
-    label: Do the oracle dice match?
-  - id: twist
-    type: step
-    label: An extreme result or twist has occurred. Envision it; if stuck, move on
-  - id: done
-    type: end
-    label: Interpret the answer in the fiction and continue
+- id: start
+  type: start
+  label: Seek an answer about the world, another character, or what happens next
+- id: method
+  type: decision
+  label: How will you answer the question?
+- id: conclude
+  type: step
+  label: Decide the most interesting and obvious answer.
+- id: pick-two
+  type: step
+  label: Envision two options. Treat one as likely; yes selects it, no selects the other.
+- id: spark
+  type: step
+  label: Brainstorm or roll an appropriate oracle table; interpret the prompt in context.
+- id: odds
+  type: step
+  label: 'Choose the odds of yes: almost certain, likely, 50/50, unlikely, or small chance'
+- id: roll
+  type: step
+  label: Roll two ten-sided oracle dice as a number from 1 to 100 (00 means 100)
+- id: answer
+  type: decision
+  label: Is the roll at or above the threshold for your chosen odds?
+- id: 'true'
+  type: step
+  label: 'Yes: the proposed answer is true'
+- id: 'false'
+  type: step
+  label: 'No: the proposed answer is false'
+- id: match
+  type: decision
+  label: Do the oracle dice match?
+- id: twist
+  type: step
+  label: An extreme result or twist has occurred. Envision it; if stuck, move on
+- id: done
+  type: end
+  label: Interpret the answer in the fiction and continue
+- id: random-method
+  type: decision
+  label: Ask yes/no, or choose between two possibilities?
 edges:
-  - from: start
-    to: odds
-  - from: odds
-    to: roll
-  - from: roll
-    to: answer
-  - from: answer
-    to: yes
-    label: Yes
-  - from: answer
-    to: no
-    label: No
-  - from: yes
-    to: match
-  - from: no
-    to: match
-  - from: match
-    to: twist
-    label: Yes
-  - from: match
-    to: done
-    label: No
-  - from: twist
-    to: done
+- from: odds
+  to: roll
+- from: roll
+  to: answer
+- from: answer
+  to: 'true'
+  label: 'Yes'
+- from: answer
+  to: 'false'
+  label: 'No'
+- from: 'true'
+  to: match
+- from: 'false'
+  to: match
+- from: match
+  to: twist
+  label: 'Yes'
+- from: match
+  to: done
+  label: 'No'
+- from: twist
+  to: done
+- from: start
+  to: method
+- from: method
+  to: conclude
+  label: Draw a conclusion
+- from: method
+  to: spark
+  label: Spark an idea
+- from: conclude
+  to: done
+- from: spark
+  to: done
+- from: pick-two
+  to: roll
+- from: method
+  to: random-method
+  label: Roll an answer
+- from: random-method
+  to: odds
+  label: Yes/no question
+- from: random-method
+  to: pick-two
+  label: Two possibilities
 keyRules:
-  - "Almost certain: yes on 11–100. Likely: yes on 26–100. 50/50: yes on 51–100.
-    Unlikely: yes on 76–100. Small chance: yes on 91–100."
-  - For “pick two,” envision two options and rate one likely. On 26–100 it
-    happens; otherwise the other does.
-  - This is an oracle roll, not an action roll. Do not add a stat or apply
-    momentum.
-  - In guided play, the GM is the oracle; use this move when talking things out
-    needs a random result or inspiration.
+- 'Almost certain: yes on 11–100. Likely: yes on 26–100. 50/50: yes on 51–100. Unlikely: yes on
+  76–100. Small chance: yes on 91–100.'
+- For “pick two,” envision two options and rate one likely. On 26–100 it happens; otherwise the
+  other does.
+- This is an oracle roll, not an action roll. Do not add a stat or apply momentum.
+- In guided play, the GM is the oracle; use this move when talking things out needs a random result
+  or inspiration.
+- For a prompt oracle, roll d100, consult the result, and interpret it in the fiction. If stuck,
+  look one row up/down, reverse the digits, reroll, use a different table, or decide.
+- Matching dice on ordinary prompt tables have no special effect unless the table says otherwise.
+  Avoid endless follow-up questions; settle on an answer and continue.
 references:
-  - oracle-options
-  - matches
-  - credits
+- oracle-options
+- matches
+- credits
 related: []

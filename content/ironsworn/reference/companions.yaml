@@ -1,0 +1,32 @@
+id: companions
+title: Companions and Allies
+summary: An ally is another player character. A companion is an NPC represented by an asset.
+source:
+  section: Companions and Allies
+sections:
+- heading: Companion risk
+  paragraphs:
+  - Use a marked companion ability only when the companion is present and able to help. A 1 on
+    the action die when using an ability makes the companion a focus of negative consequences.
+    Harm calls for Companion Endure Harm.
+- heading: Recovery and death
+  paragraphs:
+  - Companions recover through Heal, Make Camp and Sojourn. At 0 health with a weak hit or miss
+    on Companion Endure Harm, they cannot assist until they regain at least +1 health. A slain
+    companion awards 1 experience per marked ability; remove the asset. A replacement of the same
+    type costs normal experience.
+- heading: Group moves
+  paragraphs:
+  - One character makes a move that represents the group’s shared action; others can Aid Your
+    Ally. Shared supply changes affect everyone. Personal momentum rewards normally belong only
+    to the acting character. Suffer moves and entering combat are individual.
+- heading: Other NPC allies
+  paragraphs:
+  - Ordinary NPCs do not grant numerical bonuses or make moves. Their help changes what is possible,
+    challenge ranks, or quest milestones in the fiction.
+related:
+- procedure: companion-endure-harm
+- procedure: aid-your-ally
+- procedure: heal
+- procedure: make-camp
+- procedure: sojourn

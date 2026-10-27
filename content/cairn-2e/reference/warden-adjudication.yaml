@@ -1,0 +1,33 @@
+id: warden-adjudication
+title: Warden Adjudication
+summary: Use fictional positioning, information and established risk to decide whether a save
+  is needed.
+source:
+  section: Saves; Knowledge and Perception; Variable Difficulty
+  overrides:
+    publication:
+      title: Cairn Second Edition — Warden’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/wardens-guide/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Before rolling
+  bullets:
+  - Give perceptible information freely; there is no routine perception check. Character background
+    and established experience justify knowledge without a roll.
+  - If time, tools, skill or positioning removes the risk, let the action happen. If it is impossible,
+    explain and offer alternatives.
+  - For opposition or joint action, the person most at risk saves. Be clear about serious or lethal
+    consequences before committing.
+  - Preparation and teamwork change what is possible and the consequences. Do not invent generic
+    numerical difficulty modifiers.
+- heading: Specific rulings
+  paragraphs:
+  - The Warden’s examples sometimes apply attack damage directly to STR when the target is unaware
+    or unable to defend. Apply the fictional circumstances rather than treating HP as health.
+  - 'The optional Die of Fate is d6: 4+ generally favors the PCs, 1–3 generally brings bad luck.
+    It handles uncertain world details rather than replacing a player’s decision.'
+related:
+- procedure: save
+- reference: combat-rules

@@ -1,0 +1,130 @@
+id: combat
+title: Combat
+summary: Resolve a fight using side initiative and declared actions.
+source:
+  section: Combat
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Combat begins or continues
+- id: n2
+  type: decision
+  label: Is this the first round?
+- id: n3
+  type: procedure
+  label: Each PC makes a DEX Save to act this round
+  target: save
+- id: n4
+  type: step
+  label: A failed initial DEX save loses that PC’s first turn; an applicable circumstance, item
+    or ability can remove the requirement.
+- id: n5
+  type: step
+  label: Eligible PCs declare their actions before dice are rolled. Each may move 40ft and take
+    one action.
+- id: n6
+  type: decision
+  label: Resolve each declared action
+- id: n7
+  type: step
+  label: Resolve results simultaneously for this side. Against one target, retain only the highest
+    damage die result.
+- id: n8
+  type: procedure
+  label: Attacking and Damage
+  target: attacking-and-damage
+- id: n9
+  type: procedure
+  label: Casting Spells
+  target: cast-a-spell
+- id: n10
+  type: step
+  label: Resolve movement or another reasonable action. Call for a save only if an uncertain risk
+    remains.
+- id: n11
+  type: decision
+  label: Are any declared PC actions still unresolved?
+- id: n12
+  type: step
+  label: Opponents take their side’s turn. Declare their actions and resolve them the same way.
+- id: n13
+  type: step
+  label: 'Check enemy morale at first casualty and again at half losses; a lone foe checks at
+    0 HP. WIL save: pass to remain, fail to flee.'
+- id: n14
+  type: decision
+  label: Has the fight ended through defeat, flight or agreement?
+- id: n15
+  type: end
+  label: Return to the fiction and apply any recovery or consequences
+edges:
+- to: n2
+  from: n1
+- to: n3
+  label: 'Yes'
+  from: n2
+- to: n4
+  from: n3
+- to: n5
+  from: n4
+- to: n5
+  label: 'No'
+  from: n2
+- to: n6
+  from: n5
+- to: n8
+  label: Attack
+  from: n6
+- to: n7
+  from: n8
+- to: n9
+  label: Cast a spell
+  from: n6
+- to: n7
+  from: n9
+- to: n10
+  label: Other action
+  from: n6
+- to: n7
+  from: n10
+- to: n11
+  from: n7
+- to: n6
+  label: 'Yes'
+  from: n11
+- to: n12
+  label: 'No'
+  from: n11
+- to: n13
+  from: n12
+- to: n14
+  from: n13
+- to: n5
+  label: 'No: next round'
+  from: n14
+- to: n15
+  label: 'Yes'
+  from: n14
+keyRules:
+- A round is roughly ten seconds. Each side acts together, with the effects of its actions simultaneous.
+- After the first round, PCs act before opponents. A PC’s failed first-round DEX save does not
+  lose later turns.
+- An action can be an attack, spell, second move, or another reasonable activity.
+- Attacks hit automatically. Multiple attacks against one target use only the highest damage die
+  result; do not total them.
+- Morale affects enemies, not PCs; a group may use its leader’s WIL. Running from a dire situation
+  requires a safe destination and a successful DEX save.
+references:
+- combat-rules
+- reactions-and-morale
+- armor
+- recovery
+related:
+- save

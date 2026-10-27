@@ -1,0 +1,72 @@
+id: battle
+title: Battle
+summary: Resolve a battle in a blur with a single action roll.
+source:
+  section: Battle
+nodes:
+- id: n1
+  type: start
+  label: Resolve a battle in a blur with a single action roll.
+- id: n2
+  type: procedure
+  label: Action Roll (stat matching your battle approach)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Achieve the objective unconditionally; take +2 momentum.
+- id: n6
+  type: step
+  label: Achieve the objective at a meaningful cost.
+- id: n7
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: n8
+  type: step
+  label: You are defeated and the objective is lost.
+- id: n9
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n7
+  from: n6
+- to: n4
+  from: n7
+- to: n8
+  label: Miss
+  from: n3
+- to: n9
+  from: n8
+- to: n4
+  from: n9
+keyRules:
+- 'Fight at range / speed / terrain: +edge; courage / allies / companions: +heart; overpower in
+  close: +iron; trickery: +shadow; tactics: +wits.'
+- Do not use a combat progress track or End the Fight for this resolution.
+- One character rolls for allies; helpers Aid Your Ally first. Only the acting character receives
+  momentum.
+references:
+- stats
+- victory-costs
+- companions
+related:
+- aid-your-ally

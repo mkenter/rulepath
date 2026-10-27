@@ -1,11 +1,100 @@
 action-roll: []
-gather-information:
-  - action-roll
-  - ask-the-oracle
-  - pay-the-price
-secure-an-advantage:
-  - action-roll
-  - pay-the-price
+advance: []
+aid-your-ally:
+- pay-the-price
+- secure-an-advantage
 ask-the-oracle: []
+battle:
+- action-roll
+- pay-the-price
+character-creation:
+- swear-an-iron-vow
+clash:
+- action-roll
+- pay-the-price
+companion-endure-harm:
+- action-roll
+compel:
+- action-roll
+- gather-information
+- pay-the-price
+draw-the-circle:
+- action-roll
+- pay-the-price
+end-the-fight:
+- pay-the-price
+- progress-roll
+endure-harm:
+- action-roll
+endure-stress:
+- action-roll
+enter-the-fray:
+- action-roll
+- pay-the-price
+face-a-setback: []
+face-danger:
+- action-roll
+- endure-harm
+- endure-stress
+- pay-the-price
+face-death:
+- action-roll
+- swear-an-iron-vow
+face-desolation:
+- action-roll
+- swear-an-iron-vow
+forge-a-bond:
+- action-roll
+- pay-the-price
+- swear-an-iron-vow
+forsake-your-vow:
+- endure-stress
+fulfill-your-vow:
+- forsake-your-vow
+- progress-roll
+- swear-an-iron-vow
+gather-information:
+- action-roll
+- ask-the-oracle
+- pay-the-price
+heal:
+- action-roll
+- pay-the-price
+make-camp:
+- action-roll
+- pay-the-price
+out-of-supply: []
 pay-the-price:
-  - ask-the-oracle
+- ask-the-oracle
+progress-roll: []
+reach-a-milestone: []
+reach-your-destination:
+- progress-roll
+resupply:
+- action-roll
+- pay-the-price
+secure-an-advantage:
+- action-roll
+- pay-the-price
+sojourn:
+- action-roll
+- pay-the-price
+- sojourn-focus
+sojourn-focus:
+- action-roll
+strike:
+- action-roll
+- pay-the-price
+swear-an-iron-vow:
+- action-roll
+- forsake-your-vow
+test-your-bond:
+- action-roll
+- pay-the-price
+turn-the-tide:
+- pay-the-price
+undertake-a-journey:
+- action-roll
+- pay-the-price
+write-your-epilogue:
+- progress-roll

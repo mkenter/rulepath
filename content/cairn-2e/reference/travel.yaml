@@ -1,0 +1,91 @@
+id: travel
+title: Travel, Paths and Terrain
+summary: Add distance, path, terrain and weather penalties in watches; a watch is eight hours.
+source:
+  section: Travel, Paths and Terrain
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Watches
+  bullets:
+  - A day is divided into three watches, called morning, afternoon, and night.
+  - Each character can choose one Wilderness Action per watch.
+  - If the characters split up, each group is treated as an independent entity.
+- heading: Points
+  bullets:
+  - Potential destinations on a map are called points.
+  - One or more watches may be required to journey between two points on a map, depending on the
+    path, terrain, weather, and party status.
+  - The party has a rough idea of the challenges involved to get to their destination, but rarely
+    any specifics.
+- heading: Travel Duration
+  paragraphs:
+  - Travel time in Cairn is counted in watches, divided into three eight-hour segments per day.
+    However, as most parties elect to spend the third watch of the day resting, one can use “days”
+    as a shorthand for travel time.
+  - To determine the distance between two points, combine all penalties from the path, terrain,
+    and weather difficulty tables, taking into account any changes to those elements along the
+    route. For travel via waterways, refer to the surrounding terrain difficulty. For especially
+    vast terrain, assign a penalty of up to +2 watches to the journey.
+  - The weather, terrain, darkness, injured party members, and other obstacles can impact travel
+    or even make it impossible! In some cases, the party may need to add Fatigue or expend resources
+    in order to sustain their pace. Mounts, guides, and maps can increase the party’s travel speed
+    or even negate certain penalties.
+- heading: Path Difficulty
+  table:
+    columns:
+    - Path
+    - Penalty
+    - Odds of Getting Lost
+    rows:
+    - - Roads
+      - None
+      - None
+    - - Trails
+      - +1 Watch
+      - 2-in-6
+    - - Wilderness
+      - +2 Watches
+      - 3-in-6
+- heading: Path Distance
+  table:
+    columns:
+    - Path Distance
+    - Penalty
+    rows:
+    - - Short
+      - +1 Watch
+    - - Medium
+      - +2 Watches
+    - - Long
+      - +3 Watches
+- heading: Terrain Difficulty
+  table:
+    columns:
+    - Difficulty
+    - Terrain
+    - Penalty
+    - Factors
+    rows:
+    - - Easy
+      - Plains, plateaus, valleys
+      - none
+      - Safe areas for rest, fellow travelers, good visibility
+    - - Tough
+      - Forests, deserts, hills
+      - +1 Watch
+      - Wild animals, flooding, broken equipment, falling rocks, unsafe shelters, hunter’s traps
+    - - Perilous
+      - Mountains, jungles, swamp
+      - +2 Watches
+      - Quicksand, sucking mud, choking vines, unclean water, poisonous plants and animals, poor
+        navigation
+related:
+- procedure: wilderness-exploration
+- reference: weather
+- reference: wilderness-actions

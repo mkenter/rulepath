@@ -1,0 +1,42 @@
+id: reactions-and-morale
+title: Reactions and Morale
+summary: Use reactions when NPC disposition is unclear; test enemy morale at its listed triggers.
+source:
+  section: Reactions and Morale
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Reactions
+  paragraphs:
+  - 'When the PCs encounter an NPC whose reaction to the party is not obvious, the Warden may
+    roll 2d6 and consult the following table:'
+  table:
+    columns:
+    - 2d6
+    - Reaction
+    rows:
+    - - '2'
+      - Hostile
+    - - 3-5
+      - Wary
+    - - 6-8
+      - Curious
+    - - 9-11
+      - Kind
+    - - '12'
+      - Helpful
+- heading: Morale
+  bullets:
+  - Enemies must pass a WIL save to avoid fleeing when they take their first casualty and again
+    when they lose half their number.
+  - Some groups may use their leader’s WIL in place of their own. Lone foes must save when they’re
+    reduced to 0 HP.
+  - Morale does not affect PCs.
+related:
+- procedure: combat
+- procedure: save

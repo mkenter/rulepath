@@ -1,0 +1,94 @@
+id: save
+title: Saves
+summary: Avoid a negative outcome from a risky choice, oppose someone, or share risk.
+source:
+  section: Saves
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Avoid a negative outcome from a risky choice, oppose someone, or share risk.
+- id: n2
+  type: step
+  label: Explain the intent, circumstances and possible consequences. Consider preparation, tools,
+    background and time.
+- id: n3
+  type: decision
+  label: Does a risky uncertainty remain?
+- id: n4
+  type: step
+  label: Continue after resolving the choice
+- id: n5
+  type: step
+  label: Resolve the action from the fiction. Do not roll for a safe or assured action; explain
+    alternatives if it is impossible.
+- id: n6
+  type: step
+  label: Choose STR, DEX or WIL. For opposition or joint action, only the character most at risk
+    saves (often the lowest relevant attribute).
+- id: n7
+  type: step
+  label: Roll d20 against the current attribute. 1 always succeeds; 20 always fails.
+- id: n8
+  type: decision
+  label: Is the roll 1, or equal to/below the attribute without being 20?
+- id: n9
+  type: step
+  label: Continue after resolving the choice
+- id: n10
+  type: step
+  label: Succeed; avoid the stated negative outcome.
+- id: n11
+  type: step
+  label: Fail; apply the consequences established for this risk.
+- id: n12
+  type: end
+  label: Return to the current situation with the consequences recorded
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: 'No'
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: 'Yes'
+  from: n3
+- to: n7
+  from: n6
+- to: n8
+  from: n7
+- to: n10
+  label: 'Yes'
+  from: n8
+- to: n9
+  from: n10
+- to: n11
+  label: 'No'
+  from: n8
+- to: n9
+  from: n11
+- to: n4
+  from: n9
+- to: n12
+  from: n4
+keyRules:
+- 'STR: physical power, endurance, poison. DEX: speed, poise, climbing, stealth, dodging. WIL:
+  influence, resolve, magic.'
+- A save is not a routine attack roll or perception check. Tell players about lethal risk before
+  they commit.
+- 'The calling rule supplies the result: a casting save, critical damage save or morale save has
+  its own consequences.'
+references:
+- attributes-and-saves
+- warden-adjudication
+related: []

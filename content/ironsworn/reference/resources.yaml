@@ -1,0 +1,44 @@
+id: resources
+title: Health, Spirit, Supply and Recovery
+summary: Health, spirit and supply range from 0 to +5. Begin each at +5.
+source:
+  section: Health, Spirit, Supply and Recovery
+sections:
+- heading: Health and spirit
+  bullets:
+  - Health represents fitness and endurance. Suffer harm through Endure Harm; overflow below 0
+    costs momentum.
+  - Spirit is courage and resolve. Endure Stress handles mental shock; overflow below 0 costs
+    momentum.
+  - At 0 health or spirit, a miss on the corresponding suffer move risks debilities or a consequence
+    table. Reaching 0 alone does not kill or break you.
+- heading: Supply
+  paragraphs:
+  - Supply abstracts provisions, ammunition and mundane equipment. Allies share its current value.
+    At 0, everyone marks unprepared; while unprepared, supply cannot increase until Sojourn clears
+    it. Further supply loss becomes health, spirit or momentum loss.
+- heading: Recovery
+  table:
+    columns:
+    - Need
+    - Moves
+    rows:
+    - - Physical recovery
+      - Heal; Make Camp; Sojourn
+    - - Spirit
+      - Make Camp; Sojourn; move or asset rewards
+    - - Supply
+      - Resupply; Sojourn (equip first if unprepared)
+    - - Companion health
+      - Heal; Make Camp; Sojourn; Companion Endure Harm strong hit
+- heading: Limits and excess
+  paragraphs:
+  - Do not increase a track past its maximum. If a move offers a benefit you cannot use, choose
+    another permitted option. Momentum has its own limits and reset rules.
+related:
+- procedure: endure-harm
+- procedure: endure-stress
+- procedure: out-of-supply
+- procedure: heal
+- procedure: make-camp
+- procedure: sojourn

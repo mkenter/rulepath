@@ -1,0 +1,68 @@
+id: forest-exploration
+title: Forestcrawls
+summary: Explore a small forest of close points linked by trails.
+source:
+  section: Forestcrawls / Exploring the Wood
+  overrides:
+    publication:
+      title: Cairn Second Edition — Warden’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/wardens-guide/forest-seeds/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Explore a small forest of close points linked by trails.
+- id: n2
+  type: step
+  label: Use dungeon-style exploration cycles at this close scale. Substitute Wilderness Events
+    for Dungeon Events.
+- id: n3
+  type: decision
+  label: Stay on a clear trail or go off-trail?
+- id: n4
+  type: step
+  label: Continue after resolving the choice
+- id: n5
+  type: step
+  label: Use the known route and its fictional travel time.
+- id: n6
+  type: step
+  label: Explain added time, effort, tools and obvious danger before committing. Going off-trail
+    triggers a Wilderness Events roll.
+- id: n7
+  type: procedure
+  label: Continue Dungeon Exploration with the forestcrawl event substitution
+  target: dungeon-exploration
+- id: n8
+  type: end
+  label: Return to the current situation with the consequences recorded
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Stay on trail
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Go off-trail
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  from: n4
+- to: n8
+  from: n7
+keyRules:
+- On clear trails, a small forest of 10–15 points can be explored within one watch. Use the fiction
+  for daylight, rest, darkness and off-trail costs.
+- A broad journey between regions uses Wilderness Exploration and Travel instead.
+references:
+- forestcrawl
+- wilderness-events
+related:
+- wilderness-exploration

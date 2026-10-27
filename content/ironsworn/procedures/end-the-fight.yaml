@@ -1,0 +1,65 @@
+id: end-the-fight
+title: End the Fight
+summary: After a strong hit on a move framed as decisive action, resolve this foe’s fate.
+source:
+  section: End the Fight
+nodes:
+- id: n1
+  type: start
+  label: After a strong hit on a move framed as decisive action, resolve this foe’s fate.
+- id: n2
+  type: procedure
+  label: Progress Roll (foe progress)
+  target: progress-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Foe is killed, out of action, fleeing or surrendered, as appropriate to your intent.
+- id: n6
+  type: step
+  label: Foe is defeated, but choose a victory cost from the reference.
+- id: n7
+  type: step
+  label: You have lost the fight.
+- id: n8
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  label: Miss
+  from: n3
+- to: n8
+  from: n7
+- to: n4
+  from: n8
+keyRules:
+- A strong hit on a preceding decisive move is required, even at 10 progress.
+- If other foes remain on separate tracks, a strong hit gives initiative and the fight continues.
+- Allies share progress; the cost of a weak hit or miss affects whoever fits the fiction.
+references:
+- victory-costs
+- progress-tracks
+- initiative
+related:
+- endure-harm
+- endure-stress

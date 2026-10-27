@@ -333,10 +333,6 @@
   color: var(--trn-route-return);
 }
 
-.connectorReturn .route {
-  stroke-dasharray: 4 3;
-}
-
 .connector text {
   fill: currentcolor;
   font-family: var(--trn-font-ui);

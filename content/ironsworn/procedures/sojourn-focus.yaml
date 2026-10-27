@@ -1,0 +1,55 @@
+id: sojourn-focus
+title: 'Sojourn: Focus on Recovery'
+summary: After a hit on Sojourn, optionally focus on one of your selected Recover actions.
+source:
+  section: Sojourn / optional focus roll
+nodes:
+- id: n1
+  type: start
+  label: After a hit on Sojourn, optionally focus on one of your selected Recover actions.
+- id: n2
+  type: procedure
+  label: Action Roll (heart; add +1 if bonded)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Take +2 more for the selected action.
+- id: n6
+  type: step
+  label: Take +1 more for the selected action.
+- id: n7
+  type: step
+  label: 'It goes badly: lose all benefits for that selected action.'
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  label: Miss
+  from: n3
+- to: n4
+  from: n7
+keyRules:
+- This is the optional second roll of Sojourn, not another visit or another set of options.
+- A miss removes only that action’s benefits. Retain other Sojourn choices.
+references:
+- sojourn-options
+related:
+- sojourn

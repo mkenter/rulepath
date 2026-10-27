@@ -1,0 +1,47 @@
+id: forsake-your-vow
+title: Forsake Your Vow
+summary: Renounce a quest, betray a promise, or lose the goal beyond reach.
+source:
+  section: Forsake Your Vow
+  overrides:
+    publication:
+      title: Ironsworn Playkit — Original Move Sheets
+      edition: Original Ironsworn move reference; official CC BY 4.0 text edition
+      url: https://tomkinpress.com/collections/free-downloads/products/ironsworn-playkit
+      creator: Shawn Tomkin
+      publisher: Tomkin Press
+nodes:
+- id: n1
+  type: start
+  label: Renounce a quest, betray a promise, or lose the goal beyond reach.
+- id: n2
+  type: step
+  label: 'Clear the vow. Suffer stress equal to its rank: troublesome 1, dangerous 2, formidable
+    3, extreme 4, epic 5.'
+- id: n3
+  type: procedure
+  label: Endure Stress with the vow’s rank as stress
+  target: endure-stress
+- id: n4
+  type: step
+  label: Envision the consequences of breaking your oath and your next path.
+- id: n5
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n5
+  from: n4
+keyRules:
+- If abandoning your central purpose ends your adventuring life, Write Your Epilogue.
+- If sworn to a bonded person or community, Test Your Bond when you next meet (original move sheet).
+references:
+- progress-tracks
+related:
+- write-your-epilogue
+- test-your-bond

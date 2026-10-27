@@ -35,7 +35,9 @@ export function testRegisteredGameRoutes(registry: ContentRegistry, renderRoute:
         expect(screen.getByRole('heading', { level: 1, name: resource.title })).toBeInTheDocument();
         const breadcrumb = screen.getByRole('navigation', { name: 'Breadcrumb' });
         expect(within(breadcrumb).getAllByRole('link', { name: game.details.title }).map(link => link.getAttribute('href'))).toContain(home);
-        const resourceLinks = screen.getAllByRole('link').map(link => link.getAttribute('href')).filter(href => href?.includes('/procedures/') || href?.includes('/reference/'));
+        const resourceLinks = screen.getAllByRole('link').map(link => link.getAttribute('href')).filter(href =>
+          href?.startsWith('/games/') && (href.includes('/procedures/') || href.includes('/reference/')),
+        );
         for (const href of resourceLinks) expect(resources.map(({ path }) => path)).toContain(href);
         const expectedLinks = 'nodes' in resource ? [
           ...resource.nodes.flatMap(node => node.type === 'procedure' ? [`${home}/procedures/${node.target}`] : []),

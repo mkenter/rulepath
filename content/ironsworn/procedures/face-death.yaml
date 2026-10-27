@@ -1,0 +1,112 @@
+id: face-death
+title: Face Death
+summary: Reach the brink of death and glimpse the world beyond.
+source:
+  section: Face Death
+nodes:
+- id: n1
+  type: start
+  label: Reach the brink of death and glimpse the world beyond.
+- id: n2
+  type: procedure
+  label: Action Roll (heart)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Death rejects you; return to the mortal world.
+- id: n6
+  type: decision
+  label: Choose your fate
+- id: n7
+  type: step
+  label: Continue after resolving the choice
+- id: n8
+  type: step
+  label: Envision your final moments; your life or sanity ends.
+- id: n9
+  type: step
+  label: Envision what death desires.
+- id: n10
+  type: procedure
+  label: Swear an Iron Vow (formidable or extreme)
+  target: swear-an-iron-vow
+- id: n11
+  type: decision
+  label: Did you score a hit on the vow?
+- id: n12
+  type: step
+  label: Continue after resolving the choice
+- id: n13
+  type: step
+  label: Return, now cursed. Clear this burden only by fulfilling that quest.
+- id: n14
+  type: step
+  label: You die.
+- id: n15
+  type: step
+  label: You die.
+- id: n16
+  type: step
+  label: You die.
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n8
+  label: Noble sacrifice
+  from: n6
+- to: n7
+  from: n8
+- to: n9
+  label: Accept a quest
+  from: n6
+- to: n10
+  from: n9
+- to: n11
+  from: n10
+- to: n13
+  label: 'Yes'
+  from: n11
+- to: n12
+  from: n13
+- to: n14
+  label: 'No'
+  from: n11
+- to: n12
+  from: n14
+- to: n7
+  from: n12
+- to: n15
+  label: Refuse the quest
+  from: n6
+- to: n7
+  from: n15
+- to: n4
+  from: n7
+- to: n16
+  label: Miss
+  from: n3
+- to: n4
+  from: n16
+keyRules:
+- This move does not automatically restore health or spirit; resolve your return through the fiction.
+references:
+- debilities
+- resources
+related:
+- ask-the-oracle

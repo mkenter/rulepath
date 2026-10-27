@@ -1,0 +1,181 @@
+id: downtime
+title: Downtime
+summary: Research, train, or strengthen ties through safe downtime actions and agreed milestones.
+source:
+  section: Downtime
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Between sessions, pursue a downtime activity
+- id: n2
+  type: decision
+  label: Are conditions safe, and are you free from recovery?
+- id: n3
+  type: end
+  label: Resolve danger or recovery before taking downtime
+- id: n4
+  type: decision
+  label: Which activity are you pursuing?
+- id: n5
+  type: step
+  label: 'Research: pose a specific question arising from play. Identify a source of knowledge
+    in the world.'
+- id: n6
+  type: decision
+  label: Do you have an appropriate source?
+- id: n7
+  type: end
+  label: Spend a Downtime Action seeking a source; success is not guaranteed. Resume research
+    when a source is found.
+- id: n8
+  type: step
+  label: 'Training: describe the exact skill or ability to improve and the experience that inspired
+    it. Identify a master to train with.'
+- id: n9
+  type: decision
+  label: Is a suitable master available?
+- id: n10
+  type: end
+  label: Seek a master before this training can proceed
+- id: n11
+  type: step
+  label: 'Strengthening Ties: identify an NPC or faction and a specific intent, such as building
+    trust, reconciliation, membership or alliance.'
+- id: n12
+  type: step
+  label: The Warden sets the project’s concrete effects, costs, and (for multi-step work) 1–5
+    comprehensive milestones.
+- id: n13
+  type: decision
+  label: Can you meet the next milestone’s cost?
+- id: n14
+  type: step
+  label: Take a Downtime Action and pay the cost to complete that milestone.
+- id: n15
+  type: decision
+  label: Is reducing or avoiding the cost justified?
+- id: n16
+  type: step
+  label: Use established skills or connections to reduce or remove the cost.
+- id: n17
+  type: step
+  label: The Warden states the risk of pressing for a reduction.
+- id: n18
+  type: procedure
+  label: Make a WIL Save for that risk
+  target: save
+- id: n19
+  type: decision
+  label: Did the save succeed?
+- id: n20
+  type: end
+  label: Apply the stated risk and find another way forward
+- id: n21
+  type: step
+  label: Record the completed milestone and its actual effect. For ties, describe how the relationship
+    changes.
+- id: n22
+  type: decision
+  label: Does the project have unfinished milestones?
+- id: n23
+  type: end
+  label: Continue in a later Downtime Action; revise milestones as events warrant
+- id: n24
+  type: end
+  label: The agreed project is complete; apply its concrete result
+edges:
+- to: n2
+  from: n1
+- to: n3
+  label: 'No'
+  from: n2
+- to: n4
+  label: 'Yes'
+  from: n2
+- to: n5
+  label: Research
+  from: n4
+- to: n6
+  from: n5
+- to: n7
+  label: 'No'
+  from: n6
+- to: n8
+  label: Training
+  from: n4
+- to: n9
+  from: n8
+- to: n10
+  label: 'No'
+  from: n9
+- to: n11
+  label: Strengthening Ties
+  from: n4
+- to: n12
+  label: 'Yes'
+  from: n6
+- to: n12
+  label: 'Yes'
+  from: n9
+- to: n12
+  from: n11
+- to: n13
+  from: n12
+- to: n14
+  label: 'Yes'
+  from: n13
+- to: n15
+  label: 'No'
+  from: n13
+- to: n16
+  label: 'Yes'
+  from: n15
+- to: n13
+  from: n16
+- to: n17
+  label: Uncertain
+  from: n15
+- to: n18
+  from: n17
+- to: n19
+  from: n18
+- to: n16
+  label: 'Yes'
+  from: n19
+- to: n20
+  label: 'No'
+  from: n19
+- to: n20
+  label: 'No'
+  from: n15
+- to: n21
+  from: n14
+- to: n22
+  from: n21
+- to: n23
+  label: 'Yes'
+  from: n22
+- to: n24
+  label: 'No'
+  from: n22
+keyRules:
+- Only one downtime action at a time. Unsafe conditions, recovery, or an action that jeopardizes
+  safety prevent downtime.
+- The Warden may create other downtime activities appropriate to play.
+- A milestone is a comprehensive, non-interactive task. Its costs can be gold, resources, reputation
+  or a unique loss. If costs cannot be met, find another way.
+- The Warden may add or discard milestones as the fiction changes. There is no universal XP level,
+  project price or automatic numerical reward.
+references:
+- downtime
+- growth
+- recovery
+related:
+- save

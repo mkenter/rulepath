@@ -1,71 +1,71 @@
 id: pay-the-price
 title: Pay the Price
-summary: When you suffer the outcome of a move, choose how to determine the
-  negative consequence.
+summary: When you suffer the outcome of a move, choose how to determine the negative consequence.
 source:
-  section: "Pay the Price"
+  section: Pay the Price
 nodes:
-  - id: start
-    type: start
-    label: Suffer the outcome of a move
-  - id: method
-    type: decision
-    label: Choose how to determine the price
-  - id: obvious
-    type: step
-    label: Make the most obvious negative outcome happen
-  - id: two
-    type: step
-    label: Envision two negative outcomes and rate one likely
-  - id: oracle
-    type: procedure
-    label: "Ask the Oracle (Yes/No): yes selects the likely outcome; no selects the
-      other"
-    target: ask-the-oracle
-  - id: table
-    type: step
-    label: Roll 1–100 on the Pay the Price Table reference. If a result is difficult
-      to fit to the situation, roll again
-  - id: apply
-    type: end
-    label: Envision the consequence, apply appropriate costs, and continue the
-      fiction (see Key Rules)
+- id: start
+  type: start
+  label: Suffer the outcome of a move
+- id: method
+  type: decision
+  label: Choose how to determine the price
+- id: obvious
+  type: step
+  label: Make the most obvious negative outcome happen
+- id: two
+  type: step
+  label: Envision two negative outcomes and rate one likely
+- id: oracle
+  type: procedure
+  label: 'Ask the Oracle (Yes/No): yes selects the likely outcome; no selects the other'
+  target: ask-the-oracle
+- id: table
+  type: step
+  label: Roll 1–100 on the Pay the Price Table reference. If a result is difficult to fit to the
+    situation, roll again
+- id: apply
+  type: end
+  label: Envision the consequence, apply appropriate costs, and continue the fiction (see Key
+    Rules)
 edges:
-  - from: start
-    to: method
-  - from: method
-    to: obvious
-    label: Obvious outcome
-  - from: method
-    to: two
-    label: Two outcomes
-  - from: method
-    to: table
-    label: Roll on table
-  - from: obvious
-    to: apply
-  - from: two
-    to: oracle
-  - from: oracle
-    to: apply
-  - from: table
-    to: apply
+- from: start
+  to: method
+- from: method
+  to: obvious
+  label: Obvious outcome
+- from: method
+  to: two
+  label: Two outcomes
+- from: method
+  to: table
+  label: Roll on table
+- from: obvious
+  to: apply
+- from: two
+  to: oracle
+- from: oracle
+  to: apply
+- from: table
+  to: apply
 keyRules:
-  - In guided play, look to the GM for a ruling. Follow the fiction before
-    determining mechanical costs.
-  - "Physical injury or hardship: Endure Harm and suffer -health. Fear or
-    despair: Endure Stress and suffer -spirit. Lost equipment or resources:
-    suffer -supply. Lost time or disadvantage: suffer -momentum. If an ally or
-    companion is endangered, apply the cost to them."
-  - When in doubt, suffer -2 from the appropriate track. Costs may be purely
-    narrative; make costs appropriate to the circumstances and originating move.
-  - Endure Harm, Endure Stress, and other follow-up moves are outside this small
-    sample. Use the official SRD for their full procedures; this navigator is
-    not a complete game reference.
-  - A match on the originating move may inspire rolling on the table. Matches on
-    the Pay the Price table itself have no special significance.
+- In guided play, look to the GM for a ruling. Follow the fiction before determining mechanical
+  costs.
+- 'Physical injury or hardship: Endure Harm and suffer -health. Fear or despair: Endure Stress
+  and suffer -spirit. Lost equipment or resources: suffer -supply. Lost time or disadvantage:
+  suffer -momentum. If an ally or companion is endangered, apply the cost to them.'
+- When in doubt, suffer -2 from the appropriate track. Costs may be purely narrative; make costs
+  appropriate to the circumstances and originating move.
+- A match on the originating move may inspire rolling on the table. Matches on the Pay the Price
+  table itself have no special significance.
 references:
-  - price-table
-  - oracle-options
-  - credits
-related: []
+- price-table
+- oracle-options
+- credits
+- resources
+- progress-tracks
+related:
+- endure-harm
+- endure-stress
+- out-of-supply
+- face-a-setback

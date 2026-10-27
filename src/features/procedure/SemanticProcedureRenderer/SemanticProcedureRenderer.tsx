@@ -177,7 +177,14 @@ function assignLanes(
     const fromIndex = nodeIndexes.get(group.from) ?? 0;
     const toIndex = nodeIndexes.get(group.to) ?? 0;
     const interval = { end: Math.max(fromIndex, toIndex), start: Math.min(fromIndex, toIndex) };
-    let lane = lanes.findIndex((entries) =>
+    // A containing path must stay outside every path it encloses, even when
+    // another overlapping interval pushed an inner path into a deeper lane.
+    const minimumLane = lanes.reduce((minimum, entries, index) =>
+      entries.some((entry) => interval.start <= entry.start && interval.end >= entry.end)
+        ? Math.max(minimum, index + 1)
+        : minimum,
+    0);
+    let lane = lanes.findIndex((entries, index) => index >= minimumLane &&
       entries.every((entry) => interval.end < entry.start || interval.start > entry.end),
     );
     if (lane === -1) {
@@ -283,9 +290,14 @@ function createRailLayout(
     (group) => routeDirections.get(group.key) === 'right',
   );
   const leftLanes = assignLanes(leftBypasses, presentationIndexes);
-  const rightLanes = assignLanes(rightBypasses, presentationIndexes);
-  const bypassLanes = new Map([...leftLanes, ...rightLanes]);
-  const loopLanes = assignLanes(loops, presentationIndexes);
+  // Forward branches and return loops share the same physical right gutter.
+  // Allocate them together so overlapping routes cannot occupy the same rail.
+  const rightLanes = assignLanes([...rightBypasses, ...loops], presentationIndexes);
+  const bypassLanes = new Map([
+    ...leftLanes,
+    ...rightBypasses.map((group) => [group.key, rightLanes.get(group.key)!] as const),
+  ]);
+  const loopLanes = new Map(loops.map((group) => [group.key, rightLanes.get(group.key)!]));
   const routeTones = new Map<string, RouteTone>();
 
   for (const group of groupedEdges) {

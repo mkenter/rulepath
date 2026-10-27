@@ -1,17 +1,24 @@
 id: momentum
 title: Momentum
-summary: "Momentum ranges from -6 to a maximum starting at +10, reduced by 1 per
-  marked debility. Positive momentum may be burned after an action roll: cancel
-  challenge dice strictly below your momentum; one canceled die guarantees at
-  least a weak hit and two a strong hit. Keep any success against the other die.
-  Burning is optional. Reset afterward to +2 with no debilities, +1 with one, or
-  0 with more than one. At negative momentum, cancel the action die if its value
-  equals the magnitude of that negative momentum; still compare stat plus adds.
-  Never apply momentum to progress rolls. At minimum momentum, further loss
-  requires Face a Setback (outside this sample; consult the SRD). You cannot
-  gain momentum above your current maximum."
+summary: Momentum ranges from -6 to your current maximum. Burn positive momentum after an action
+  roll to cancel lower challenge dice, then reset. Negative momentum can cancel the action die.
 source:
-  section: "Momentum"
+  section: Momentum
 related:
-  - procedure: action-roll
-  - procedure: secure-an-advantage
+- procedure: action-roll
+- procedure: face-a-setback
+- reference: debilities
+sections:
+- heading: Limits and reset
+  paragraphs:
+  - Momentum begins at +2, normally ranges from -6 to +10, and resets to +2 after burning. Maximum
+    is 10 minus the number of marked debilities. One debility changes reset to +1; two or more
+    change reset to 0.
+- heading: Negative momentum
+  paragraphs:
+  - When the action die equals the magnitude of negative momentum, cancel the action die; use
+    only stat/track and adds. At -6, further loss triggers Face a Setback.
+- heading: Burning
+  paragraphs:
+  - After an action roll, optionally burn positive momentum to cancel challenge dice strictly
+    below it. Reset after burning. Momentum cannot be burned on a progress roll.

@@ -1,0 +1,68 @@
+id: character-creation
+title: Character Creation
+summary: Create a hero for solo, co-op or guided Ironsworn.
+source:
+  section: Character Creation
+nodes:
+- id: n1
+  type: start
+  label: Create a hero for solo, co-op or guided Ironsworn.
+- id: n2
+  type: step
+  label: Envision your character, choose a name, and assign 3, 2, 2, 1, 1 among edge, heart, iron,
+    shadow and wits.
+- id: n3
+  type: step
+  label: Set health, spirit and supply to +5; momentum to +2; maximum momentum +10 and reset +2.
+    Clear debilities.
+- id: n4
+  type: step
+  label: Choose three assets and mark each preset ability, or choose one ability if none is preset.
+    Meet any requirements.
+- id: n5
+  type: step
+  label: Envision up to three background bonds. Mark one tick for each and note the people or
+    communities.
+- id: n6
+  type: step
+  label: Write an epic background vow. Envision an inciting incident and swear a vow to address
+    it.
+- id: n7
+  type: procedure
+  label: Swear an Iron Vow for the inciting incident
+  target: swear-an-iron-vow
+- id: n8
+  type: step
+  label: Record important equipment, bonds and vows. Begin in the fiction.
+- id: n9
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n5
+  from: n4
+- to: n6
+  from: n5
+- to: n7
+  from: n6
+- to: n8
+  from: n7
+- to: n9
+  from: n8
+keyRules:
+- Ordinary gear is abstract; give yourself appropriate armor, weapons and supplies in the fiction.
+- Agree on a shared setting and play mode with your group. This reference covers the permitted
+  SRD rules, not rulebook-only setting truths.
+references:
+- stats
+- resources
+- momentum
+- assets
+- equipment
+- progress-tracks
+related: []
