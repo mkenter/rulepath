@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { scenarios } from './support/content';
 
+// Measure resting layouts rather than an intermediate sheet entrance.
+test.use({ reducedMotion: 'reduce' });
+
 for (const width of [390, 820, 1440]) {
   test(`${width}px library, contents, procedures, and search stay usable without overflow`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
@@ -53,7 +56,7 @@ for (const width of [390, 1180]) {
               ancestor.scrollTop = ancestor.scrollHeight;
               if (ancestor.scrollTop + ancestor.clientHeight < ancestor.scrollHeight - 1) return false;
             }
-            if (ancestor.getAttribute('role') === 'dialog') break;
+            if (ancestor.matches('dialog, [role="dialog"]')) break;
             ancestor = ancestor.parentElement;
           }
           return true;

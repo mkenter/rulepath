@@ -13,12 +13,12 @@
 .form input::placeholder { color: var(--trn-text-on-rules-muted); }
 .form input:hover { border-color: var(--trn-ink-accent); }
 .form input:focus-visible { border-color: var(--trn-focus-on-rules); box-shadow: 0 0 0 2px var(--trn-surface-rules), 0 0 0 4px var(--trn-focus-on-rules); outline: none; }
-.clear { position: absolute; right: 8px; display: grid; width: 44px; height: 44px; place-items: center; border: 0; background: transparent; color: var(--trn-text-on-rules); cursor: pointer; font-size: 1.5rem; }
+.clear { position: absolute; right: 8px; display: grid; width: 44px; height: 44px; place-items: center; border: 0; background: transparent; color: var(--trn-text-on-rules); cursor: pointer; font-size: 1.5rem; transition: background-color var(--trn-motion-functional), color var(--trn-motion-functional); }
 .clear:hover { background: var(--trn-ink-accent-soft); }
 .clear:focus-visible { outline: 2px solid var(--trn-focus-on-rules); outline-offset: -4px; }
 .scope { display: flex; flex-wrap: wrap; align-items: center; min-height: 44px; margin: 12px 0 0; gap: 8px 12px; color: var(--trn-text-on-rules-muted); font-size: .8125rem; }
 .globalScope { margin-bottom: 0; }
-.scopePill { display: inline-flex; align-items: center; gap: 16px; max-width: 100%; min-height: 44px; padding: 6px 8px 6px 14px; border: 1px solid transparent; border-radius: 0; background: var(--trn-signal); color: var(--trn-text-on-signal); cursor: pointer; font: inherit; font-weight: 600; text-align: left; overflow-wrap: anywhere; }
+.scopePill { display: inline-flex; align-items: center; gap: 16px; max-width: 100%; min-height: 44px; padding: 6px 8px 6px 14px; border: 1px solid transparent; border-radius: 0; background: var(--trn-signal); color: var(--trn-text-on-signal); cursor: pointer; font: inherit; font-weight: 600; text-align: left; overflow-wrap: anywhere; transition: background-color var(--trn-motion-functional), color var(--trn-motion-functional); }
 .scopePill:hover { background: var(--trn-signal-hover); }
 .scopePill:focus-visible { outline: 2px solid var(--trn-focus-on-rules); outline-offset: 3px; }
 .remove { display: grid; flex-shrink: 0; width: 28px; height: 28px; place-items: center; }
@@ -26,7 +26,7 @@
 .scopePill path { fill: none; stroke: currentcolor; stroke-linecap: round; stroke-width: 2; }
 .results { margin-top: 24px; color: var(--trn-text-on-rules); }
 .heading { display: flex; align-items: center; min-height: 42px; padding-bottom: 12px; border-bottom: 2px solid var(--trn-text-on-rules); }
-.heading h2 { margin: 0; font-size: .75rem; font-weight: 650; text-transform: uppercase; letter-spacing: .1em; }
+.heading h2 { margin: 0; font-size: .9375rem; font-weight: 600; }
 .results ul { margin: 0; padding: 0; list-style: none; }
 .results li + li { border-top: 1px solid var(--trn-border-on-rules); }
 .empty { margin: 0; padding: 26px 0; color: var(--trn-text-on-rules-muted); line-height: 1.6; }

@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -77,12 +77,14 @@ describe('generic application interactions', () => {
     await user.click(link);
     expect(screen.getByRole('dialog', { name: reference.reference.title })).toBeVisible();
     expect(screen.getByRole('heading', { level: 1, name: reference.procedure.title })).toBeInTheDocument();
-    await user.keyboard('{Escape}');
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    // Browsers dispatch cancel for Escape; jsdom has no native dialog default actions.
+    fireEvent(screen.getByRole('dialog'), new Event('cancel', { cancelable: true }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     expect(router.state.location.pathname).toBe(reference.path);
     await user.click(link);
     await user.click(screen.getByRole('button', { name: `Close ${reference.reference.title}` }));
     expect(router.state.location.pathname).toBe(reference.path);
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     await user.click(link);
     await router.navigate(-1);
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());

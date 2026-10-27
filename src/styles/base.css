@@ -10,6 +10,7 @@ html {
   font-size: 16px;
   font-optical-sizing: auto;
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -39,6 +40,11 @@ a {
   outline-offset: 3px;
 }
 
+/* Route headings receive focus to announce navigation, without an interactive outline. */
+h1[tabindex='-1']:focus {
+  outline: none;
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -55,8 +61,10 @@ a {
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
-  *::after {
+  *::after,
+  *::backdrop {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+    animation: none !important;
   }
 }

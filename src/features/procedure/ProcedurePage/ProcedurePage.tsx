@@ -67,7 +67,7 @@ export function ProcedurePage() {
           <aside className={styles.support} aria-label={`${procedure.title} supporting rules`}>
             {procedure.keyRules.length ? (
               <section className={styles.key} id="key-rules" tabIndex={-1} aria-labelledby="key-rules-heading">
-                <h2 id="key-rules-heading">Key Rules</h2>
+                <h2 id="key-rules-heading">Key rules</h2>
                 <ul>{procedure.keyRules.map((rule) => <li key={rule}>{rule}</li>)}</ul>
               </section>
             ) : null}

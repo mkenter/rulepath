@@ -24,14 +24,6 @@
 .paper h1 { color: var(--trn-text-on-rules); }
 .paper p { color: var(--trn-text-on-rules-muted); }
 
-.eyebrow {
-  color: var(--trn-accent-context);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
 @media (max-width: 560px) {
   .root { margin-bottom: 20px; }
 }

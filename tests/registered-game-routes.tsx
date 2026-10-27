@@ -20,8 +20,10 @@ export function testRegisteredGameRoutes(registry: ContentRegistry, renderRoute:
       const games = screen.getByRole('region', { name: 'Games' });
       const link = within(games).getAllByRole('link').find(link => link.getAttribute('href') === home)!;
       expect(link).toHaveTextContent(game.details.title);
+      expect(link).toHaveTextContent(`by ${game.details.source.publication.creator}`);
       await user.click(link);
-      expect(screen.getByRole('heading', { level: 1, name: game.details.title })).toBeInTheDocument();
+      const title = screen.getByRole('heading', { level: 1, name: game.details.title });
+      expect(title.nextElementSibling).toHaveTextContent(`by ${game.details.source.publication.creator}`);
       const contents = screen.getByRole('navigation', { name: `${game.details.title} contents` });
       expect(within(contents).queryAllByRole('link').map(link => link.getAttribute('href')).sort()).toEqual(resources.map(({ path }) => path).sort());
     });

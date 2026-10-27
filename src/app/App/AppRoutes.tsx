@@ -1,3 +1,5 @@
+import { AnimatePresence, domAnimation, LazyMotion } from 'motion/react';
+import { useLayoutEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppShell } from '../AppShell';
@@ -8,15 +10,23 @@ import { ProcedurePage } from '../../features/procedure/ProcedurePage';
 import { ReferencePage } from '../../features/reference/ReferencePage';
 import { ReferenceSheet } from '../../features/reference/ReferenceSheet';
 import { SearchPage } from '../../features/search/SearchPage';
+import { RouteFocus } from '../../navigation/RouteFocus';
 import { backgroundLocationFromState } from '../../navigation/invocationPath';
 
 export function AppRoutes() {
   const location = useLocation();
   const backgroundLocation = backgroundLocationFromState(location.state);
+  const [hasSheet, setHasSheet] = useState(Boolean(backgroundLocation));
+  const sheetActive = Boolean(backgroundLocation) || hasSheet;
+
+  useLayoutEffect(() => {
+    if (backgroundLocation && !hasSheet) setHasSheet(true);
+  }, [backgroundLocation, hasSheet]);
 
   return (
     <AppShell>
-      <div data-route-content inert={backgroundLocation ? true : undefined}>
+      <RouteFocus location={backgroundLocation ?? location} suspended={sheetActive} />
+      <div data-route-content inert={sheetActive ? true : undefined}>
         <Routes location={backgroundLocation ?? location}>
           <Route path="/" element={<LibraryPage />} />
           <Route path="/search" element={<SearchPage />} />
@@ -26,11 +36,16 @@ export function AppRoutes() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
-      {backgroundLocation ? (
-        <Routes>
-          <Route path="/games/:gameId/reference/:resourceId" element={<ReferenceSheet />} />
-        </Routes>
-      ) : null}
+      <LazyMotion features={domAnimation} strict>
+        <AnimatePresence initial={false} onExitComplete={() => setHasSheet(false)}>
+          {backgroundLocation ? (
+            // Freeze the exiting route's context; the URL can already point at its destination.
+            <Routes key={backgroundLocation.key} location={location}>
+              <Route path="/games/:gameId/reference/:resourceId" element={<ReferenceSheet />} />
+            </Routes>
+          ) : null}
+        </AnimatePresence>
+      </LazyMotion>
     </AppShell>
   );
 }

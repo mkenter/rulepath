@@ -36,3 +36,19 @@ test('phone controls expose the immediate parent and full ancestor path', async 
   await sheet.getByRole('link', { name: 'Gather Information' }).click();
   await expect(page).toHaveURL(gather);
 });
+
+test('procedure navigation focuses the destination and Back restores the invoking link', async ({ page }) => {
+  await page.goto(gather);
+  const priceLink = page.getByLabel('Procedure link: Pay the Price', { exact: true }).getByRole('link');
+  await priceLink.click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Pay the Price', exact: true })).toBeFocused();
+  const oracleLink = page.getByLabel(/Procedure link: Ask the Oracle/).getByRole('link');
+  await oracleLink.click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Ask the Oracle', exact: true })).toBeFocused();
+  await page.goBack();
+  await expect(oracleLink).toBeFocused();
+  await expect(oracleLink).toBeInViewport();
+  await page.goBack();
+  await expect(priceLink).toBeFocused();
+  await expect(priceLink).toBeInViewport();
+});

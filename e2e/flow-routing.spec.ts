@@ -105,3 +105,23 @@ for (const width of [390, 1180]) {
     }
   });
 }
+
+test('pointer tracing emphasizes one decision route without adding decision controls', async ({ page }) => {
+  await page.goto('/games/ironsworn/procedures/action-roll');
+  const branch = page.locator('[data-flow-decision-branch]').first();
+  const route = await branch.getAttribute('data-route-key');
+  await branch.hover();
+  const emphasized = page.locator('[data-route-kind][data-emphasized]');
+  await expect(emphasized).toHaveCount(1);
+  const [from, to] = route!.split(':');
+  await expect(emphasized).toHaveAttribute('data-edge-from', from!);
+  await expect(emphasized).toHaveAttribute('data-edge-to', to!);
+  await expect(page.locator('[data-flow-node-type="decision"] a, [data-flow-node-type="decision"] button')).toHaveCount(0);
+  await page.getByRole('heading', { level: 1 }).hover();
+  await expect(emphasized).toHaveCount(0);
+
+  await page.goto('/games/ironsworn/procedures/gather-information');
+  const linkNode = page.getByLabel('Procedure link: Pay the Price', { exact: true });
+  await linkNode.getByRole('link').focus();
+  await expect(page.locator('[data-route-kind][data-emphasized]').first()).toBeAttached();
+});

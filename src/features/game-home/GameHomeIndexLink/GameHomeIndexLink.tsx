@@ -15,10 +15,10 @@ export function GameHomeIndexLink({ kind, showKind, summary, title, to }: GameHo
   const summaryId = useId();
 
   return (
-    <Link className={`${styles.root} ${styles[kind]}`} aria-label={title} aria-describedby={summary ? summaryId : undefined} data-game-home-entry data-resource-kind={kind} to={to}>
+    <Link className={`${styles.root} ${styles[kind]}`} aria-label={showKind ? `${title}, ${kind}` : title} aria-describedby={summary ? summaryId : undefined} data-game-home-entry data-resource-kind={kind} to={to}>
       <span className={styles.text}>
-        {showKind ? <span className={styles.kind}>{kind}</span> : null}
         <span className={styles.title}>{title}</span>
+        {showKind ? <span className={styles.kind}>{kind === 'procedure' ? 'Procedure' : 'Reference'}</span> : null}
         {summary ? <span className={styles.summary} id={summaryId}>{summary}</span> : null}
       </span>
     </Link>
