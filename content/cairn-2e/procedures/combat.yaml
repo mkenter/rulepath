@@ -27,40 +27,55 @@ nodes:
     or ability can remove the requirement.
 - id: n5
   type: step
-  label: Eligible PCs declare their actions before dice are rolled. Each may move 40ft and take
-    one action.
+  label: The eligible PCs are the acting side.
 - id: n6
+  type: step
+  label: The whole acting side declares its movements, actions and targets before dice are rolled.
+    Each combatant may move 40ft and take one action.
+- id: n16
   type: decision
-  label: Resolve each declared action
+  label: Did this side declare any spells?
 - id: n7
   type: step
-  label: Resolve results simultaneously for this side. Against one target, retain only the highest
-    damage die result.
+  label: Apply all of this side’s action results simultaneously. For multiple attacks against
+    one target, use only the single highest damage die result already rolled, not separate hits.
 - id: n8
   type: procedure
-  label: Attacking and Damage
+  label: Determine this side’s attack results together, grouped by target; hold effects for
+    simultaneous resolution
   target: attacking-and-damage
 - id: n9
   type: procedure
-  label: Casting Spells
+  label: Determine this side’s declared spell results; hold effects for simultaneous resolution
   target: cast-a-spell
 - id: n10
   type: step
-  label: Resolve movement or another reasonable action. Call for a save only if an uncertain risk
-    remains.
+  label: Determine results for all other declared actions. Call for saves only where risky;
+    hold movement and other effects until all of this side’s results are ready.
+- id: n17
+  type: decision
+  label: Did this side declare any attacks?
 - id: n11
   type: decision
-  label: Are any declared PC actions still unresolved?
+  label: Has an enemy morale threshold just been reached?
 - id: n12
   type: step
-  label: Opponents take their side’s turn. Declare their actions and resolve them the same way.
+  label: The opponents are now the acting side.
 - id: n13
+  type: procedure
+  label: Enemy WIL saves at newly reached thresholds — first casualty, half their number lost,
+    or a lone foe reduced to 0 HP
+  target: save
+- id: n18
   type: step
-  label: 'Check enemy morale at first casualty and again at half losses; a lone foe checks at
-    0 HP. WIL save: pass to remain, fail to flee.'
+  label: Enemies that fail morale flee; those that pass remain. Resolve these checks before
+    passing play to the next side.
 - id: n14
   type: decision
   label: Has the fight ended through defeat, flight or agreement?
+- id: n19
+  type: decision
+  label: Was this the PCs’ side of the round?
 - id: n15
   type: end
   label: Return to the fiction and apply any recovery or consequences
@@ -79,39 +94,52 @@ edges:
   from: n2
 - to: n6
   from: n5
-- to: n8
-  label: Attack
+- to: n16
   from: n6
-- to: n7
-  from: n8
 - to: n9
-  label: Cast a spell
-  from: n6
-- to: n7
+  label: 'Yes'
+  from: n16
+- to: n10
   from: n9
 - to: n10
-  label: Other action
-  from: n6
-- to: n7
+  label: 'No'
+  from: n16
+- to: n17
   from: n10
+- to: n8
+  label: 'Yes'
+  from: n17
+- to: n7
+  from: n8
+- to: n7
+  label: 'No'
+  from: n17
 - to: n11
   from: n7
-- to: n6
+- to: n13
   label: 'Yes'
   from: n11
-- to: n12
+- to: n14
   label: 'No'
   from: n11
-- to: n13
-  from: n12
-- to: n14
+- to: n18
   from: n13
-- to: n5
-  label: 'No: next round'
+- to: n14
+  from: n18
+- to: n19
+  label: 'No'
   from: n14
 - to: n15
   label: 'Yes'
   from: n14
+- to: n12
+  label: 'Yes: opponents act next'
+  from: n19
+- to: n6
+  from: n12
+- to: n5
+  label: 'No: next round'
+  from: n19
 keyRules:
 - A round is roughly ten seconds. Each side acts together, with the effects of its actions simultaneous.
 - After the first round, PCs act before opponents. A PC’s failed first-round DEX save does not
@@ -119,6 +147,10 @@ keyRules:
 - An action can be an attack, spell, second move, or another reasonable activity.
 - Attacks hit automatically. Multiple attacks against one target use only the highest damage die
   result; do not total them.
+- Work out all declared actions for the acting side before applying their effects. The linked
+  attack and casting procedures supply resolution rules for that batch, not separate PC turns.
+- Check morale as soon as the relevant threshold is reached during a side’s resolution; do not
+  wait until the opponents have taken their turn or repeat checks without a new threshold.
 - Morale affects enemies, not PCs; a group may use its leader’s WIL. Running from a dire situation
   requires a safe destination and a successful DEX save.
 references:
