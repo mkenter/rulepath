@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { SourceDetails } from '../../../components/SourceDetails';
 import { contentRegistry } from '../../../content/bundled-content';
 import { resolveSource } from '../../../content/registry';
 import type { Reference } from '../../../content/schema';
 import styles from './ReferenceContent.module.css';
+import { backgroundLocationFromState } from '../../../navigation/invocationPath';
 
 interface ReferenceContentProps {
   gameId: string;
@@ -17,6 +18,8 @@ export function ReferenceContent({
   presentation = 'page',
   reference,
 }: ReferenceContentProps) {
+  const location = useLocation();
+  const backgroundLocation = backgroundLocationFromState(location.state);
   const game = contentRegistry.getGame(gameId);
   if (!game) return null;
   const sectionClassName = `${styles.section}${presentation === 'page' ? ` ${styles.page}` : ''}`;
@@ -58,7 +61,9 @@ export function ReferenceContent({
               const relatedReference = game?.references.get(related.reference);
               return relatedReference ? (
                 <li key={`reference-${relatedReference.id}`}>
-                  <Link to={`/games/${gameId}/reference/${relatedReference.id}`}>{relatedReference.title}</Link>
+                  <Link to={`/games/${gameId}/reference/${relatedReference.id}`}
+                    replace={presentation === 'sheet'}
+                    state={presentation === 'sheet' ? { backgroundLocation } : undefined}>{relatedReference.title}</Link>
                 </li>
               ) : null;
             })}

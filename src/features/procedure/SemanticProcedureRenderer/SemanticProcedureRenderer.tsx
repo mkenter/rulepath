@@ -31,6 +31,7 @@ interface SemanticProcedureRendererProps {
 }
 
 interface NodeCardProps extends SemanticProcedureRendererProps {
+  edgeDescriptionIds: ReadonlyMap<string, string>;
   node: ProcedureNode;
   routeDirections: ReadonlyMap<string, RouteDirection>;
   routeTones: ReadonlyMap<string, RouteTone>;
@@ -327,12 +328,14 @@ function createRailLayout(
 }
 
 function FlowConnectors({
+  emphasis,
   containerRef,
   flow,
   presentationIndexes,
   procedure,
   railLayout,
 }: {
+  emphasis: { nodeId?: string; routeKey?: string } | null;
   containerRef: RefObject<HTMLOListElement | null>;
   flow: ReturnType<typeof analyzeProcedureFlow>;
   presentationIndexes: ReadonlyMap<string, number>;
@@ -529,8 +532,9 @@ function FlowConnectors({
             id={`${markerId}-${tone}`}
             key={tone}
             data-flow-marker-tone={tone}
-            markerHeight="5"
-            markerWidth="5"
+            markerUnits="userSpaceOnUse"
+            markerHeight="7.5"
+            markerWidth="7.5"
             orient="auto-start-reverse"
             refX="6"
             refY="3.5"
@@ -543,6 +547,7 @@ function FlowConnectors({
       {routes.map((route) => (
         <g
           className={`${styles.connector} ${connectorToneClasses[route.tone]}`}
+          data-emphasized={emphasis?.routeKey === route.key || (!!emphasis?.nodeId && (emphasis.nodeId === route.from || emphasis.nodeId === route.to)) ? true : undefined}
           data-edge-from={route.from}
           data-edge-to={route.to}
           data-route-direction={route.direction}
@@ -568,6 +573,7 @@ function FlowConnectors({
 }
 
 function NodeCard({
+  edgeDescriptionIds,
   gameId,
   invocationPath,
   node,
@@ -612,6 +618,7 @@ function NodeCard({
       className={`${styles.node} ${nodeTypeClasses[node.type]}`} data-flow-node
       data-flow-node-type={node.type}
       aria-label={`${nodeTypeLabel[node.type]}: ${node.label}`}
+      aria-describedby={edgeDescriptionIds.get(node.id)}
     >
       <div className={styles.body}>
         {node.type === 'procedure' && targetTitle ? (
@@ -676,6 +683,12 @@ function NodeCard({
 
 export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps) {
   const { procedure } = props;
+  const descriptionId = useId();
+  const edgeDescriptionIds = new Map(procedure.nodes.map(node => [node.id,
+    procedure.edges.flatMap((edge, index) => edge.from === node.id ? [`${descriptionId}-edge-${index}`] : []).join(' ') || undefined,
+  ]).filter((entry): entry is [string, string] => entry[1] !== undefined));
+  const [pointerEmphasis, setPointerEmphasis] = useState<{ nodeId?: string; routeKey?: string } | null>(null);
+  const [focusedNode, setFocusedNode] = useState<string | undefined>(undefined);
   const listRef = useRef<HTMLOListElement>(null);
   const nodesById = new Map(procedure.nodes.map((node) => [node.id, node]));
   const flow = useMemo(() => analyzeProcedureFlow(procedure), [procedure]);
@@ -713,8 +726,21 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
         <h2>Procedure</h2>
         <span>Follow the arrows</span>
       </div>
-      <ol className={styles.list} data-flow-list data-rail-depth={railDepth} ref={listRef} style={flowStyle}>
+      <ol className={styles.list} data-flow-list data-rail-depth={railDepth} ref={listRef} style={flowStyle}
+        onPointerOver={(event) => {
+          const target = event.target as Element;
+          const routeKey = target.closest<HTMLElement>('[data-route-key]')?.dataset.routeKey;
+          const nodeId = target.closest<HTMLElement>('[data-flow-node-id]')?.dataset.flowNodeId;
+          setPointerEmphasis(routeKey ? { routeKey } : nodeId ? { nodeId } : null);
+        }}
+        onPointerLeave={() => setPointerEmphasis(null)}
+        onFocusCapture={(event) => setFocusedNode(event.target.closest<HTMLElement>('[data-flow-node-id]')?.dataset.flowNodeId)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setFocusedNode(undefined);
+        }}
+      >
         <FlowConnectors
+          emphasis={pointerEmphasis ?? (focusedNode ? { nodeId: focusedNode } : null)}
           containerRef={listRef}
           flow={flow}
           presentationIndexes={presentationIndexes}
@@ -730,6 +756,7 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
             key={node.id}
           >
             <NodeCard
+              edgeDescriptionIds={edgeDescriptionIds}
               node={node}
               routeDirections={railLayout.routeDirections}
               routeTones={railLayout.routeTones}
@@ -740,10 +767,12 @@ export function SemanticProcedureRenderer(props: SemanticProcedureRendererProps)
       </ol>
       <ul className={styles.screenReaderEdges} aria-label="Procedure connections">
         {procedure.edges.map((edge, index) => {
+          const source = nodesById.get(edge.from)?.label ?? edge.from;
           const destination = nodesById.get(edge.to)?.label ?? edge.to;
           const isLoop = flow.loopEdges.has(edge);
           return (
-            <li key={`${edge.from}-${edge.to}-${edge.label ?? ''}-${index}`}>
+            <li id={`${descriptionId}-edge-${index}`} key={`${edge.from}-${edge.to}-${edge.label ?? ''}-${index}`}>
+              {`From “${source}”: `}
               {edge.label ? `${edge.label}: ` : ''}
               {isLoop ? 'Return to ' : 'Continue to '}
               {destination}

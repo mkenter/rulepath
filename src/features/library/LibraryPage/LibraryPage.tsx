@@ -16,7 +16,6 @@ export function LibraryPage() {
       <div className={styles.inner}>
         <header className={styles.header}>
           <div>
-            <p className={styles.eyebrow}>Game library</p>
             <h1>Library</h1>
           </div>
           <p className={styles.count}>{gameCount} {gameCount === 1 ? 'game' : 'games'} available</p>
@@ -28,7 +27,7 @@ export function LibraryPage() {
                 <GameCatalogEntry
                   accent={game.details.accent}
                   procedureCount={game.procedures.size}
-                  publisher={game.details.publisher}
+                  creator={game.details.source.publication.creator}
                   referenceCount={game.references.size}
                   summary={game.details.summary}
                   title={game.details.title}

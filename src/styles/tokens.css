@@ -67,11 +67,11 @@
   --trn-info: #1e657b;
   --trn-info-soft: #e1f1f6;
 
-  /* Diagram-only hues; path labels, arrowheads, and line styles retain semantics. */
-  --trn-route-a: #166b7a;
-  --trn-route-b: #7650a3;
-  --trn-route-c: #a64a28;
-  --trn-route-return: #836013;
+  /* Coordinated tracking colors separate adjacent rails without assigning outcome meaning. */
+  --trn-route-a: #376b78;
+  --trn-route-b: #785468;
+  --trn-route-c: var(--trn-ink-accent);
+  --trn-route-return: var(--trn-surface-shell-raised-hover);
   --trn-overlay: rgb(40 29 47 / 42%);
   --trn-shadow-soft: 0 16px 40px rgb(40 29 47 / 18%);
   --trn-shadow-paper: 0 12px 30px rgb(40 29 47 / 16%);
@@ -81,5 +81,5 @@
   --trn-content-reading: 760px;
   --trn-font-ui: "Instrument Sans Variable", sans-serif;
   --trn-font-editorial: "Newsreader Variable", serif;
-  --trn-motion-functional: 150ms ease;
+  --trn-motion-functional: 220ms cubic-bezier(.2, .6, .3, 1);
 }

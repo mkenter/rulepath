@@ -7,13 +7,13 @@
 .folio { display: grid; grid-template-columns: 350px minmax(0, 1fr); align-items: start; gap: 40px; }
 .identity { display: grid; min-width: 0; padding: 28px; border-top: 3px solid var(--game-accent); background: color-mix(in srgb, var(--trn-signal) 55%, var(--trn-surface-rules)); }
 .titleZone { min-width: 0; container-type: inline-size; }
-.publisher { margin: 0 0 18px; color: var(--trn-text-on-rules-muted); font-size: .8125rem; font-weight: 500; line-height: 1.5; }
+.byline { margin: 14px 0 0; color: var(--trn-text-on-rules-muted); font-size: .9375rem; font-weight: 450; line-height: 1.5; }
 .titleZone h1 { margin: 0; font-family: var(--trn-font-editorial); font-size: clamp(2rem, 16cqi, 3.5rem); font-weight: 550; letter-spacing: -.045em; line-height: 1.03; overflow-wrap: anywhere; }
 .context { min-width: 0; }
 .summary { margin: 24px 0 0; font-size: .9375rem; line-height: 1.65; overflow-wrap: anywhere; }
 .metadata { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 22px 0 0; color: var(--trn-text-on-rules-muted); font-size: .75rem; line-height: 1.5; }
 .jumpNav { display: flex; flex-direction: column; align-items: start; margin-top: 28px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--trn-text-on-signal) 24%, transparent); }
-.jumpLabel { margin-bottom: 8px; color: var(--trn-text-on-rules-muted); font-size: .625rem; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; }
+.jumpLabel { margin-bottom: 8px; color: var(--trn-text-on-rules-muted); font-size: .875rem; font-weight: 550; }
 .jumpNav a { display: flex; align-items: center; min-height: 44px; max-width: 100%; padding: 8px 0; color: var(--trn-text-on-rules); font-size: .875rem; font-weight: 550; line-height: 1.4; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: transparent; transition: text-decoration-color var(--trn-motion-functional); }
 .jumpNav a:hover, .jumpNav a:focus-visible { text-decoration-color: currentColor; }
 .jumpNav a:focus-visible { outline: 2px solid var(--trn-focus-on-rules); outline-offset: 4px; }
@@ -33,5 +33,5 @@
 .referenceSections .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; border-top: 0; }
 @media(max-width: 1150px) and (min-width: 901px) { .folio { grid-template-columns: 310px minmax(0, 1fr); gap: 32px; } .identity { padding: 24px; } .section { grid-template-columns: 120px minmax(0, 1fr); gap: 20px; } }
 @media(max-width: 900px) { .folio { grid-template-columns: minmax(0, 1fr); gap: 36px; } .identity { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); column-gap: 40px; padding: 28px 32px 18px; } .summary { margin-top: 0; } .metadata { margin-top: 18px; } .jumpNav { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0 24px; margin-top: 24px; padding-top: 10px; } .jumpLabel { margin: 0; } .section { grid-template-columns: 145px minmax(0, 1fr); gap: 28px; } }
-@media(max-width: 600px) { .root { padding: 16px 20px 48px; } .breadcrumbs > nav { margin-bottom: 18px; } .identity { grid-template-columns: minmax(0, 1fr); padding: 24px 24px 16px; } .publisher { margin-bottom: 14px; } .summary { margin-top: 20px; } .jumpNav { gap: 0 18px; margin-top: 20px; } .jumpLabel { flex-basis: 100%; margin: 6px 0 4px; } .jumpNav a { font-size: .8125rem; } .folio { gap: 32px; } .mainSections { gap: 32px; } .section { grid-template-columns: minmax(0, 1fr); gap: 16px; } .sectionHeading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px; padding-top: 16px; } .sectionCount { margin-top: 0; } .section h2 { font-size: 1.125rem; } .referenceSections .list { grid-template-columns: minmax(0, 1fr); } }
+@media(max-width: 600px) { .root { padding: 16px 20px 48px; } .breadcrumbs > nav { margin-bottom: 18px; } .identity { grid-template-columns: minmax(0, 1fr); padding: 24px 24px 16px; } .summary { margin-top: 20px; } .jumpNav { gap: 0 18px; margin-top: 20px; } .jumpLabel { flex-basis: 100%; margin: 6px 0 4px; } .jumpNav a { font-size: .8125rem; } .folio { gap: 32px; } .mainSections { gap: 32px; } .section { grid-template-columns: minmax(0, 1fr); gap: 16px; } .sectionHeading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px; padding-top: 16px; } .sectionCount { margin-top: 0; } .section h2 { font-size: 1.125rem; } .referenceSections .list { grid-template-columns: minmax(0, 1fr); } }
 @media(prefers-reduced-motion: reduce) { .jumpNav a { transition: none; } }

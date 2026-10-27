@@ -84,8 +84,8 @@ export function GameHomePage() {
         <div className={styles.folio}>
           <header className={styles.identity} data-game-home-title>
             <div className={styles.titleZone}>
-              {game.details.publisher ? <p className={styles.publisher}>{game.details.publisher}</p> : null}
               <h1>{game.details.title}</h1>
+              <p className={styles.byline}>by {game.details.source.publication.creator}</p>
             </div>
             <div className={styles.context}>
               {game.details.summary ? <p className={styles.summary}>{game.details.summary}</p> : null}

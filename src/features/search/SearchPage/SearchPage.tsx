@@ -23,7 +23,7 @@ export function SearchPage() {
   );
 
   useEffect(() => setQuery(routeQuery), [routeQuery]);
-  useEffect(() => inputRef.current?.focus(), []);
+  useEffect(() => { document.title = 'Search | Rulepath'; }, []);
 
   useEffect(() => {
     if (query.trim() === routeQuery) return;
@@ -48,6 +48,7 @@ export function SearchPage() {
     const nextParams: Record<string, string> = {};
     if (query.trim()) nextParams.q = query.trim();
     setSearchParams(nextParams, { replace: true });
+    inputRef.current?.focus();
   }
 
   function clearSearch() {
@@ -103,7 +104,10 @@ export function SearchPage() {
           <p className={`${styles.scope} ${styles.globalScope}`}>Searching all games</p>
         )}
       </form></div>
-      <section className={styles.results} aria-labelledby="search-results-heading" aria-live="polite">
+      <p className="visually-hidden" role="status" aria-atomic="true">
+        {query.trim() ? `${results.length} ${results.length === 1 ? 'result' : 'results'}${scopedGame ? ` in ${scopedGame.details.title}` : ' across all games'}.` : 'Enter a title, alias, or phrase from a rule.'}
+      </p>
+      <section className={styles.results} aria-labelledby="search-results-heading">
         <div className={styles.heading}>
           <h2 id="search-results-heading">
             {query.trim() ? `${results.length} ${results.length === 1 ? 'result' : 'results'}` : 'Results'}

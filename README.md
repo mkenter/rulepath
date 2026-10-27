@@ -14,7 +14,7 @@ The bundled games are Ironsworn and Cairn Second Edition. Rulepath focuses on pr
 
 ## Implementation
 
-Built with React, TypeScript, React Router, Vite, and CSS Modules.
+Built with React, TypeScript, React Router, Vite, and CSS Modules. Reference-sheet entrance and exit animations use Motion.
 
 - The [flow renderer](src/features/procedure/SemanticProcedureRenderer/SemanticProcedureRenderer.tsx) uses semantic HTML and SVG connectors to display branches, detours, and loops. Procedures are read-only; the app does not roll dice, choose outcomes, or track game state.
 - [Navigation state](src/navigation/invocationPath.ts) preserves the path between procedures. References have direct URLs and open as contextual sheets with keyboard focus handling.

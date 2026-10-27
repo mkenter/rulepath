@@ -2,6 +2,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { registry, scenarios } from './support/content';
 
+// Audit resting contrast and focus; opening motion is covered separately below.
+test.use({ reducedMotion: 'reduce' });
+
 async function focusByKeyboard(page: Page, target: Locator) {
   await expect(target).toBeVisible();
   const limit = await page.locator('a[href], button, input, summary, [tabindex]').count() + 1;
@@ -155,4 +158,15 @@ test('primary controls retain the stronger 44px touch-target standard', async ({
     await page.locator(`[href="${reference.referencePath}"]`).click();
     await minimum(page.getByRole('button', { name: `Close ${reference.reference.title}`, exact: true }));
   }
+});
+
+test('reduced motion keeps sheet and link interactions usable without animations', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/games/ironsworn/procedures/action-roll');
+  await page.getByRole('link', { name: 'Momentum', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Momentum', exact: true });
+  await expect(dialog.getByRole('button', { name: 'Close Momentum', exact: true })).toBeFocused();
+  expect(await dialog.evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('link', { name: 'Momentum', exact: true })).toBeFocused();
 });

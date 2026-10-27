@@ -17,10 +17,9 @@
 .heading h2 {
   margin: 0;
   color: var(--trn-text-on-rules-muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .heading > span {
@@ -203,6 +202,7 @@
   position: relative;
   border-color: var(--trn-ink-accent);
   background: var(--trn-ink-accent-soft);
+  box-shadow: inset 2px 0 transparent;
   transition: border-color var(--trn-motion-functional), background-color var(--trn-motion-functional), box-shadow var(--trn-motion-functional);
 }
 
@@ -228,18 +228,24 @@
 .linkArrow {
   flex-shrink: 0;
   font-size: 1.25rem;
+  transition: transform var(--trn-motion-functional);
 }
 
 .procedure:hover, .procedure:focus-within {
   border-color: var(--trn-ink-accent);
-  background: var(--trn-ink-accent-soft-hover);
-  box-shadow: inset 3px 0 var(--trn-ink-accent);
+  background: color-mix(in srgb, var(--trn-ink-accent-soft-hover) 70%, var(--trn-ink-accent-soft));
+  box-shadow: inset 2px 0 color-mix(in srgb, var(--trn-ink-accent) 60%, transparent);
 }
 
-.procedureLink:hover > span:first-child {
+.procedureLink > span:first-child {
   text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
   text-underline-offset: 4px;
+  transition: text-decoration-color var(--trn-motion-functional);
 }
+
+.procedureLink:is(:hover, :focus-visible) > span:first-child { text-decoration-color: currentcolor; }
 
 .procedure:focus-within {
   outline: 2px solid var(--trn-focus-on-rules);
@@ -266,14 +272,20 @@
 }
 
 .connectors {
+  --route-color: var(--trn-text-on-rules-muted);
   position: absolute;
   z-index: 0;
   inset: 0;
   width: 100%;
   height: 100%;
   overflow: visible;
-  color: var(--trn-border-on-rules-strong);
+  color: var(--trn-text-on-rules-muted);
   pointer-events: none;
+}
+
+.connector {
+  color: var(--route-color);
+  transition: color var(--trn-motion-functional);
 }
 
 .connector path {
@@ -291,6 +303,7 @@
 .route {
   stroke: currentcolor;
   stroke-width: 1.5;
+  transition: stroke-width var(--trn-motion-functional);
 }
 
 .marker path {
@@ -298,7 +311,7 @@
 }
 
 .markerNeutral path {
-  fill: var(--trn-border-on-rules-strong);
+  fill: var(--trn-text-on-rules-muted);
 }
 
 .markerRouteA path {
@@ -318,19 +331,19 @@
 }
 
 .connectorRouteA {
-  color: var(--trn-route-a);
+  --route-color: var(--trn-route-a);
 }
 
 .connectorRouteB {
-  color: var(--trn-route-b);
+  --route-color: var(--trn-route-b);
 }
 
 .connectorRouteC {
-  color: var(--trn-route-c);
+  --route-color: var(--trn-route-c);
 }
 
 .connectorReturn {
-  color: var(--trn-route-return);
+  --route-color: var(--trn-route-return);
 }
 
 .connector text {
@@ -375,3 +388,10 @@
 .procedureLink:active { color: var(--trn-ink-accent-pressed); }
 
 .procedureLink .typeLabel { color: inherit; }
+
+.connector[data-emphasized] { color: color-mix(in srgb, var(--route-color) 75%, var(--trn-surface-shell)); }
+.connector[data-emphasized] .route { stroke-width: 2.5; }
+.procedure:is(:hover, :focus-within) .linkArrow { transform: translateX(2px); }
+@media (forced-colors: active) {
+  .procedure:focus-within { outline-color: Highlight; }
+}

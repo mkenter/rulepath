@@ -70,6 +70,10 @@ for (const width of [390, 820]) {
     test.skip(!linked, 'No linked procedure with supporting rules and references.');
     await page.goto(linked!.path);
     await page.locator(`[data-flow-node-id="${linked!.node.id}"]`).getByRole('link').click();
+    await expect(page).toHaveURL(linked!.targetPath);
+    await expect(page.getByRole('heading', {
+      level: 1, name: linked!.game.procedures.get(linked!.node.target)!.title, exact: true,
+    })).toBeVisible();
     const initialHistory = await page.evaluate(() => window.history.length);
     const nav = page.getByRole('navigation', { name: 'On this page' });
     await nav.getByRole('link', { name: 'Key rules', exact: true }).focus();
@@ -96,3 +100,130 @@ for (const width of [390, 820]) {
     await expect(page).toHaveURL(linked!.path);
   });
 }
+
+test('related references stay contextual and one dismissal restores the original trigger', async ({ page }) => {
+  await page.goto('/games/ironsworn/procedures/action-roll');
+  const trigger = page.getByRole('link', { name: 'Momentum', exact: true });
+  await trigger.click();
+  const momentum = page.getByRole('dialog', { name: 'Momentum', exact: true });
+  await expect(momentum).toBeVisible();
+  // Native modality blocks programmatic focus as well as pointer and Tab access to the header.
+  const headerSearch = page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Search', exact: true });
+  expect(await headerSearch.evaluate(element => { (element as HTMLElement).focus(); return document.activeElement === element; })).toBe(false);
+  await momentum.getByRole('link', { name: 'Debilities', exact: true }).click();
+  const debilities = page.getByRole('dialog', { name: 'Debilities', exact: true });
+  await expect(debilities).toBeVisible();
+  await expect(debilities.getByRole('button', { name: 'Close Debilities', exact: true })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page).toHaveURL('/games/ironsworn/procedures/action-roll');
+  await expect(trigger).toBeFocused();
+});
+
+test('search announces a concise result count and Back restores the selected result', async ({ page }) => {
+  await page.goto('/search?game=ironsworn&q=gather');
+  await expect(page).toHaveTitle('Search | Rulepath');
+  const result = page.getByRole('link', { name: 'Procedure Gather Information in Ironsworn', exact: true });
+  await expect(page.getByRole('status')).toContainText('result');
+  await result.click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Gather Information', exact: true })).toBeFocused();
+  await page.goBack();
+  await expect(result).toBeFocused();
+  await expect(result).toBeInViewport();
+  await expect(page.getByRole('searchbox')).toHaveValue('gather');
+});
+
+test.describe('phone touch interaction', () => {
+  test.use({ hasTouch: true, viewport: { width: 390, height: 844 } });
+
+  test('a reference opens and dismisses by touch without losing its procedure', async ({ page }) => {
+    await page.goto('/games/ironsworn/procedures/action-roll');
+    const trigger = page.getByRole('link', { name: 'Momentum', exact: true });
+    await trigger.tap();
+    const sheet = page.getByRole('dialog', { name: 'Momentum', exact: true });
+    await expect(sheet).toBeVisible();
+    await sheet.getByRole('button', { name: 'Close Momentum', exact: true }).tap();
+    await expect(sheet).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await trigger.tap();
+    await expect(sheet).toBeVisible();
+    // The narrow space above the full-width phone sheet is its dismissal backdrop.
+    await page.touchscreen.tap(195, 8);
+    await expect(sheet).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+  });
+});
+
+test('sheets retain their native modal behavior until each dismissal finishes', async ({ page }) => {
+  const procedurePath = '/games/ironsworn/procedures/action-roll';
+  await page.goto(procedurePath);
+  const trigger = page.getByRole('link', { name: 'Momentum', exact: true });
+  const dialog = page.getByRole('dialog', { name: 'Momentum', exact: true });
+  for (const dismissal of ['close', 'Escape', 'Back']) {
+    await trigger.click();
+    await expect(dialog).toBeVisible();
+    // Observe the lifecycle boundary rather than asserting animation duration or CSS values.
+    await dialog.evaluate(element => {
+      delete document.documentElement.dataset.sheetExitProbe;
+      const observer = new MutationObserver(() => {
+        if (!element.hasAttribute('data-exiting')) return;
+        document.documentElement.dataset.sheetExitProbe = JSON.stringify({
+          modal: element.matches(':modal'),
+          backgroundInert: document.querySelector<HTMLElement>('[data-route-content]')!.inert,
+          focusContained: element.contains(document.activeElement),
+          title: element.querySelector('h1')!.textContent,
+        });
+        observer.disconnect();
+      });
+      observer.observe(element, { attributes: true, attributeFilter: ['data-exiting'] });
+    });
+    if (dismissal === 'close') await dialog.getByRole('button', { name: 'Close Momentum', exact: true }).click();
+    else if (dismissal === 'Escape') {
+      await page.keyboard.press('Escape');
+      await page.keyboard.press('Escape');
+    } else await page.goBack();
+    await expect(dialog).toHaveCount(0);
+    await expect(page).toHaveURL(procedurePath);
+    await expect(trigger).toBeFocused();
+    await expect(page.locator('[data-route-content]')).not.toHaveAttribute('inert');
+    expect(JSON.parse((await page.locator('html').getAttribute('data-sheet-exit-probe'))!)).toEqual({
+      modal: true, backgroundInert: true, focusContained: true, title: 'Momentum',
+    });
+  }
+});
+
+test('procedure links from a sheet focus the destination after the sheet exits', async ({ page }) => {
+  await page.goto('/games/ironsworn/procedures/action-roll');
+  const trigger = page.getByRole('link', { name: 'Momentum', exact: true });
+  await trigger.click();
+  const sheet = page.getByRole('dialog', { name: 'Momentum', exact: true });
+  await sheet.getByRole('link', { name: 'Face a Setback', exact: true }).click();
+  await expect(page).toHaveURL('/games/ironsworn/procedures/face-a-setback');
+  await expect(sheet).toHaveCount(0);
+  await expect(page.getByRole('heading', { level: 1, name: 'Face a Setback', exact: true })).toBeFocused();
+  await page.goBack();
+  await expect(sheet).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(sheet).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
+test('browser Forward can reopen a dismissing sheet without leaving the background locked', async ({ page }) => {
+  await page.goto('/games/ironsworn/procedures/action-roll');
+  const trigger = page.getByRole('link', { name: 'Momentum', exact: true });
+  await trigger.click();
+  const sheet = page.getByRole('dialog', { name: 'Momentum', exact: true });
+  await expect(sheet).toBeVisible();
+  await page.goBack();
+  await page.goForward();
+  await expect(sheet).toBeVisible();
+  const close = sheet.getByRole('button', { name: 'Close Momentum', exact: true });
+  await expect(close).toBeFocused();
+  await close.click();
+  await expect(sheet).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await expect(page.locator('[data-route-content]')).not.toHaveAttribute('inert');
+  const search = page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Search', exact: true });
+  await search.click();
+  await expect(page.getByRole('searchbox')).toBeFocused();
+});

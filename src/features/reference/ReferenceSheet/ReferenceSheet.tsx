@@ -1,85 +1,133 @@
-import { useEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
+import { useIsPresent, type Variants } from 'motion/react';
+import * as m from 'motion/react-m';
+import { useId, useLayoutEffect, useRef, useSyncExternalStore, type KeyboardEvent, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReferenceContent } from '../ReferenceContent';
 import { useReference } from '../useReference';
 import styles from './ReferenceSheet.module.css';
 
+const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
+function subscribeToMotionPreference(onChange: () => void) {
+  const query = window.matchMedia?.(reducedMotionQuery);
+  query?.addEventListener('change', onChange);
+  return () => query?.removeEventListener('change', onChange);
+}
+function prefersReducedMotion() {
+  return window.matchMedia?.(reducedMotionQuery).matches ?? true;
+}
+const reducedMotionOnServer = () => true;
+
+const sheetOffset = { x: 'var(--sheet-offset-x, 32px)', y: 'var(--sheet-offset-y, 0px)' };
+const sheetVariants: Variants = {
+  enter: { ...sheetOffset, opacity: 1, '--backdrop-opacity': 0 },
+  open: {
+    x: 0, y: 0, opacity: 1, '--backdrop-opacity': 1,
+    transition: { duration: 0.32, ease: [0.22, 0.61, 0.36, 1] },
+  },
+  exit: {
+    ...sheetOffset, opacity: 0, '--backdrop-opacity': 0,
+    transition: { duration: 0.22, ease: [0.4, 0, 1, 1] },
+  },
+  still: { x: 0, y: 0, opacity: 1, '--backdrop-opacity': 1, transition: { duration: 0 } },
+  gone: { x: 0, y: 0, opacity: 0, '--backdrop-opacity': 0, transition: { duration: 0 } },
+};
+
 export function ReferenceSheet() {
   const navigate = useNavigate();
   const { gameId, game, reference } = useReference();
-  const sheetRef = useRef<HTMLElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const backdropPressed = useRef(false);
+  const closeRequested = useRef(false);
+  const isPresent = useIsPresent();
+  // Subscribe so a preference change also stops motion in an already-open sheet.
+  const reduceMotion = useSyncExternalStore(subscribeToMotionPreference, prefersReducedMotion, reducedMotionOnServer);
+  const titleId = useId();
 
-  useEffect(() => {
-    if (!game || !reference) return;
-    const returnTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    closeButtonRef.current?.focus();
-
+    dialog.showModal();
+    closeButtonRef.current?.focus({ preventScroll: true });
     return () => {
+      dialog.close();
       document.body.style.overflow = previousOverflow;
-      returnTarget?.focus();
     };
-  }, [game, reference]);
+  }, []);
+
+  useLayoutEffect(() => {
+    dialogRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+    closeButtonRef.current?.focus({ preventScroll: true });
+  }, [reference]);
+
+  useLayoutEffect(() => {
+    if (isPresent) closeRequested.current = false;
+  }, [isPresent]);
 
   if (!game || !reference) return null;
 
   function close() {
+    if (!isPresent || closeRequested.current) return;
+    closeRequested.current = true;
     navigate(-1);
   }
 
-  function handleBackdrop(event: MouseEvent<HTMLDivElement>) {
-    if (event.target === event.currentTarget) close();
+  function outsideSheet(event: MouseEvent<HTMLDialogElement>) {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    return event.target === event.currentTarget &&
+      (event.clientX < bounds.left || event.clientX > bounds.right ||
+        event.clientY < bounds.top || event.clientY > bounds.bottom);
   }
 
-  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      close();
-      return;
-    }
+  // Keep Tab within the sheet, including table scrollers and expanded disclosures.
+  // Native modality also prevents pointer, programmatic, and assistive-tech access behind it.
+  function containTab(event: KeyboardEvent<HTMLDialogElement>) {
     if (event.key !== 'Tab') return;
-
-    const focusable = [...(sheetRef.current?.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
-    ) ?? [])].filter(element => !element.closest('details:not([open])') || element.matches('summary'));
-    const first = focusable[0];
-    const last = focusable.at(-1);
-    if (!first || !last) return;
+    const elements = [...event.currentTarget.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
+    )].filter(element => element.getClientRects().length > 0 &&
+      (!element.closest('details:not([open])') || element.matches('summary')));
+    const first = elements[0];
+    const last = elements.at(-1);
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault();
-      last.focus();
+      last?.focus();
     } else if (!event.shiftKey && document.activeElement === last) {
       event.preventDefault();
-      first.focus();
+      first?.focus();
     }
   }
 
   return (
-    <div className={styles.overlay} role="presentation" onMouseDown={handleBackdrop}>
-      <section
-        ref={sheetRef}
-        className={styles.sheet}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="reference-sheet-title"
-        onKeyDown={handleKeyDown}
-      >
-        <header className={styles.header}>
-          <div>
-            <p>{game.details.title} · Reference</p>
-            <h1 id="reference-sheet-title">{reference.title}</h1>
-          </div>
-          <button ref={closeButtonRef} type="button" onClick={close} aria-label={`Close ${reference.title}`}>
-            <span aria-hidden="true">×</span>
-          </button>
-        </header>
-        <div className={styles.body}>
-          <ReferenceContent gameId={gameId} presentation="sheet" reference={reference} />
-        </div>
-      </section>
-    </div>
+    <m.dialog
+      ref={dialogRef}
+      className={styles.sheet}
+      aria-labelledby={titleId}
+      data-exiting={!isPresent ? true : undefined}
+      variants={sheetVariants}
+      initial={reduceMotion ? false : 'enter'}
+      animate={reduceMotion ? 'still' : 'open'}
+      exit={reduceMotion ? 'gone' : 'exit'}
+      onPointerDown={(event) => { backdropPressed.current = outsideSheet(event); }}
+      onClick={(event) => { if (backdropPressed.current && outsideSheet(event)) close(); }}
+      onClickCapture={(event) => {
+        if (!isPresent) { event.preventDefault(); event.stopPropagation(); }
+      }}
+      onKeyDown={containTab}
+      onCancel={(event) => { event.preventDefault(); close(); }}
+    >
+      <header className={styles.header}>
+        <h1 id={titleId}>{reference.title}</h1>
+        <button ref={closeButtonRef} type="button" onClick={close} aria-label={`Close ${reference.title}`}>
+          <span aria-hidden="true">×</span>
+        </button>
+      </header>
+      <div className={styles.body}>
+        <ReferenceContent gameId={gameId} presentation="sheet" reference={reference} />
+      </div>
+    </m.dialog>
   );
 }

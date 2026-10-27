@@ -33,6 +33,7 @@ describe('semantic graph regression cases', () => {
     const connections = screen.getByRole('list', { name: 'Procedure connections' });
     expect(connections).toHaveTextContent('Yes: Continue to Node hidden');
     expect(connections).toHaveTextContent('No: Continue to Node hidden');
+    expect(decision).toHaveAccessibleDescription('From “Node drawn”: Yes: Continue to Node hidden From “Node drawn”: No: Continue to Node hidden');
     expect(within(decision).queryByRole('button')).not.toBeInTheDocument();
     expect(screen.getByRole('article', { name: 'Decision · read only: Node hidden' })).toBeInTheDocument();
   });

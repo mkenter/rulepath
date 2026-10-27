@@ -25,8 +25,12 @@
   min-height: 32px;
   align-items: center;
   color: var(--trn-text-context);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
   transition:
+    text-decoration-color var(--trn-motion-functional),
     border-color var(--trn-motion-functional),
     background-color var(--trn-motion-functional),
     color var(--trn-motion-functional),
@@ -35,9 +39,7 @@
 
 .root a:hover {
   color: var(--trn-accent-context);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
+  text-decoration-color: currentcolor;
 }
 .root a:focus-visible {
   border-radius: 2px;
