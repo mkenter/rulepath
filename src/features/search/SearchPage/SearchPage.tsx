@@ -42,10 +42,11 @@ export function SearchPage() {
   }, [query, routeQuery, scopedGame?.details.id]);
 
   function updateRouteQuery(nextQuery: string) {
+    // A pending debounce must not restore a game scope that was just removed.
+    const nextParams = new URLSearchParams(window.location.search);
     const trimmed = nextQuery.trim();
-    const nextParams: Record<string, string> = {};
-    if (scopedGame) nextParams.game = scopedGame.details.id;
-    if (trimmed) nextParams.q = trimmed;
+    if (trimmed) nextParams.set('q', trimmed);
+    else nextParams.delete('q');
     setSearchParams(nextParams, { replace: true });
   }
 
