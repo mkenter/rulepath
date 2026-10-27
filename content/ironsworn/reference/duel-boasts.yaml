@@ -1,0 +1,25 @@
+id: duel-boasts
+title: Duel Boasts
+summary: Choose distinct boasts in Draw the Circle. Each selected boast grants +1 momentum.
+source:
+  section: Draw the Circle
+sections:
+- heading: Boasts
+  table:
+    columns:
+    - Boast
+    - Cost
+    rows:
+    - - Grant first strike
+      - Foe has initiative.
+    - - Bare yourself
+      - No benefit from armor or shield; foe inflicts +1 harm.
+    - - Hold no iron
+      - No benefit from weapons; your harm is 1.
+    - - Bloody yourself
+      - Endure Harm (1 harm).
+    - - To the death
+      - The fight must end with death.
+related:
+- procedure: draw-the-circle
+- procedure: endure-harm

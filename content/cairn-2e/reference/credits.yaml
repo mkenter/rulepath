@@ -1,0 +1,38 @@
+id: credits
+title: Cairn Attribution and Content Licence
+summary: Unofficial procedure navigation adapted from Cairn Second Edition’s Player’s Guide and
+  Warden’s Guide by Yochai Gal and contributors.
+source:
+  section: Cairn Attribution and Content Licence
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Attribution
+  paragraphs:
+  - 'Cairn Second Edition, Player’s Guide and Warden’s Guide, by Yochai Gal and contributors,
+    published by Cairn Press. Official rules: https://cairnrpg.com/second-edition/. Included guide
+    text is licensed under Creative Commons Attribution-ShareAlike 4.0 International (https://creativecommons.org/licenses/by-sa/4.0/).'
+- heading: Adaptation and ShareAlike
+  paragraphs:
+  - Rules are reorganized and paraphrased into linked procedure graphs and focused mechanical
+    references. Tables preserve licensed results with formatting normalized. The adapted Cairn
+    content under content/cairn-2e/ is distributed under CC BY-SA 4.0; downstream adaptations
+    must use that or a compatible licence.
+  - Rulepath code and original application assets remain MIT. No publisher artwork, maps, logos,
+    layouts or website code are copied. This is unofficial and implies no endorsement by Yochai
+    Gal or Cairn Press.
+- heading: Procedure-focused scope
+  paragraphs:
+  - Covers source-defined creation, saves, combat/attacks, casting, dungeon and wilderness cycles,
+    forestcrawls, and downtime. Includes supporting costs, conditions, recovery, damage and event
+    tables.
+  - Spell, background, equipment, monster and relic catalogs, world-generation tools, setting
+    text and extended examples are outside this navigator. Consult the official guides for those
+    resources. First Edition and Barebones rules are not substituted.
+related:
+- procedure: character-creation

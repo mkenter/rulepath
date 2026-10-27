@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { AppRoutes } from './AppRoutes';
+import { contentRegistry } from '../../content/bundled-content';
 
 const gatherUrl = '/games/ironsworn/procedures/gather-information';
 function renderRoute(route: string) {
@@ -20,7 +21,8 @@ describe('Ironsworn authored application regressions', () => {
     await user.click(within(screen.getByRole('region', { name: 'Games' })).getAllByRole('link').find(link => link.getAttribute('href') === '/games/ironsworn')!);
     expect(screen.getByRole('heading', { name: 'Ironsworn' })).toBeInTheDocument();
     const contents = screen.getByRole('navigation', { name: 'Ironsworn contents' });
-    expect(within(contents).getAllByRole('link')).toHaveLength(11);
+    const game = contentRegistry.getGame('ironsworn')!;
+    expect(within(contents).getAllByRole('link')).toHaveLength(game.procedures.size + game.references.size);
     expect(within(contents).getByRole('link', { name: 'Gather Information' })).toHaveAttribute('href', gatherUrl);
   });
   it('renders semantic nodes and labeled connections without interactive decisions', () => {

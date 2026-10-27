@@ -1,0 +1,36 @@
+id: move-glossary
+title: Moves and Rules Terminology
+summary: Fiction triggers moves; a roll is required only when a move or asset calls for it.
+source:
+  section: Moves and Rules Terminology
+sections:
+- heading: Common instructions
+  table:
+    columns:
+    - Term
+    - Meaning
+    rows:
+    - - Add +X
+      - Add to the action score, alongside action die and stat/track.
+    - - Take / suffer
+      - Increase / decrease the indicated resource, within its limits.
+    - - Choose
+      - Select the specified number of distinct options; never select an option twice.
+    - - On a hit
+      - Either strong or weak hit.
+    - - In exchange for
+      - Pay the stated cost to gain the stated benefit.
+    - - Reroll any dice
+      - Choose any subset of the action and challenge dice; reroll all selected dice once together,
+        keeping the new results.
+    - - Progress move
+      - Roll only challenge dice against full progress boxes; ignore momentum.
+- heading: Use the fiction
+  paragraphs:
+  - State the action and intent, choose the matching move, and resolve its outcome. A move can
+    cover seconds or a montage. Not every conversation, trip or task needs a move. Do not use
+    NPC moves or roll repeatedly without a changed situation.
+related:
+- procedure: action-roll
+- procedure: progress-roll
+- reference: stats

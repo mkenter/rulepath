@@ -1,9 +1,23 @@
 id: credits
 title: Ironsworn SRD Attribution
-summary: "Source, licensing, and adaptation details for this unofficial Ironsworn
-  SRD sample appear below. Coverage is limited to investigation, preparation,
-  action rolls, and selected fate procedures. Character creation, assets, combat,
-  quests, and the complete suffer moves are not included; consult the SRD."
+summary: Unofficial navigation for original Ironsworn’s moves and core resolution procedures,
+  with supporting mechanical references.
 source:
-  section: "License; How to Provide Credit"
+  section: License; How to Provide Credit
 related: []
+sections:
+- heading: Attribution
+  paragraphs:
+  - This work is based on Ironsworn (found at https://www.ironswornrpg.com), created by Shawn
+    Tomkin, and licensed for our use under the Creative Commons Attribution 4.0 International
+    License (https://creativecommons.org/licenses/by/4.0/).
+- heading: Adaptation and scope
+  paragraphs:
+  - SRD .09 rules have been reorganized and paraphrased into linked procedures and supporting
+    references. The original move sheet clarifies two table transcription differences, identified
+    on the affected references. The adapted Ironsworn content is CC BY 4.0.
+  - Includes all 35 original-game moves, shared action and progress resolution, character creation
+    and Sojourn’s optional focus roll. Asset cards, creative oracle catalogs, rulebook-only setting
+    material and expansion rules are outside this procedure navigator.
+  - No publisher artwork, icons or layouts are included. This is unofficial and implies no endorsement.
+    Rulepath application code and original assets remain MIT.

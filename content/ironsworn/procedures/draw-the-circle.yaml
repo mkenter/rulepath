@@ -1,0 +1,69 @@
+id: draw-the-circle
+title: Draw the Circle
+summary: Challenge someone to a formal duel, or accept a challenge.
+source:
+  section: Draw the Circle
+nodes:
+- id: n1
+  type: start
+  label: Challenge someone to a formal duel, or accept a challenge.
+- id: n2
+  type: procedure
+  label: Action Roll (heart; add +1 if bonded to this community)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Take +1 momentum; optionally select up to three distinct boasts for +1 momentum each.
+    You start with initiative unless granting first strike.
+- id: n6
+  type: step
+  label: Optionally select one boast for +1 momentum. You start with initiative unless granting
+    first strike.
+- id: n7
+  type: step
+  label: Your foe has initiative; begin at a disadvantage.
+- id: n8
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  label: Miss
+  from: n3
+- to: n8
+  from: n7
+- to: n4
+  from: n8
+keyRules:
+- Set a foe progress track by rank, but use this move instead of Enter the Fray. Then resolve
+  the fight with the normal combat moves.
+- Victor may make a lawful demand. If you refuse the challenge, surrender or lose, your opponent
+  makes a demand of you; refusing forfeits honor and standing.
+references:
+- duel-boasts
+- initiative
+- progress-tracks
+related:
+- strike
+- clash
+- end-the-fight

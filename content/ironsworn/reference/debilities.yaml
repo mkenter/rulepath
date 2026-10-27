@@ -1,0 +1,54 @@
+id: debilities
+title: Debilities
+summary: Each marked debility reduces maximum momentum by 1. One debility resets burned momentum
+  to +1; two or more reset it to 0.
+source:
+  section: Debilities
+sections:
+- heading: Conditions
+  table:
+    columns:
+    - Condition
+    - Effect and clearing
+    rows:
+    - - Wounded
+      - Cannot increase health. Clear with Heal or Sojourn (mend).
+    - - Shaken
+      - Cannot increase spirit. Clear with Sojourn (hearten).
+    - - Unprepared
+      - Cannot increase supply. Clear with Sojourn (equip).
+    - - Encumbered
+      - Too much equipment; clear when you lighten your load. Only its momentum penalty is mechanical.
+- heading: Banes
+  table:
+    columns:
+    - Bane
+    - Effect
+    rows:
+    - - Maimed
+      - Permanent physical injury; normally cannot be cleared. It changes the fiction and reduces
+        momentum.
+    - - Corrupted
+      - Permanent mental or spiritual damage; normally cannot be cleared. It changes the fiction
+        and reduces momentum.
+- heading: Burdens
+  table:
+    columns:
+    - Burden
+    - Clearing
+    rows:
+    - - Cursed
+      - Fulfill the quest sworn to death.
+    - - Tormented
+      - Fulfill the quest sworn to prevent the vision of desolation.
+- heading: Permission
+  paragraphs:
+  - A condition does not prevent attempting an action unless the fiction does. Do not apply invented
+    stat penalties. Assets may specifically alter a debility’s effects.
+related:
+- procedure: endure-harm
+- procedure: endure-stress
+- procedure: face-death
+- procedure: face-desolation
+- procedure: sojourn
+- reference: momentum

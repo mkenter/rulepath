@@ -1,0 +1,27 @@
+id: recovery
+title: Healing and Recovery
+summary: A drink and brief safe rest restore HP; attribute recovery usually takes a week with
+  appropriate care.
+source:
+  section: Healing and Recovery
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Healing & Recovery
+  bullets:
+  - Resting for a few moments and having a drink of water restores lost HP but may leave the party
+    exposed. Bandages can stabilize a character that has taken critical damage.
+  - Attribute loss (see Critical Damage) can usually be restored with a week’s rest, facilitated
+    by a healer or other appropriate source of expertise.
+  - Some healing services are free, while magical or more expedient means of recovery may come
+    at a cost.
+related:
+- procedure: combat
+- procedure: wilderness-exploration
+- reference: conditions
+- reference: scars

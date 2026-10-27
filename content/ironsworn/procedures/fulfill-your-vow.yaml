@@ -1,0 +1,108 @@
+id: fulfill-your-vow
+title: Fulfill Your Vow
+summary: Achieve what you believe to be fulfillment of your vow.
+source:
+  section: Fulfill Your Vow
+nodes:
+- id: n1
+  type: start
+  label: Achieve what you believe to be fulfillment of your vow.
+- id: n2
+  type: procedure
+  label: Progress Roll (quest progress)
+  target: progress-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: 'Quest complete: mark experience by rank (1 / 2 / 3 / 4 / 5).'
+- id: n6
+  type: step
+  label: More remains or the truth of the quest is revealed. Mark reduced experience (0 / 1 /
+    2 / 3 / 4).
+- id: n7
+  type: decision
+  label: Set things right with a new vow?
+- id: n8
+  type: step
+  label: Continue after resolving the choice
+- id: n9
+  type: procedure
+  label: Swear an Iron Vow; add +1
+  target: swear-an-iron-vow
+- id: n10
+  type: step
+  label: Continue from the discovery.
+- id: n11
+  type: step
+  label: The quest is undone.
+- id: n12
+  type: decision
+  label: Recommit or give up?
+- id: n13
+  type: step
+  label: Continue after resolving the choice
+- id: n14
+  type: step
+  label: Clear all but one filled progress box; raise quest rank by one unless already epic.
+- id: n15
+  type: procedure
+  label: Forsake Your Vow
+  target: forsake-your-vow
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n7
+  from: n6
+- to: n9
+  label: 'Yes'
+  from: n7
+- to: n8
+  from: n9
+- to: n10
+  label: 'No'
+  from: n7
+- to: n8
+  from: n10
+- to: n4
+  from: n8
+- to: n11
+  label: Miss
+  from: n3
+- to: n12
+  from: n11
+- to: n14
+  label: Recommit
+  from: n12
+- to: n13
+  from: n14
+- to: n15
+  label: Give up
+  from: n12
+- to: n13
+  from: n15
+- to: n4
+  from: n13
+keyRules:
+- Experience lists are troublesome / dangerous / formidable / extreme / epic.
+- For a shared vow, one character rolls; all receive the experience reward.
+references:
+- progress-tracks
+- assets
+related:
+- advance
+- ask-the-oracle

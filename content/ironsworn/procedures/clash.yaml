@@ -1,0 +1,97 @@
+id: clash
+title: Clash
+summary: Without initiative, fight back in close quarters, exchange a volley, or shoot at an advancing
+  foe.
+source:
+  section: Clash
+nodes:
+- id: n1
+  type: start
+  label: Without initiative, fight back in close quarters, exchange a volley, or shoot at an advancing
+    foe.
+- id: n2
+  type: procedure
+  label: Action Roll (iron in close quarters; edge at range)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Inflict your harm and take initiative.
+- id: n6
+  type: decision
+  label: Choose one
+- id: n7
+  type: step
+  label: Continue after resolving the choice
+- id: n8
+  type: step
+  label: Take +1 momentum.
+- id: n9
+  type: step
+  label: Inflict +1 harm.
+- id: n10
+  type: step
+  label: Inflict your harm; foe retains initiative.
+- id: n11
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: n12
+  type: step
+  label: You are outmatched; inflict no harm. Foe retains initiative.
+- id: n13
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n6
+  from: n5
+- to: n8
+  label: Bolster position
+  from: n6
+- to: n7
+  from: n8
+- to: n9
+  label: Find an opening
+  from: n6
+- to: n7
+  from: n9
+- to: n4
+  from: n7
+- to: n10
+  label: Weak hit
+  from: n3
+- to: n11
+  from: n10
+- to: n4
+  from: n11
+- to: n12
+  label: Miss
+  from: n3
+- to: n13
+  from: n12
+- to: n4
+  from: n13
+keyRules:
+- If only avoiding an attack rather than fighting back, Face Danger instead.
+- Apply total harm as progress per the foe’s rank.
+references:
+- equipment
+- progress-tracks
+- initiative
+related:
+- face-danger
+- strike
+- end-the-fight

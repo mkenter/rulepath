@@ -1,0 +1,43 @@
+id: downtime
+title: Downtime, Milestones and Costs
+summary: One safe downtime action at a time. The Warden sets 1–5 milestones and their costs for
+  projects.
+source:
+  section: Downtime, Milestones and Costs
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Prerequisites
+  paragraphs:
+  - One downtime action at a time, in safety and while free from recovery. The action cannot put
+    the character’s safety at risk.
+- heading: Activities
+  table:
+    columns:
+    - Action
+    - Required before work begins
+    rows:
+    - - Research
+      - A question arising from play and a source of knowledge. If needed, spend an action finding
+        a source; success is not assured.
+    - - Training
+      - A precisely stated improvement inspired by play, plus a master to train with.
+    - - Strengthening Ties
+      - An NPC or faction and a specific intent for the relationship.
+- heading: Milestones and costs
+  paragraphs:
+  - For multi-step work, the Warden sets 1–5 comprehensive, non-interactive milestones. Each costs
+    one downtime action and its agreed cost. Costs can be gold, resources, reputation or a unique
+    loss.
+  - Skills or connections can reduce or remove a cost. If attempting to force the issue, the Warden
+    may explain the risk and ask for a WIL save to avoid or reduce it. Failure applies that risk.
+  - The Warden can revise milestones as circumstances change. Describe concrete results, including
+    how a relationship changes; no universal XP or numerical reward is implied.
+related:
+- procedure: downtime
+- reference: growth

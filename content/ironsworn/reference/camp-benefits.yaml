@@ -1,0 +1,25 @@
+id: camp-benefits
+title: Camp Benefits
+summary: On a strong hit choose two; on a weak hit choose one. Allies choose their own distinct
+  benefits.
+source:
+  section: Make Camp
+sections:
+- heading: Options
+  table:
+    columns:
+    - Option
+    - Benefit
+    rows:
+    - - Recuperate
+      - +1 health for you and companions.
+    - - Partake
+      - -1 supply; +1 health for you and companions.
+    - - Relax
+      - +1 spirit.
+    - - Focus
+      - +1 momentum.
+    - - Prepare
+      - Add +1 to Undertake a Journey when breaking camp.
+related:
+- procedure: make-camp

@@ -1,0 +1,66 @@
+id: progress-roll
+title: Progress Roll
+summary: A progress move calls for a roll against its track.
+source:
+  section: Progress Roll
+nodes:
+- id: n1
+  type: start
+  label: A progress move calls for a roll against its track.
+- id: n2
+  type: step
+  label: Count only fully filled boxes on the appropriate track (0–10).
+- id: n3
+  type: step
+  label: Roll two d10 challenge dice. Do not roll an action die or add stats.
+- id: n4
+  type: decision
+  label: How many dice does your progress score strictly exceed?
+- id: n5
+  type: step
+  label: Continue after resolving the choice
+- id: n6
+  type: step
+  label: 'Strong hit: return to the originating move.'
+- id: n7
+  type: step
+  label: 'Weak hit: return to the originating move.'
+- id: n8
+  type: step
+  label: 'Miss: return to the originating move.'
+- id: n9
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n6
+  label: Both
+  from: n4
+- to: n5
+  from: n6
+- to: n7
+  label: One
+  from: n4
+- to: n5
+  from: n7
+- to: n8
+  label: Neither
+  from: n4
+- to: n5
+  from: n8
+- to: n9
+  from: n5
+keyRules:
+- Ties favor challenge dice. Ignore both positive and negative momentum; do not burn momentum.
+- Only an ability explicitly naming progress moves can modify one. Matching challenge dice can
+  suggest a twist.
+references:
+- progress-tracks
+- matches
+- assets
+related: []

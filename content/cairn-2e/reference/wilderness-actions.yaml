@@ -1,0 +1,75 @@
+id: wilderness-actions
+title: Wilderness Actions and Resources
+summary: 'Each character chooses one action per watch: Travel, Explore, Supply or Make Camp.'
+source:
+  section: Wilderness Actions and Resources
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Night
+  bullets:
+  - The party can choose to travel during the night and rest during the day, but night travel
+    is far slower and more treacherous!
+  - Traveling at night is always more dangerous! The Warden should roll twice on the Wilderness
+    Events table.
+  - Some terrain and weather may be easier to traverse at night (desert, for example). The Warden
+    should balance these challenges along with any other.
+- heading: Sleep
+  bullets:
+  - The last watch of the day is typically reserved for the Make Camp action.
+  - Characters typically need to sleep each day. Anything beyond a minor interruption can negate
+    or cancel the benefits of sleep.
+  - If the party skips the Make Camp action, they each add a Fatigue to their inventory and are
+    deprived. Additionally, traveling when sleep-deprived raises the terrain Difficulty by a step
+    (i.e. Easy becomes Tough).
+- heading: Light
+  bullets:
+  - Torches and other radial sources of light illuminate 40ft ahead of the party, but beyond that
+    only provides a dim outline of objects.
+  - Characters without a light source may suffer from panic until their situation is remedied.
+  - Environmental conditions (sudden gusts of wind, dust, water, etc.) can easily blow out a torch.
+- heading: Light Sources
+  bullets:
+  - A torch can be lit 3 times before degrading.
+  - A lantern can be relit indefinitely but requires a separate oil can (6 uses).
+- heading: Travel
+  bullets:
+  - Travel begins. Obvious locations, features, and terrain of nearby areas are revealed according
+    to their distance. This action is typically taken by the entire party as one.
+  - The party rolls 1d6 to see if they get lost along the way. This risk can increase or decrease,
+    depending on path Difficulty, maps, party skills, and guides.
+  - If lost, the party may need to spend a Wilderness Action to recover their way. Otherwise,
+    the party reaches the next point along their route.
+  paragraphs:
+  - Remember to compare the results of getting lost to the relevant path Difficulty.
+- heading: Explore
+  bullets:
+  - One or more party members search a large area, searching for hidden features, scouting ahead,
+    or treading carefully.
+  - A Location (shelter, village, cave, etc.) or Feature (geyser, underground river, beached ship,
+    etc.) is discovered.
+  - The Travel action is still required to leave the current area, even if it has been completely
+    explored.
+- heading: Supply
+  bullets:
+  - One or more party members may hunt, fish, or forage for food, collecting 1d4 Rations (3 uses
+    each). The chance of a greater bounty increases with each additional participant (e.g. 1d4
+    becomes 1d6, up to a maximum of 1d12).
+  - Relevant experience or equipment may also increase the bounty collected.
+  - The party may encounter homes and small villages, spending gold and a full watch to resupply.
+- heading: Make Camp
+  bullets:
+  - The party stops to set up camp in the wilds. Each party member (and their mounts) consumes
+    a Ration.
+  - A lookout rotation is set so that the party can sleep unmolested. A smaller party may need
+    to risk sleeping unguarded or switch off sleeping over multiple days.
+  - Party members that were able to rest remove all of Fatigue from their inventory.
+related:
+- procedure: wilderness-exploration
+- reference: conditions
+- reference: travel

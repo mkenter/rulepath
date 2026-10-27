@@ -2,7 +2,7 @@
 
 Rulepath is a rules reference for board games and tabletop RPGs. Browse procedures as flowcharts, follow links between them, and open reference sheets without losing your place. Search across the library or within a game. The app works offline after an initial online load.
 
-The first bundled content is a small, unofficial Ironsworn SRD sample, not a complete game reference.
+The bundled games are Ironsworn and Cairn Second Edition. Rulepath focuses on procedures: recognize a trigger, follow the decisions, and resolve the consequences. Supporting references provide the mechanical lookups needed along the way. Spell lists, asset cards, equipment catalogs, and setting material stay in the official game resources.
 
 [Run locally](#development)
 
@@ -64,12 +64,17 @@ Captures go to `artifacts/screenshots/quick/` or `artifacts/screenshots/full/`. 
 
 ## Rules content
 
-Rules content lives under `content/<game-id>/`. `game.yaml` defines the game's metadata and contents list; `procedures/` contains flow graphs; `reference/` contains supporting text; and `crosslinks.yaml` records links between procedures. The content schema is in `src/content/schema.ts`.
+Rules content lives under `content/<game-id>/`. `game.yaml` defines the game's metadata and contents list; `procedures/` contains flow graphs; `reference/` contains supporting rules and lookup tables; and `crosslinks.yaml` records links between procedures. The content schema is in `src/content/schema.ts`.
+
+References may contain optional `sections`, each with a `heading`, `paragraphs`, `bullets`, and an optional `table` with `columns` and `rows`. Table rows must match the column count. This structured content appears in both reference pages and contextual sheets, is indexed for search, and is bundled for offline use. Existing summary-only references remain supported.
 
 Source and licensing metadata are defined in `game.yaml` and can be specified for individual resources. The app displays source information with each procedure and reference.
 
 ## Licensing and attribution
 
 - Rulepath code and original assets: [MIT](LICENSE).
-- Ironsworn sample: adapted from Shawn Tomkin's SRD under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [source and full attribution](content/ironsworn/game.yaml).
+- Ironsworn procedures and supporting rules: adapted from Shawn Tomkin's SRD .09 and original move text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [source and full attribution](content/ironsworn/game.yaml) and the [content notice](content/ironsworn/LICENSE.md). Rulebook-only CC BY-NC-SA material is excluded.
+- Cairn Second Edition procedures and supporting rules: adapted from Yochai Gal and contributors' Player's Guide and Warden's Guide under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See [source and full attribution](content/cairn-2e/game.yaml) and the [content notice](content/cairn-2e/LICENSE.md). ShareAlike applies to adapted Cairn content, separately from the application code.
 - Fonts and other third-party assets: see [third-party licenses](docs/THIRD_PARTY_ASSETS.md).
+
+Both game implementations are unofficial and imply no publisher endorsement. No publisher artwork, maps, icons, layouts or website code are included. The application's MIT licence is unchanged.

@@ -1,0 +1,99 @@
+id: reach-your-destination
+title: Reach Your Destination
+summary: Your journey comes to an end.
+source:
+  section: Reach Your Destination
+nodes:
+- id: n1
+  type: start
+  label: Your journey comes to an end.
+- id: n2
+  type: procedure
+  label: Progress Roll (journey progress)
+  target: progress-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: decision
+  label: The situation favors you; choose one
+- id: n6
+  type: step
+  label: Continue after resolving the choice
+- id: n7
+  type: step
+  label: Make another move now (not a progress move) and add +1.
+- id: n8
+  type: step
+  label: Take +1 momentum.
+- id: n9
+  type: step
+  label: Arrive, but face an unforeseen hazard or complication; envision it or Ask the Oracle.
+- id: n10
+  type: step
+  label: You are hopelessly astray, your objective is lost, or you were misled.
+- id: n11
+  type: decision
+  label: Does the journey continue?
+- id: n12
+  type: step
+  label: Continue after resolving the choice
+- id: n13
+  type: step
+  label: Clear all but one filled progress box; raise the journey rank by one unless already epic.
+- id: n14
+  type: step
+  label: Resolve the failed journey in the fiction.
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n7
+  label: Act immediately
+  from: n5
+- to: n6
+  from: n7
+- to: n8
+  label: Build momentum
+  from: n5
+- to: n6
+  from: n8
+- to: n4
+  from: n6
+- to: n9
+  label: Weak hit
+  from: n3
+- to: n4
+  from: n9
+- to: n10
+  label: Miss
+  from: n3
+- to: n11
+  from: n10
+- to: n13
+  label: 'Yes'
+  from: n11
+- to: n12
+  from: n13
+- to: n14
+  label: 'No'
+  from: n11
+- to: n12
+  from: n14
+- to: n4
+  from: n12
+keyRules:
+- One character rolls for allies sharing a track; all share the fictional outcome. Only the acting
+  character receives the strong-hit mechanical benefit.
+references:
+- progress-tracks
+related:
+- undertake-a-journey
+- ask-the-oracle

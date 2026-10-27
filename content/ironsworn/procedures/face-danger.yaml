@@ -1,0 +1,120 @@
+id: face-danger
+title: Face Danger
+summary: Attempt something risky or react to an imminent threat.
+source:
+  section: Face Danger
+nodes:
+- id: n1
+  type: start
+  label: Attempt something risky or react to an imminent threat.
+- id: n2
+  type: procedure
+  label: Action Roll (stat matching your approach)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Succeed and take +1 momentum.
+- id: n6
+  type: step
+  label: Succeed, but face a troublesome cost.
+- id: n7
+  type: decision
+  label: Choose a cost to resources or personal endurance
+- id: n8
+  type: step
+  label: Continue after resolving the choice
+- id: n9
+  type: step
+  label: Suffer -1 momentum.
+- id: n10
+  type: procedure
+  label: Endure Harm (1 harm)
+  target: endure-harm
+- id: n11
+  type: procedure
+  label: Endure Stress (1 stress)
+  target: endure-stress
+- id: n12
+  type: step
+  label: Suffer -1 supply; if it reaches 0, make Out of Supply.
+- id: n13
+  type: step
+  label: Fail, or have progress undermined by a costly turn.
+- id: n14
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: resource-cost
+  type: decision
+  label: Choose a resource cost
+- id: personal-cost
+  type: decision
+  label: Choose a personal cost
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n7
+  from: n6
+- to: n8
+  from: n9
+- to: n8
+  from: n10
+- to: n8
+  from: n11
+- to: n8
+  from: n12
+- to: n4
+  from: n8
+- to: n13
+  label: Miss
+  from: n3
+- to: n14
+  from: n13
+- to: n4
+  from: n14
+- from: n7
+  to: resource-cost
+  label: Resources / advantage
+- from: n7
+  to: personal-cost
+  label: Physical / mental
+- to: n9
+  label: Delayed / disadvantaged
+  from: resource-cost
+- to: n10
+  label: Tired / hurt
+  from: personal-cost
+- to: n11
+  label: Dispirited / afraid
+  from: personal-cost
+- to: n12
+  label: Sacrifice resources
+  from: resource-cost
+keyRules:
+- Roll +edge for speed, agility or precision; +heart for charm, loyalty or courage; +iron for
+  aggression, force, strength or endurance; +shadow for deception or stealth; +wits for expertise,
+  insight or observation.
+- In combat, this can defend without inflicting harm; a strong hit gains initiative.
+references:
+- stats
+- momentum
+- initiative
+related:
+- secure-an-advantage
+- out-of-supply

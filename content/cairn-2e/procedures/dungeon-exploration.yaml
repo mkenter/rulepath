@@ -1,0 +1,95 @@
+id: dungeon-exploration
+title: Dungeon Exploration
+summary: Resolve exploration turns in a dungeon or another dangerous site.
+source:
+  section: Dungeon Exploration
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Explore a dungeon or another dangerous site
+- id: n2
+  type: step
+  label: Describe surroundings, perceptible details and immediate dangers. Players declare movement
+    and one action each.
+- id: n3
+  type: step
+  label: Resolve all character actions and ongoing actions simultaneously. Use specific procedures
+    when needed.
+- id: n4
+  type: step
+  label: Record item uses, Fatigue, deprivation and other consequences.
+- id: n5
+  type: decision
+  label: Did an event trigger occur?
+- id: n6
+  type: decision
+  label: Is this a close-scale forestcrawl?
+- id: n7
+  type: step
+  label: Roll d6 on Dungeon Events and resolve the result.
+- id: n8
+  type: step
+  label: Roll d6 on Wilderness Events instead and resolve the result.
+- id: n9
+  type: decision
+  label: Continue exploring?
+- id: n10
+  type: end
+  label: Leave the cycle and resolve the next situation
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n5
+  from: n4
+- to: n6
+  label: 'Yes'
+  from: n5
+- to: n7
+  label: 'No'
+  from: n6
+- to: n8
+  label: 'Yes'
+  from: n6
+- to: n9
+  label: 'No'
+  from: n5
+- to: n9
+  from: n7
+- to: n9
+  from: n8
+- to: n2
+  label: 'Yes: next cycle'
+  from: n9
+- to: n10
+  label: 'No'
+  from: n9
+keyRules:
+- A turn allows movement about 40ft (torchlight’s perimeter) and one action. An action may instead
+  move up to three times that distance, increasing risk.
+- Roll events after more than one cycle in a single location, quick/haphazard movement, entering
+  a new area/level/zone, or a loud disturbance.
+- Dungeon turns measure the cost of actions; the source does not assign a universal fixed number
+  of minutes.
+- In a forestcrawl, substitute Wilderness Events. Going off-trail also triggers an event.
+- Provide obvious sensory information freely. Searching spends time to expose hidden details,
+  rather than rolling perception.
+references:
+- dungeon-events
+- dungeon-actions
+- forestcrawl
+- warden-adjudication
+related:
+- combat
+- cast-a-spell
+- save

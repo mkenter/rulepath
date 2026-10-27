@@ -1,0 +1,32 @@
+id: growth
+title: Growth and Triggers
+summary: Cairn has no routine XP or level rewards. Significant fictional experience changes a
+  character.
+source:
+  section: Growth and Triggers
+  overrides:
+    publication:
+      title: Cairn Second Edition — Warden’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/wardens-guide/growth/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Experience changes characters
+  paragraphs:
+  - There are no routine XP or level awards for kills, treasure or exploration. Growth follows
+    significant events and may change health, skills, beliefs, relationships or the character’s
+    mind. Scars and specific effects provide their own mechanical instructions.
+- heading: Warden guidance
+  bullets:
+  - 'A good growth trigger generally combines at least two of: a focused pattern of behavior,
+    an obvious serious risk, and interaction with a unique item or being.'
+  - Growth should relate to the experience and invite further play. It may be cumulative, immediate,
+    costly or undesirable.
+  - Possible sources include repeated practice, strange magic, injury, powerful relationships,
+    faction advancement, or resolving a bond or omen. This guidance does not guarantee a fixed
+    bonus.
+related:
+- procedure: downtime
+- procedure: character-creation
+- reference: scars

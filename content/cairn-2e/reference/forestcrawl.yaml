@@ -1,0 +1,26 @@
+id: forestcrawl
+title: Forestcrawl Rules
+summary: The Warden’s Guide defines close-scale exploration of forest points and trails using
+  dungeon cycles.
+source:
+  section: Forestcrawls / Exploring the Wood
+  overrides:
+    publication:
+      title: Cairn Second Edition — Warden’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/wardens-guide/forest-seeds/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Cycle and costs
+  bullets:
+  - Use Dungeon Exploration, substituting Wilderness Events for Dungeon Events.
+  - Going off-trail automatically triggers a Wilderness Events roll. Explain extra time, effort,
+    equipment and obvious dangers first.
+  - A small forest of 10–15 points on clear trails can be explored in one watch.
+  - Use the fiction for available daylight, suitable rest, darkness and other costs.
+related:
+- procedure: forest-exploration
+- procedure: dungeon-exploration
+- procedure: wilderness-exploration
+- reference: wilderness-events

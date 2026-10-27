@@ -1,0 +1,29 @@
+id: initiative
+title: Initiative and Combat
+summary: Initiative means control of the exchange, not whose turn comes next.
+source:
+  section: Initiative and Combat
+sections:
+- heading: Control
+  bullets:
+  - 'With initiative, act proactively: Strike, Secure an Advantage, or take another appropriate
+    action. Without it, respond to the threat: Clash, Face Danger or another fitting move.'
+  - 'Unless a move says otherwise, a strong hit takes or retains initiative; a weak hit or miss
+    loses it. This includes suffer moves: a strong hit on Endure Harm can restore control.'
+  - NPCs do not roll moves. Describe their threatening actions when they have initiative, and
+    respond with character moves.
+- heading: Allies and resolution
+  paragraphs:
+  - Each ally tracks their own initiative; share progress against a common foe. Shift focus in
+    the fiction rather than using a turn order. End the Fight requires a strong hit on a preceding
+    decisive move; full progress alone does not end a fight. Compel, flight, surrender, or Battle
+    can also resolve a conflict.
+related:
+- procedure: enter-the-fray
+- procedure: strike
+- procedure: clash
+- procedure: turn-the-tide
+- procedure: end-the-fight
+- procedure: battle
+- procedure: face-danger
+- procedure: compel

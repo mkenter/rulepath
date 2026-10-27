@@ -1,0 +1,55 @@
+id: out-of-supply
+title: Out of Supply
+summary: 'Supply is exhausted: reduced to 0.'
+source:
+  section: Out of Supply
+nodes:
+- id: n1
+  type: start
+  label: 'Supply is exhausted: reduced to 0.'
+- id: n2
+  type: step
+  label: You and each ally mark unprepared. You cannot increase supply while it remains marked.
+- id: n3
+  type: decision
+  label: Suffer additional -supply while unprepared?
+- id: n4
+  type: step
+  label: Continue after resolving the choice
+- id: n5
+  type: step
+  label: For each point, choose any combination of -health, -spirit or -momentum fitting the circumstances.
+    Each ally pays their own cost.
+- id: n6
+  type: step
+  label: Seek help to equip through Sojourn.
+- id: n7
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: 'Yes'
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: 'No'
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  from: n4
+keyRules:
+- Only Sojourn’s equip option clears unprepared, unless an asset explicitly changes the rule.
+references:
+- resources
+- debilities
+related:
+- sojourn
+- endure-harm
+- endure-stress
+- face-a-setback

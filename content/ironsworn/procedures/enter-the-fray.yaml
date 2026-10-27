@@ -1,0 +1,89 @@
+id: enter-the-fray
+title: Enter the Fray
+summary: Enter combat and determine who is initially in control.
+source:
+  section: Enter the Fray
+nodes:
+- id: n1
+  type: start
+  label: Enter combat and determine who is initially in control.
+- id: n2
+  type: step
+  label: Set each foe’s rank and a ten-box track. Group eligible weaker foes into packs if appropriate.
+- id: n3
+  type: procedure
+  label: Action Roll (heart / shadow / wits)
+  target: action-roll
+- id: n4
+  type: decision
+  label: What is the roll result?
+- id: n5
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n6
+  type: step
+  label: Take +2 momentum and initiative.
+- id: n7
+  type: decision
+  label: Choose one
+- id: n8
+  type: step
+  label: Continue after resolving the choice
+- id: n9
+  type: step
+  label: Take +2 momentum; foe has initiative.
+- id: n10
+  type: step
+  label: Take initiative.
+- id: n11
+  type: step
+  label: Begin at a disadvantage; foe has initiative.
+- id: n12
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n6
+  label: Strong hit
+  from: n4
+- to: n5
+  from: n6
+- to: n7
+  label: Weak hit
+  from: n4
+- to: n9
+  label: Bolster position
+  from: n7
+- to: n8
+  from: n9
+- to: n10
+  label: Prepare to act
+  from: n7
+- to: n8
+  from: n10
+- to: n5
+  from: n8
+- to: n11
+  label: Miss
+  from: n4
+- to: n12
+  from: n11
+- to: n5
+  from: n12
+keyRules:
+- 'Face off: +heart. Position against an unaware foe or strike without warning: +shadow. Ambushed:
+  +wits.'
+- Each ally rolls individually; share a track against a common foe.
+references:
+- progress-tracks
+- npc-rules
+- initiative
+related:
+- strike
+- clash

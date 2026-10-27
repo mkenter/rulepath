@@ -1,0 +1,64 @@
+id: strike
+title: Strike
+summary: With initiative, attack in close quarters or at range.
+source:
+  section: Strike
+nodes:
+- id: n1
+  type: start
+  label: With initiative, attack in close quarters or at range.
+- id: n2
+  type: procedure
+  label: Action Roll (iron in close quarters; edge at range)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: Inflict your harm +1; retain initiative.
+- id: n6
+  type: step
+  label: Inflict your harm; lose initiative.
+- id: n7
+  type: step
+  label: Your attack fails; foe has initiative.
+- id: n8
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  label: Miss
+  from: n3
+- to: n8
+  from: n7
+- to: n4
+  from: n8
+keyRules:
+- Deadly weapons inflict base 2 harm; simple weapons or unarmed base 1. Add asset bonuses, then
+  mark rank-based progress for each harm.
+references:
+- equipment
+- progress-tracks
+- initiative
+related:
+- end-the-fight
+- clash

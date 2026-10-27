@@ -1,0 +1,108 @@
+id: cast-a-spell
+title: Casting Spells
+summary: Read a spellbook or scroll, or activate a relic.
+source:
+  section: Magic / Casting Spells; Scrolls; Relics
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Use a spellbook, scroll, or relic
+- id: n2
+  type: decision
+  label: What are you using?
+- id: n3
+  type: step
+  label: Hold the spellbook in both hands and read it aloud. Add one Fatigue to inventory; drop
+    an item if necessary.
+- id: n4
+  type: step
+  label: Read the scroll aloud as a spellbook. It is petty, causes no Fatigue, and disappears
+    after one use.
+- id: n5
+  type: end
+  label: Apply the relic’s own power, limits and recharge condition. It causes no Fatigue.
+- id: n6
+  type: decision
+  label: Are you deprived or in danger?
+- id: n7
+  type: decision
+  label: Does the Warden require a WIL save to avoid ill effects?
+- id: n8
+  type: step
+  label: Resolve the spell’s stated effect in the fiction. Given time and safety, its impact may
+    be enhanced without an extra cost.
+- id: n9
+  type: procedure
+  label: WIL Save for the stated casting risk
+  target: save
+- id: n10
+  type: decision
+  label: Did the WIL save succeed?
+- id: n11
+  type: step
+  label: 'Apply ill effects on par with the intended spell: added Fatigue, injury, destruction
+    of the book, or even death, as established.'
+- id: n12
+  type: end
+  label: Record the spell, item use, Fatigue and consequences
+edges:
+- to: n2
+  from: n1
+- to: n3
+  label: Spellbook
+  from: n2
+- to: n4
+  label: Scroll
+  from: n2
+- to: n5
+  label: Relic
+  from: n2
+- to: n6
+  from: n3
+- to: n6
+  from: n4
+- to: n7
+  label: 'Yes'
+  from: n6
+- to: n8
+  label: 'No'
+  from: n6
+- to: n8
+  label: 'No'
+  from: n7
+- to: n9
+  label: 'Yes'
+  from: n7
+- to: n10
+  from: n9
+- to: n8
+  label: 'Yes'
+  from: n10
+- to: n11
+  label: 'No'
+  from: n10
+- to: n8
+  from: n11
+- to: n12
+  from: n8
+keyRules:
+- Anyone can cast a spell; no class or spell slot is required. A spellbook occupies one inventory
+  slot and contains one spell.
+- Spellbooks cannot be easily copied or created; recover them in play. Each may have an unusual
+  property or limitation.
+- A failed casting save establishes ill effects; do not automatically erase the spell’s effect
+  unless that is the agreed consequence.
+- Check the Inventory reference after Fatigue or item changes; a full inventory reduces HP to 0.
+references:
+- magic
+- inventory
+- conditions
+related:
+- save

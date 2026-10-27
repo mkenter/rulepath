@@ -1,0 +1,27 @@
+id: harm-consequences
+title: Endure Harm Consequences
+summary: On a miss at 0 health, mark an unmarked wounded or maimed debility, or roll d100 here.
+source:
+  section: Endure Harm
+sections:
+- heading: d100
+  table:
+    columns:
+    - Roll
+    - Result
+    rows:
+    - - 1–10
+      - 'Mortal harm: Face Death.'
+    - - 11–20
+      - 'Dying: Heal within an hour or two, or Face Death.'
+    - - 21–35
+      - Unconscious for an hour or two; if at a merciless foe’s mercy, Face Death.
+    - - 36–50
+      - 'Reeling: take a few minutes’ breather. If you act vigorously first, reroll here before
+        the other move.'
+    - - 51–100
+      - Battered but standing.
+related:
+- procedure: endure-harm
+- procedure: face-death
+- procedure: heal

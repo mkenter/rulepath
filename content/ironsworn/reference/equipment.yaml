@@ -1,0 +1,34 @@
+id: equipment
+title: Equipment and Harm
+summary: Equipment enables fictional actions; ordinary equipment is not a catalog of bonuses.
+source:
+  section: Equipment and Harm
+sections:
+- heading: Inflicting harm
+  table:
+    columns:
+    - Weapon
+    - Base harm
+    rows:
+    - - Deadly weapon (sword, axe, spear, bow)
+      - '2'
+    - - Unarmed, simple or improvised weapon (staff, rock, shield)
+      - '1'
+- heading: Armor and weapons
+  paragraphs:
+  - Ordinary armor and shields have no armor score and do not automatically reduce harm. Envision
+    how equipment lets you act or avoid danger. Combat talents supply specific bonuses when their
+    requirements are met.
+- heading: Equipment loss
+  paragraphs:
+  - Lost weapons may reduce harm or prevent a move. Broken gear or exhausted ammunition can be
+    a fictional consequence, supply loss or momentum loss. An item’s emotional importance can
+    justify stress.
+- heading: Load and supply
+  paragraphs:
+  - Track special or important items explicitly; abstract normal provisions and gear through supply.
+    If the fiction demands it, mark encumbered until you shed excess equipment.
+related:
+- procedure: strike
+- procedure: clash
+- reference: assets

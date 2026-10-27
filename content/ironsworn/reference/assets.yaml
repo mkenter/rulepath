@@ -1,0 +1,32 @@
+id: assets
+title: Assets and Experience
+summary: Choose three starting assets. New assets cost 3 experience; upgrading one ability costs
+  2 experience.
+source:
+  section: Assets and Experience
+sections:
+- heading: Types
+  paragraphs:
+  - Companions are NPC helpers with health tracks. Paths describe background, training or nature.
+    Combat talents require relevant equipment. Rituals are magic with specific fictional requirements
+    and risks.
+- heading: Abilities
+  bullets:
+  - For a new asset, mark its preset ability; if none is preset, choose one. Only marked abilities
+    apply. Upgrades may be taken in any order unless the text imposes a requirement.
+  - Requirements apply when acquiring or using an asset; meet the stated fictional or mechanical
+    prerequisite. Multiple applicable bonuses stack unless specifically restricted.
+  - An asset’s move can use the shared Action Roll. A miss on an asset move requires Pay the Price
+    even if the card does not repeat that instruction.
+  - Benefits do not apply to progress moves unless explicitly granted to a progress move. Ritual
+    effects last or end as described on the card or by the fiction.
+- heading: Experience
+  paragraphs:
+  - Mark experience from Fulfill Your Vow, including its reduced weak-hit reward. Shared vows
+    award each ally experience. Spend it through Advance when the fiction supports gaining or
+    improving an asset.
+related:
+- procedure: advance
+- procedure: action-roll
+- procedure: pay-the-price
+- reference: companions

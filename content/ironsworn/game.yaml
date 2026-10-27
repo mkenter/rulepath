@@ -3,8 +3,8 @@ game:
   id: ironsworn
   title: Ironsworn
   publisher: Shawn Tomkin
-  summary: "A small, unofficial SRD sample: investigation, preparation, action
-    rolls, and fate. CC BY 4.0; not a complete game reference."
+  summary: Follow the original game’s moves, choices and consequences, with shared roll procedures
+    and supporting mechanical lookups. Unofficial; CC BY 4.0.
   source:
     publication:
       title: Ironsworn System Reference Document
@@ -17,34 +17,96 @@ game:
       license:
         name: Creative Commons Attribution 4.0 International (CC BY 4.0)
         url: https://creativecommons.org/licenses/by/4.0/
-      attribution: >-
-        This work is based on Ironsworn (found at https://www.ironswornrpg.com),
-        created by Shawn Tomkin, and licensed for our use under the Creative
-        Commons Attribution 4.0 International License
-        (https://creativecommons.org/licenses/by/4.0/).
-      adaptation: >-
-        Selected SRD text has been reorganized and paraphrased into linked
-        procedures and references. The adapted rules content is licensed under
-        CC BY 4.0. No publisher artwork, icons, or layout assets are included.
-        This is an unofficial product and does not imply endorsement.
+      attribution: This work is based on Ironsworn (found at https://www.ironswornrpg.com), created
+        by Shawn Tomkin, and licensed for our use under the Creative Commons Attribution 4.0 International
+        License (https://creativecommons.org/licenses/by/4.0/).
+      adaptation: SRD .09 rules and original move text have been reorganized and paraphrased into
+        linked procedures and supporting references. Adapted Ironsworn content is CC BY 4.0. Asset
+        cards and creative oracle catalogs are outside the procedure-focused scope. No rulebook-only
+        noncommercial content, publisher artwork, icons or layouts are included. This is unofficial
+        and implies no endorsement.
 sections:
-  - id: adventure
-    title: Adventure Moves
-    items:
-      - procedure: gather-information
-      - procedure: secure-an-advantage
-  - id: resolution
-    title: Resolution and Fate
-    items:
-      - procedure: action-roll
-      - procedure: pay-the-price
-      - procedure: ask-the-oracle
-  - id: references
-    title: References
-    items:
-      - reference: momentum
-      - reference: matches
-      - reference: stats
-      - reference: oracle-options
-      - reference: price-table
-      - reference: credits
+- id: getting-started
+  title: Getting Started
+  items:
+  - procedure: character-creation
+  - procedure: action-roll
+  - procedure: progress-roll
+- id: adventure
+  title: Adventure Moves
+  items:
+  - procedure: face-danger
+  - procedure: secure-an-advantage
+  - procedure: gather-information
+  - procedure: heal
+  - procedure: resupply
+  - procedure: make-camp
+  - procedure: undertake-a-journey
+  - procedure: reach-your-destination
+- id: relationship
+  title: Relationship Moves
+  items:
+  - procedure: compel
+  - procedure: sojourn
+  - procedure: sojourn-focus
+  - procedure: draw-the-circle
+  - procedure: forge-a-bond
+  - procedure: test-your-bond
+  - procedure: aid-your-ally
+  - procedure: write-your-epilogue
+- id: combat
+  title: Combat Moves
+  items:
+  - procedure: enter-the-fray
+  - procedure: strike
+  - procedure: clash
+  - procedure: turn-the-tide
+  - procedure: end-the-fight
+  - procedure: battle
+- id: suffer
+  title: Suffer Moves
+  items:
+  - procedure: endure-harm
+  - procedure: face-death
+  - procedure: companion-endure-harm
+  - procedure: endure-stress
+  - procedure: face-desolation
+  - procedure: out-of-supply
+  - procedure: face-a-setback
+- id: quest
+  title: Quest Moves
+  items:
+  - procedure: swear-an-iron-vow
+  - procedure: reach-a-milestone
+  - procedure: fulfill-your-vow
+  - procedure: forsake-your-vow
+  - procedure: advance
+- id: resolution
+  title: Fate Moves
+  items:
+  - procedure: pay-the-price
+  - procedure: ask-the-oracle
+- id: references
+  title: References
+  items:
+  - reference: assets
+  - reference: camp-benefits
+  - reference: companions
+  - reference: debilities
+  - reference: duel-boasts
+  - reference: harm-consequences
+  - reference: stress-consequences
+  - reference: equipment
+  - reference: resources
+  - reference: initiative
+  - reference: credits
+  - reference: matches
+  - reference: momentum
+  - reference: move-glossary
+  - reference: npc-rules
+  - reference: oracle-options
+  - reference: price-table
+  - reference: progress-tracks
+  - reference: sojourn-options
+  - reference: stats
+  - reference: victory-costs

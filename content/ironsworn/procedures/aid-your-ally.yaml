@@ -1,0 +1,68 @@
+id: aid-your-ally
+title: Aid Your Ally
+summary: Secure an Advantage in direct support of another player character.
+source:
+  section: Aid Your Ally
+nodes:
+- id: n1
+  type: start
+  label: Secure an Advantage in direct support of another player character.
+- id: n2
+  type: procedure
+  label: Secure An Advantage
+  target: secure-an-advantage
+- id: n3
+  type: decision
+  label: Result of Secure an Advantage?
+- id: n4
+  type: step
+  label: Continue after resolving the choice
+- id: n5
+  type: step
+  label: Your ally takes the benefit instead of you, including applicable asset bonuses. In combat,
+    you both have initiative.
+- id: n6
+  type: step
+  label: Your ally takes +1 momentum and applicable asset bonuses. In combat, both lose initiative.
+- id: n7
+  type: step
+  label: One or both of you Pay the Price as fits the fiction. Both lose initiative in combat.
+- id: n8
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+- id: n9
+  type: end
+  label: Apply the outcome and continue the fiction
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n4
+  from: n5
+- to: n6
+  label: Weak hit
+  from: n3
+- to: n4
+  from: n6
+- to: n7
+  label: Miss
+  from: n3
+- to: n8
+  from: n7
+- to: n4
+  from: n8
+- to: n9
+  from: n4
+keyRules:
+- In combat this is proactive and requires initiative.
+- Several helpers’ bonuses stack; any helper’s strong hit lets the target retain/take initiative.
+  Do not trade this move back and forth without meaningful fictional actions.
+references:
+- companions
+- initiative
+related: []

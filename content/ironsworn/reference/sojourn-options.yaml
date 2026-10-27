@@ -1,0 +1,45 @@
+id: sojourn-options
+title: Sojourn Options
+summary: Choose two on a strong hit, one on a weak hit, and one more if bonded. Choose each option
+  at most once.
+source:
+  section: Sojourn
+sections:
+- heading: Clear a condition
+  table:
+    columns:
+    - Option
+    - Effect
+    rows:
+    - - Mend
+      - Clear wounded; take +1 health.
+    - - Hearten
+      - Clear shaken; take +1 spirit.
+    - - Equip
+      - Clear unprepared; take +1 supply.
+- heading: Recover
+  table:
+    columns:
+    - Option
+    - Effect
+    rows:
+    - - Recuperate
+      - +2 health for you and companions.
+    - - Consort
+      - +2 spirit.
+    - - Provision
+      - +2 supply.
+    - - Plan
+      - +2 momentum.
+- heading: Provide aid
+  paragraphs:
+  - 'Take a quest: envision what the community needs. If you choose to help, Swear an Iron Vow
+    and add +1.'
+- heading: Focus
+  paragraphs:
+  - 'After a hit, each character may focus on one selected Recover action. Roll +heart (+1 if
+    bonded): strong hit +2 more, weak hit +1 more, miss lose all benefits of that action.'
+related:
+- procedure: sojourn
+- procedure: sojourn-focus
+- procedure: swear-an-iron-vow

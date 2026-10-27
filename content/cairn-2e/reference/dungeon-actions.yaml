@@ -1,0 +1,74 @@
+id: dungeon-actions
+title: Dungeon Actions, Light, Doors and Traps
+summary: Search one object or location exhaustively in a turn; rest requires safety and light.
+  Information is freely available.
+source:
+  section: Dungeon Actions, Light, Doors and Traps
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: The Basics
+  bullets:
+  - The dungeon exploration cycle (see below) is divided into a series of Turns, Actions, and
+    their consequences.
+  - On their turn, a character can move a distance equal to their torchlight’s perimeter (about
+    40ft), and perform one action. Players can use their action to move up to three times that
+    distance though that will increase the chance of triggering a roll on the Dungeon Events table.
+  - The Warden should present obvious information about an area and its dangers freely and at
+    no cost. Moving quickly or without caution may increase the chance of encountering a wandering
+    monster, springing a trap, or triggering a roll on the Dungeon Events table.
+  paragraphs:
+  - Although the term “dungeon” is used here, it can mean any dangerous locale (mansions, farmhouses,
+    adventure site, etc).
+- heading: Actions
+  bullets:
+  - Actions are any non-passive activities, such as searching for traps, forcing open a door,
+    listening for danger, disarming a trap, engaging an enemy in combat, casting a spell, dodging
+    a trap, running away, resting, etc.
+  - Some actions have special rules (see below), while others may take multiple turns to complete.
+  - Loud or noticeable actions may also trigger an encounter with the dungeon’s denizens.
+- heading: Searching
+  bullets:
+  - A character can spend a turn performing an exhaustive search of one object or location in
+    an area, revealing any relevant hidden treasure, traps, secret doors, etc.
+  - Larger rooms and difficult or complex dungeon terrain may take a few turns to properly search.
+  - 'Searching a room first is a safer way to explore the dungeon, but it has a steep cost: time.'
+- heading: Resting
+  bullets:
+  - A character can spend a turn resting to restore all HP.
+  - A light source and a safe location are required to rest. Present or oncoming danger makes
+    rest impossible.
+  - Resting does not restore Fatigue, as it is impossible to safely Make Camp in a dungeon.
+- heading: Light
+  bullets:
+  - Torches and other radial sources of light illuminate 40ft of dungeon and beyond that only
+    a dim outline of objects. Torches last until they are put out by a character or their environment.
+  - A torch can be lit 3 times before permanently degrading. A lantern can be relit 6 times per
+    oil can, but requires more inventory slots.
+  - Characters without a light source may suffer from panic until their situation is remedied.
+- heading: Doors
+  bullets:
+  - Doors and entryways may be locked, stuck, or blocked entirely. Characters can try to force
+    a door open (or wedge it shut) using available resources (spikes, glue) or through raw ability.
+  - The party’s marching order determines who is most impacted by whatever lies beyond a door.
+  - A character can detect, through careful observation (listening, smelling, etc.), signs of
+    life and other hazards through nearby doors and walls.
+- heading: Traps
+  bullets:
+  - A cautious character should be presented with any and all information that would allow them
+    the opportunity to avoid springing a trap. An unwitting character will trigger a trap according
+    to the fiction, or otherwise will have a 2-in-6 chance.
+  - Traps can usually be detected by carefully searching a room.
+  - Damage from traps is taken from Attributes (usually STR or DEX) and not from HP. Armor can
+    reduce damage, but only if applicable (e.g. a shield would not reduce damage from noxious
+    gas).
+related:
+- procedure: dungeon-exploration
+- procedure: save
+- procedure: cast-a-spell
+- reference: conditions

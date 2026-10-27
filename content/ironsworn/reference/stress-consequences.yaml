@@ -1,0 +1,35 @@
+id: stress-consequences
+title: Endure Stress Consequences
+summary: On a miss at 0 spirit, mark an unmarked shaken or corrupted debility, or roll d100 here.
+source:
+  section: Endure Stress; original move sheet (corrects SRD .09 table transcription)
+  overrides:
+    publication:
+      title: Ironsworn Playkit — Original Move Sheets
+      edition: Original Ironsworn move reference; official CC BY 4.0 text edition
+      url: https://tomkinpress.com/collections/free-downloads/products/ironsworn-playkit
+      creator: Shawn Tomkin
+      publisher: Tomkin Press
+sections:
+- heading: d100
+  table:
+    columns:
+    - Roll
+    - Result
+    rows:
+    - - 1–10
+      - 'Overwhelmed: Face Desolation.'
+    - - 11–25
+      - 'Give up: Forsake Your Vow, preferably one relevant to this crisis.'
+    - - 26–50
+      - Give in to a fear or compulsion; act against your better instincts.
+    - - 51–100
+      - Persevere.
+- heading: Source correction
+  paragraphs:
+  - SRD .09 contains a duplicated/incorrect row in this table. These ranges and outcomes follow
+    the official original-game move sheet in the Playkit.
+related:
+- procedure: endure-stress
+- procedure: face-desolation
+- procedure: forsake-your-vow

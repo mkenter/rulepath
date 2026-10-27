@@ -1,0 +1,22 @@
+id: armor
+title: Armor
+summary: Subtract armor from rolled attack damage before HP. Armor is capped at 3.
+source:
+  section: Armor
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Armor
+  bullets:
+  - Before calculating damage to HP, subtract the target’s Armor value from the result of damage
+    rolls.
+  - Shields and similar armor provide a bonus defense (e.g. +1 Armor), but only while the item
+    is held or worn. Some may also provide additional benefits, depending on the fiction.
+  - A PC, NPC, or monster cannot have more than 3 Armor.
+related:
+- procedure: attacking-and-damage

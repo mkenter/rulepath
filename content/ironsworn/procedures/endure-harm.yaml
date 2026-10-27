@@ -1,0 +1,136 @@
+id: endure-harm
+title: Endure Harm
+summary: Face physical damage.
+source:
+  section: Endure Harm
+nodes:
+- id: n1
+  type: start
+  label: Face physical damage.
+- id: n2
+  type: step
+  label: Reduce health by the harm or stress. At 0, convert any excess to -momentum.
+- id: n3
+  type: procedure
+  label: Action Roll (health or iron, whichever is higher)
+  target: action-roll
+- id: n4
+  type: decision
+  label: What is the roll result?
+- id: n5
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n6
+  type: decision
+  label: Choose one
+- id: n7
+  type: step
+  label: Continue after resolving the choice
+- id: n8
+  type: step
+  label: 'Only if health is above 0: suffer -1 momentum and take +1 health.'
+- id: n9
+  type: step
+  label: Take +1 momentum.
+- id: n10
+  type: step
+  label: Press on.
+- id: n11
+  type: step
+  label: Suffer -1 momentum.
+- id: n12
+  type: decision
+  label: Is health at 0?
+- id: n13
+  type: step
+  label: Continue after resolving the choice
+- id: n14
+  type: step
+  label: Continue, battered but unbroken.
+- id: n15
+  type: decision
+  label: Mark an unmarked debility, or roll the consequence table
+- id: n16
+  type: step
+  label: Continue after resolving the choice
+- id: n17
+  type: step
+  label: If not already marked, mark wounded.
+- id: n18
+  type: step
+  label: If not already marked, mark maimed.
+- id: n19
+  type: step
+  label: Roll d100 on the linked consequence table and resolve its result.
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n6
+  label: Strong hit
+  from: n4
+- to: n8
+  label: Shake it off
+  from: n6
+- to: n7
+  from: n8
+- to: n9
+  label: Embrace the pain
+  from: n6
+- to: n7
+  from: n9
+- to: n5
+  from: n7
+- to: n10
+  label: Weak hit
+  from: n4
+- to: n5
+  from: n10
+- to: n11
+  label: Miss
+  from: n4
+- to: n12
+  from: n11
+- to: n14
+  label: 'No'
+  from: n12
+- to: n13
+  from: n14
+- to: n15
+  label: 'Yes'
+  from: n12
+- to: n17
+  label: Mark wounded
+  from: n15
+- to: n16
+  from: n17
+- to: n18
+  label: Mark maimed
+  from: n15
+- to: n16
+  from: n18
+- to: n19
+  label: Roll
+  from: n15
+- to: n16
+  from: n19
+- to: n13
+  from: n16
+- to: n5
+  from: n13
+keyRules:
+- Suffer -health equal to the foe’s rank or the fictional severity (1–5; default 2). Convert overflow
+  below 0 to -momentum before rolling.
+- If both relevant debilities are already marked, you must roll the consequence table.
+- In combat, a strong hit on this suffer move can take initiative.
+references:
+- resources
+- debilities
+- harm-consequences
+- momentum
+related:
+- face-death
+- face-a-setback

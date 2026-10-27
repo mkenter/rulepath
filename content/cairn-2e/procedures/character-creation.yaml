@@ -1,0 +1,70 @@
+id: character-creation
+title: Character Creation
+summary: Create a new Cairn Second Edition character.
+source:
+  section: Character Creation
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/character-creation/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+nodes:
+- id: n1
+  type: start
+  label: Create a new Cairn Second Edition character.
+- id: n2
+  type: step
+  label: Roll d20 or choose a background. Choose one of its names, record its gear, and roll on
+    both background tables.
+- id: n3
+  type: step
+  label: Roll 3d6 for STR, then DEX, then WIL. You may swap any two results. Roll 1d6 for starting
+    HP.
+- id: n4
+  type: step
+  label: Start with a backpack (six slots of capacity within your ten slots). Record background
+    items, uses, coins and any special abilities.
+- id: n5
+  type: step
+  label: 'Check inventory: ten slots maximum including Fatigue; full inventory reduces HP to 0.
+    See Inventory.'
+- id: n6
+  type: step
+  label: Roll d10 for physique, skin, hair, face, speech, clothing, virtue and vice. Roll d20
+    for a bond.
+- id: n7
+  type: step
+  label: Roll age (2d20+10). The youngest PC rolls d20 for an omen and reads it aloud; the Warden
+    incorporates it.
+- id: n8
+  type: end
+  label: Return to the current situation with the consequences recorded
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n4
+  from: n3
+- to: n5
+  from: n4
+- to: n6
+  from: n5
+- to: n7
+  from: n6
+- to: n8
+  from: n7
+keyRules:
+- A background provides equipment, knowledge and fictional permissions; it does not restrict a
+  character to a class.
+- Bonds may grant items or abilities; record those too. Character advancement follows experiences
+  and downtime rather than XP levels.
+- Use the official character-creation and background tables for names, items, traits, bonds and
+  omens. Those catalogs are outside this procedure navigator.
+references:
+- inventory
+- growth
+- credits
+related: []

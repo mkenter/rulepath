@@ -1,16 +1,26 @@
 id: oracle-options
 title: Oracle Options
-summary: "Ask the Oracle offers four options: draw a conclusion using the most
-  interesting and obvious result; ask a yes/no question, choose odds, and roll;
-  envision two options, rate one likely, and roll (yes selects it, no selects
-  the other); or spark an idea by brainstorming or using a random prompt. The
-  linked Yes/No procedure covers the roll, not all four options as mandatory
-  steps. Oracle dice generate 1–100. Yes thresholds: almost certain 11+, likely
-  26+, 50/50 51+, unlikely 76+, small chance 91+. Matching yes/no dice invite an
-  extreme result or twist. In guided play, the GM is the oracle."
+summary: 'Ask the Oracle offers four options: draw a conclusion, ask yes/no, pick two, or spark
+  an idea. Choose the method that helps play move forward.'
 source:
-  section: "Ask the Oracle"
+  section: Ask the Oracle
 related:
-  - procedure: ask-the-oracle
-  - procedure: pay-the-price
-  - procedure: gather-information
+- procedure: ask-the-oracle
+- procedure: pay-the-price
+- procedure: gather-information
+sections:
+- heading: Approaches
+  bullets:
+  - 'Draw a conclusion: decide an obvious and interesting answer.'
+  - 'Yes/no: choose odds and roll d100. Almost certain 11+, likely 26+, 50/50 51+, unlikely 76+,
+    small chance 91+.'
+  - 'Pick two: envision two options, rate one likely, roll d100. On 26+ it happens; otherwise
+    the other happens.'
+  - 'Spark an idea: brainstorm or use a prompt table, interpreting its result in context.'
+- heading: Using prompt tables
+  paragraphs:
+  - For open-ended inspiration, combine an action and a theme, use a suitable prompt table from
+    the official game, or brainstorm. Interpret prompts in context; avoid endless follow-up questions.
+    Prompt catalogs are outside this procedure navigator.
+  - 00 on percentile dice means 100. Do not add a stat or momentum. A match on the yes/no table
+    suggests a twist; matches on ordinary prompt tables and Pay the Price have no special effect.

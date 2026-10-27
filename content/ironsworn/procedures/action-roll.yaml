@@ -1,91 +1,91 @@
 id: action-roll
 title: Action Roll
-summary: Resolve a risky or uncertain action when a move calls for an action
-  roll, then return to that move for its outcome.
+summary: Resolve a risky or uncertain action when a move calls for an action roll, then return
+  to that move for its outcome.
 source:
-  section: "Action Roll"
+  section: Action Roll
 nodes:
-  - id: start
-    type: start
-    label: A move calls for an action roll
-  - id: roll
-    type: step
-    label: Roll one six-sided action die and two ten-sided challenge dice
-  - id: negative
-    type: decision
-    label: Does negative momentum cancel the action die?
-  - id: cancel
-    type: step
-    label: If the action die equals the magnitude of negative momentum, cancel it;
-      use only the stat or track plus adds
-  - id: score
-    type: step
-    label: Add the relevant stat or track and any adds to the action die (unless
-      canceled). Cap the action score at 10
-  - id: burn
-    type: decision
-    label: Choose to burn positive momentum?
-  - id: burning
-    type: step
-    label: Cancel challenge dice lower than your current momentum. Each canceled die
-      counts as a hit; reset momentum afterward
-  - id: result
-    type: decision
-    label: How many challenge dice does the action score exceed, including any
-      canceled dice?
-  - id: strong
-    type: end
-    label: "Strong hit: both dice. Apply the originating move’s strong-hit outcome"
-  - id: weak
-    type: end
-    label: "Weak hit: one die. Apply the originating move’s weak-hit outcome"
-  - id: miss
-    type: end
-    label: "Miss: neither die. Apply the originating move’s miss outcome"
+- id: start
+  type: start
+  label: A move calls for an action roll
+- id: roll
+  type: step
+  label: Roll one six-sided action die and two ten-sided challenge dice
+- id: negative
+  type: decision
+  label: Does negative momentum cancel the action die?
+- id: cancel
+  type: step
+  label: If the action die equals the magnitude of negative momentum, cancel it; use only the
+    stat or track plus adds
+- id: score
+  type: step
+  label: Add the relevant stat or track and any adds to the action die (unless canceled). Cap
+    the action score at 10
+- id: burn
+  type: decision
+  label: Choose to burn positive momentum?
+- id: burning
+  type: step
+  label: Cancel challenge dice lower than your current momentum. Each canceled die counts as a
+    hit; reset momentum afterward
+- id: result
+  type: decision
+  label: How many challenge dice does the action score exceed, including any canceled dice?
+- id: strong
+  type: end
+  label: 'Strong hit: both dice. Apply the originating move’s strong-hit outcome'
+- id: weak
+  type: end
+  label: 'Weak hit: one die. Apply the originating move’s weak-hit outcome'
+- id: miss
+  type: end
+  label: 'Miss: neither die. Apply the originating move’s miss outcome'
 edges:
-  - from: start
-    to: roll
-  - from: roll
-    to: negative
-  - from: negative
-    to: cancel
-    label: Yes
-  - from: negative
-    to: score
-    label: No
-  - from: cancel
-    to: score
-  - from: score
-    to: burn
-  - from: burn
-    to: burning
-    label: Yes
-  - from: burn
-    to: result
-    label: No
-  - from: burning
-    to: result
-  - from: result
-    to: strong
-    label: Both
-  - from: result
-    to: weak
-    label: One
-  - from: result
-    to: miss
-    label: Neither
+- from: start
+  to: roll
+- from: roll
+  to: negative
+- from: negative
+  to: cancel
+  label: 'Yes'
+- from: negative
+  to: score
+  label: 'No'
+- from: cancel
+  to: score
+- from: score
+  to: burn
+- from: burn
+  to: burning
+  label: 'Yes'
+- from: burn
+  to: result
+  label: 'No'
+- from: burning
+  to: result
+- from: result
+  to: strong
+  label: Both
+- from: result
+  to: weak
+  label: One
+- from: result
+  to: miss
+  label: Neither
 keyRules:
-  - "Ties favor the challenge dice: the action score must exceed a die to beat
-    it."
-  - Burning momentum is optional and requires positive momentum. A challenge die
-    equal to momentum cannot be canceled.
-  - Check the Matches reference for twists when the challenge dice match, using
-    the result of the move to frame the twist.
-  - "Progress rolls are different: roll only challenge dice against progress;
-    ignore momentum. This procedure applies only to action rolls."
+- 'Ties favor the challenge dice: the action score must exceed a die to beat it.'
+- Burning momentum is optional and requires positive momentum. A challenge die equal to momentum
+  cannot be canceled.
+- Check the Matches reference for twists when the challenge dice match, using the result of the
+  move to frame the twist.
+- 'Progress rolls are different: roll only challenge dice against progress; ignore momentum. This
+  procedure applies only to action rolls.'
 references:
-  - momentum
-  - matches
-  - stats
-  - credits
-related: []
+- momentum
+- matches
+- stats
+- credits
+- move-glossary
+related:
+- progress-roll

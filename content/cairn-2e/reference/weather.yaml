@@ -1,0 +1,77 @@
+id: weather
+title: Weather
+summary: Roll once each day for the season. Repeated Extreme weather becomes Catastrophic.
+source:
+  section: Weather
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Daily weather
+  paragraphs:
+  - Each day, roll d6 for the current season. If Extreme is rolled twice in a row, weather becomes
+    Catastrophic. Apply the actual result’s effects below.
+- heading: Weather type
+  table:
+    columns:
+    - d6
+    - Spring
+    - Summer
+    - Fall
+    - Winter
+    rows:
+    - - '1'
+      - Nice
+      - Nice
+      - Fair
+      - Fair
+    - - '2'
+      - Fair
+      - Nice
+      - Fair
+      - Unpleasant
+    - - '3'
+      - Fair
+      - Fair
+      - Unpleasant
+      - Inclement
+    - - '4'
+      - Unpleasant
+      - Unpleasant
+      - Inclement
+      - Inclement
+    - - '5'
+      - Inclement
+      - Inclement
+      - Inclement
+      - Extreme
+    - - '6'
+      - Extreme
+      - Extreme
+      - Extreme
+      - Extreme
+- heading: Weather difficulty
+  table:
+    columns:
+    - Weather
+    - Effect
+    rows:
+    - - Nice
+      - Favorable travel conditions.
+    - - Fair
+      - Favorable travel conditions.
+    - - Unpleasant
+      - Add a Fatigue OR add one watch to the journey.
+    - - Inclement
+      - Add a Fatigue OR add one watch; also increase terrain difficulty one step.
+    - - Extreme
+      - Add a Fatigue AND add one watch; also increase terrain difficulty one step.
+    - - Catastrophic
+      - Most parties cannot travel under these conditions.
+related:
+- procedure: wilderness-exploration
+- reference: travel

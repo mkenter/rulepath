@@ -1,0 +1,53 @@
+id: dungeon-events
+title: Dungeon Events
+summary: Roll d6 when exploration triggers an event; apply the result in context.
+source:
+  section: Dungeon Events
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/procedures/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Dungeon Events
+  paragraphs:
+  - 'Exploring a dungeon is always dangerous, and time must always be weighed against the risk
+    of awakening the location’s denizens, natural hazards, and worse. When the party:'
+  - Roll on the table below.
+  bullets:
+  - Spends more than one dungeon cycle in a single room or location
+  - Moves quickly or haphazardly through a room
+  - Moves into a new area, level, or zone
+  - Creates a loud disturbance
+  table:
+    columns:
+    - d6
+    - Event
+    - Description
+    rows:
+    - - '1'
+      - Encounter
+      - Roll on an encounter table. Possibly hostile. (See Reactions.)
+    - - '2'
+      - Sign
+      - A clue, spoor, track, abandoned lair, scent, victim, etc is discovered.
+    - - '3'
+      - Environment
+      - Surroundings shift or escalate. Water rises, ceilings collapse, a ritual nears completion,
+        etc.
+    - - '4'
+      - Loss
+      - Torches are blown out, an ongoing spell fizzles, etc. The party must resolve the effect
+        before moving on.
+    - - '5'
+      - Exhaustion
+      - The party must rest (triggering another roll on this table), add a Fatigue, or consume
+        a ration.
+    - - '6'
+      - Quiet
+      - The party is left alone (and safe) for the time being.
+related:
+- procedure: dungeon-exploration
+- procedure: combat

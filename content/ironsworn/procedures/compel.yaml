@@ -1,0 +1,114 @@
+id: compel
+title: Compel
+summary: Persuade someone to do something through charm, threats, or deception.
+source:
+  section: Compel
+nodes:
+- id: n1
+  type: start
+  label: Persuade someone to do something through charm, threats, or deception.
+- id: n2
+  type: procedure
+  label: Action Roll (heart / iron / shadow)
+  target: action-roll
+- id: n3
+  type: decision
+  label: What is the roll result?
+- id: n4
+  type: end
+  label: Apply the outcome and continue the fiction
+- id: n5
+  type: step
+  label: They agree or share what they know. Take +1 momentum.
+- id: n6
+  type: decision
+  label: Using this exchange to investigate?
+- id: n7
+  type: step
+  label: Continue after resolving the choice
+- id: n8
+  type: procedure
+  label: Gather Information now; add +1
+  target: gather-information
+- id: n9
+  type: step
+  label: Continue with their agreement.
+- id: n10
+  type: step
+  label: They agree, but first ask something in return; envision it.
+- id: n11
+  type: decision
+  label: Accept the counterproposal?
+- id: n12
+  type: step
+  label: Continue after resolving the choice
+- id: n13
+  type: step
+  label: They comply; take +1 momentum. If this is investigation, Gather Information now with
+    +1.
+- id: n14
+  type: step
+  label: Find another way forward.
+- id: n15
+  type: step
+  label: They refuse or make a greatly costly demand.
+- id: n16
+  type: procedure
+  label: Pay The Price
+  target: pay-the-price
+edges:
+- to: n2
+  from: n1
+- to: n3
+  from: n2
+- to: n5
+  label: Strong hit
+  from: n3
+- to: n6
+  from: n5
+- to: n8
+  label: 'Yes'
+  from: n6
+- to: n7
+  from: n8
+- to: n9
+  label: 'No'
+  from: n6
+- to: n7
+  from: n9
+- to: n4
+  from: n7
+- to: n10
+  label: Weak hit
+  from: n3
+- to: n11
+  from: n10
+- to: n13
+  label: 'Yes'
+  from: n11
+- to: n12
+  from: n13
+- to: n14
+  label: 'No'
+  from: n11
+- to: n12
+  from: n14
+- to: n4
+  from: n12
+- to: n15
+  label: Miss
+  from: n3
+- to: n16
+  from: n15
+- to: n4
+  from: n16
+keyRules:
+- 'Charm, pacify, barter or convince: +heart (add +1 if bonded). Threaten or incite: +iron. Lie
+  or swindle: +shadow.'
+- You need credible leverage. Guaranteed agreement or an impossible request needs no roll.
+- A weak hit grants the strong-hit benefits if the exchange is completed.
+references:
+- stats
+- move-glossary
+related:
+- test-your-bond

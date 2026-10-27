@@ -1,0 +1,35 @@
+id: attributes-and-saves
+title: Attributes and Saves
+summary: Roll only when a risky action has an uncertain negative outcome. Use STR, DEX or WIL
+  as appropriate.
+source:
+  section: Attributes and Saves
+  overrides:
+    publication:
+      title: Cairn Second Edition — Player’s Guide
+      edition: Second Edition, official online text (reviewed 27 October 2026)
+      url: https://cairnrpg.com/second-edition/players-guide/core-rules/
+      creator: Yochai Gal and contributors
+      publisher: Cairn Press
+sections:
+- heading: Attributes
+  paragraphs:
+  - Each of the three Attributes are used in different circumstances. (See Saves, below.)
+  bullets:
+  - 'Strength (STR) : Used for saves requiring physical power, like lifting gates, bending bars,
+    resisting poison, etc.'
+  - 'Dexterity (DEX) : Used for saves requiring poise, speed, reflexes, dodging, climbing, sneaking,
+    balancing, etc.'
+  - 'Willpower (WIL) : Used for saves to persuade, deceive, interrogate, intimidate, charm, provoke,
+    manipulate spells, etc.'
+- heading: Saves
+  bullets:
+  - A save is a roll to avoid negative outcomes from risky choices. Characters roll a d20 and
+    compare the results to the appropriate attribute. If they roll equal to or under that attribute,
+    they succeed. Otherwise, they fail. A 1 is always a success, and a 20 is always a failure.
+  - If two opponents are each trying to overcome the other, whoever is most at risk should save.
+  - If two characters need to take an action together, whoever is most at risk should save (usually
+    the character with the lowest relevant Attribute).
+related:
+- procedure: save
+- reference: warden-adjudication

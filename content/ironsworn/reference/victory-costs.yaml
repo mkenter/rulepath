@@ -1,0 +1,28 @@
+id: victory-costs
+title: Victory Costs
+summary: Choose one cost on a weak hit on End the Fight.
+source:
+  section: End the Fight
+sections:
+- heading: Costs
+  table:
+    columns:
+    - Cost
+    - Consequence
+    rows:
+    - - Worse than you thought
+      - Endure Harm.
+    - - Overcome
+      - Endure Stress.
+    - - Short-lived victory
+      - New danger or foe appears, or an existing danger worsens.
+    - - Collateral damage
+      - Something valuable is lost/broken, or someone important pays.
+    - - Pay for it
+      - An objective falls out of reach.
+    - - Not forgotten
+      - You are marked for vengeance.
+related:
+- procedure: end-the-fight
+- procedure: endure-harm
+- procedure: endure-stress

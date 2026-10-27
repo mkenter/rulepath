@@ -113,6 +113,24 @@ const relatedResourceSchema = z.union([
   z.object({ reference: idSchema }).strict(),
 ]);
 
+const referenceTableSchema = z.object({
+  columns: z.array(nonEmptyTextSchema).min(1),
+  rows: z.array(z.array(nonEmptyTextSchema).min(1)).min(1),
+}).strict().superRefine((table, context) => {
+  table.rows.forEach((row, index) => {
+    if (row.length !== table.columns.length) {
+      context.addIssue({ code: 'custom', path: ['rows', index], message: 'Row must match the number of columns' });
+    }
+  });
+});
+
+const referenceSectionSchema = z.object({
+  heading: nonEmptyTextSchema,
+  paragraphs: z.array(nonEmptyTextSchema).default([]),
+  bullets: z.array(nonEmptyTextSchema).default([]),
+  table: referenceTableSchema.optional(),
+}).strict();
+
 export const referenceSchema = z
   .object({
     id: idSchema,
@@ -120,6 +138,7 @@ export const referenceSchema = z
     aliases: z.array(nonEmptyTextSchema).default([]),
     summary: nonEmptyTextSchema,
     source: sourceSchema,
+    sections: z.array(referenceSectionSchema).optional(),
     related: z.array(relatedResourceSchema).default([]),
     authorNotes: z.array(nonEmptyTextSchema).default([]),
   })
