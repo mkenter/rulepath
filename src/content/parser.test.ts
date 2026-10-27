@@ -106,4 +106,14 @@ describe('content parser', () => {
       expect(() => parseProcedure(validProcedure.replace('section: Example heading', `section: Example heading\n  pages: ${JSON.stringify(pages)}`), 'example.yaml')).toThrow(/source\.pages/);
     }
   });
+
+  it('rejects reference table rows that do not match their column headings', () => {
+    const reference = {
+      id: 'signals', title: 'Signals', summary: 'Synthetic table', source: { section: 'Signals' },
+      sections: [{ heading: 'Meanings', table: { columns: ['Mark', 'Meaning'], rows: [['Spiral']] } }],
+    };
+    expect(() => parseReference(stringify(reference), 'signals.yaml')).toThrow(
+      /signals\.yaml: sections\.0\.table\.rows\.0: Row must match the number of columns/,
+    );
+  });
 });

@@ -15,8 +15,10 @@ describe('semantic graph regression cases', () => {
   it.each(['detour', 'nested', 'loop', 'linked-detour'] as const)('keeps all nodes and connections in %s', id => {
     const procedure = procedureSchema.parse(topology[id]);
     const before = JSON.stringify(procedure);
-    const { container } = renderGraph(procedure);
-    expect(container.querySelectorAll('[data-flow-node-id]')).toHaveLength(procedure.nodes.length);
+    renderGraph(procedure);
+    for (const node of procedure.nodes) {
+      expect(screen.getByRole('article', { name: new RegExp(`: ${node.label}$`) })).toBeInTheDocument();
+    }
     expect(within(screen.getByRole('list', { name: 'Procedure connections' })).getAllByRole('listitem')).toHaveLength(procedure.edges.length);
     expect(JSON.stringify(procedure)).toBe(before);
     for (const node of procedure.nodes.filter(node => node.type === 'procedure')) {
@@ -26,11 +28,13 @@ describe('semantic graph regression cases', () => {
   it('preserves distinct same-target outcomes and read-only decisions', () => {
     renderGraph(procedureSchema.parse(topology.nested));
     const decision = screen.getByLabelText('Decision · read only: Node drawn');
-    expect(decision.querySelectorAll('[data-flow-decision-branch]')).toHaveLength(2);
-    expect(within(decision).getByText('Yes ↓')).toBeInTheDocument();
-    expect(within(decision).getByText('No ↓')).toBeInTheDocument();
+    expect(decision).toHaveTextContent('Yes');
+    expect(decision).toHaveTextContent('No');
+    const connections = screen.getByRole('list', { name: 'Procedure connections' });
+    expect(connections).toHaveTextContent('Yes: Continue to Node hidden');
+    expect(connections).toHaveTextContent('No: Continue to Node hidden');
     expect(within(decision).queryByRole('button')).not.toBeInTheDocument();
-    expect(screen.getAllByText('Node hidden')).toHaveLength(1);
+    expect(screen.getByRole('article', { name: 'Decision · read only: Node hidden' })).toBeInTheDocument();
   });
   it('retains all four canonical outcomes when visual presentation is unsupported', () => {
     const procedure = procedureSchema.parse({

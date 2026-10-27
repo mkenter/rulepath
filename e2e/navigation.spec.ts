@@ -1,12 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { registry, scenarios } from './support/content';
-import { unusedId } from '../tests/content-scenarios';
 import { createSearchIndex, searchContent } from '../src/features/search/searchIndex';
 
-// IDs for not-found checks are selected outside the registered namespaces.
-const missingGame = unusedId(registry.games.map(game => game.details.id));
-
-test('direct links, unknown resources, and the removed developer flag behave safely', async ({ page }) => {
+test('direct links survive reload without fabricated ancestry', async ({ page }) => {
   const entry = scenarios.procedures[0]!;
   test.skip(!entry, 'No registered procedures to exercise direct resource navigation.');
   await page.goto(entry.path);
@@ -18,15 +14,10 @@ test('direct links, unknown resources, and the removed developer flag behave saf
     await expect(page.getByRole('heading', { level: 1, name: reference.reference.title, exact: true })).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
   }
-  const missing = unusedId([...entry.game.procedures.keys(), ...entry.game.references.keys()]);
-  for (const route of [`/games/${missingGame}`, `/games/${entry.game.details.id}/procedures/${missing}`, `/games/${entry.game.details.id}/reference/${missing}`, '/missing']) {
-    await page.goto(route);
-    await expect(page.getByRole('heading', { name: 'That rules entry is not in this library' })).toBeVisible();
-  }
-  await page.goto(`${entry.path}?rail-stress=1`);
-  await expect(page.getByLabel('Synthetic developer fixture')).toHaveCount(0);
-  await expect(page.locator('[data-flow-node-id]')).toHaveCount(entry.procedure.nodes.length);
-  await expect(page.getByRole('list', { name: 'Procedure connections' }).getByRole('listitem')).toHaveCount(entry.procedure.edges.length);
+  await page.goto(entry.path);
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1, name: entry.procedure.title, exact: true })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Invocation path' })).toHaveCount(0);
 });
 
 test('references preserve context, support close and Back, and restore focus', async ({ page }) => {

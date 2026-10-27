@@ -13,3 +13,14 @@ source:
       adaptation: Written solely for Rulepath tests.
 related:
   - procedure: decode-signal
+sections:
+  - heading: Signal meanings
+    paragraphs:
+      - Read each mark from left to right.
+    bullets:
+      - Repeat a faint signal before decoding.
+    table:
+      columns: [Mark, Meaning]
+      rows:
+        - [Copper spiral, Safe passage]
+        - [Broken ring, Return to the archive]

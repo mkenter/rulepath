@@ -3,6 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
+  // Screenshot authoring is opt-in through npm run screenshots, not a regression check.
+  testIgnore: process.env.SCREENSHOT_MODE ? [] : ['**/design-review.spec.ts'],
   reporter: 'html',
   use: {
     baseURL: 'http://127.0.0.1:4173',

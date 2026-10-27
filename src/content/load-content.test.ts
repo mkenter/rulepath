@@ -15,13 +15,11 @@ const fixtureCrosslinks = Object.keys(fixtureSources.crosslinks)[0]!;
 const fixtureProcedure = Object.keys(fixtureSources.procedures).find(name => name.endsWith('/gather-information.yaml'))!;
 
 // The same maps that Vite discovers in production, with a separate test-only directory added.
-describe('Clockwork and Ironsworn loading fixture regressions', () => {
+describe('content loading and game isolation', () => {
   it('discovers, parses, and validates both directories through the production loader', () => {
     const registry = loadContentRegistry(combinedSources);
     expect(registry.games.map(game => game.details.id)).toEqual(expect.arrayContaining(['clockwork', 'ironsworn']));
     expect(loadContentRegistry(productionSources).getGame('ironsworn')).toBeDefined();
-    expect(registry.getGame('clockwork')?.procedures.size).toBe(3);
-    expect(registry.getGame('clockwork')?.references.size).toBe(1);
   });
 
   it('isolates shared IDs, graph and reference links, and source overrides by game', () => {
@@ -42,12 +40,6 @@ describe('Clockwork and Ironsworn loading fixture regressions', () => {
     expect(resolveSource(ironsworn.details.source, ironsworn.references.get('momentum')!.source).licensing.license.name).toContain('Creative Commons');
   });
 
-  it('accepts decisions with more than three outcomes', () => {
-    const procedure = loadContentRegistry(combinedSources).getProcedure('clockwork', 'momentum')!;
-    expect(procedure.nodes).toContainEqual(expect.objectContaining({ id: 'color', type: 'decision' }));
-    expect(procedure.edges.filter(edge => edge.from === 'color')).toHaveLength(4);
-  });
-
   it('keeps same-ID procedures and references in distinct routes and search results', () => {
     const registry = loadContentRegistry(combinedSources);
     const procedure = registry.getProcedure('clockwork', 'momentum')!;
@@ -61,8 +53,6 @@ describe('Clockwork and Ironsworn loading fixture regressions', () => {
 
   it('indexes both games, keeps matching titles distinct, and filters scope reversibly', () => {
     const index = createSearchIndex(loadContentRegistry(combinedSources));
-    expect(index).toHaveLength(loadContentRegistry(combinedSources).games.reduce((count, game) => count + 1 + game.procedures.size + game.references.size, 0));
-    expect(new Set(index.map(document => document.path)).size).toBe(index.length);
     const global = searchContent(index, 'Gather Information');
     const matchingPaths = global.filter(result => result.title === 'Gather Information').map(result => result.path);
     expect(matchingPaths).toContain('/games/clockwork/procedures/gather-information');

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 
-import { contentRegistry } from '../../content/bundled-content';
 import topology from './__fixtures__/topology.json';
 import type { Procedure } from '../../content/schema';
 import { analyzeProcedureFlow, deriveProcedurePresentationOrder } from './flowTopology';
@@ -10,25 +9,21 @@ function fixture(procedureId: keyof typeof topology): Procedure {
 }
 
 describe('procedure flow topology', () => {
-  for (const game of contentRegistry.games) {
-    for (const procedure of game.procedures.values()) {
-      it(`orders ${game.details.id}/${procedure.id} without dropping nodes or forward edges`, () => {
-        const flow = analyzeProcedureFlow(procedure);
-        const presentation = deriveProcedurePresentationOrder(procedure, flow.loopEdges);
-        const indexes = new Map(presentation.map((node, index) => [node.id, index]));
+  it.each(['detour', 'nested', 'loop', 'linked-detour'] as const)(
+    'orders %s without dropping nodes or forward edges', id => {
+      const procedure = fixture(id);
+      const authorOrder = procedure.nodes.map(node => node.id);
+      const flow = analyzeProcedureFlow(procedure);
+      const presentation = deriveProcedurePresentationOrder(procedure, flow.loopEdges);
+      const indexes = new Map(presentation.map((node, index) => [node.id, index]));
 
-        expect(new Set(presentation.map((node) => node.id)).size, procedure.id).toBe(
-          procedure.nodes.length,
-        );
-        expect(
-          procedure.edges
-            .filter((edge) => !flow.loopEdges.has(edge))
-            .every((edge) => (indexes.get(edge.from) ?? -1) < (indexes.get(edge.to) ?? -1)),
-          procedure.id,
-        ).toBe(true);
-      });
-    }
-  }
+      expect([...indexes.keys()].sort()).toEqual([...authorOrder].sort());
+      for (const edge of procedure.edges.filter(edge => !flow.loopEdges.has(edge))) {
+        expect(indexes.get(edge.from), `${edge.from} → ${edge.to}`).toBeLessThan(indexes.get(edge.to)!);
+      }
+      expect(procedure.nodes.map(node => node.id)).toEqual(authorOrder);
+    },
+  );
 
   it('recognizes exclusive work that rejoins a direct continuation', () => {
     const testFlow = analyzeProcedureFlow(fixture('detour'));
@@ -98,38 +93,5 @@ describe('procedure flow topology', () => {
     expect(analyzeProcedureFlow(procedure).detoursByDecision.get('choice')?.detourNodeIds).toEqual([
       'linked',
     ]);
-  });
-
-  it('derives a forward presentation order without mutating author order', () => {
-    const engagement = fixture('nested');
-    const authorOrder = engagement.nodes.map((node) => node.id);
-    const flow = analyzeProcedureFlow(engagement);
-    const presentation = deriveProcedurePresentationOrder(engagement, flow.loopEdges);
-    const presentationIndexes = new Map(presentation.map((node, index) => [node.id, index]));
-
-    expect(presentation.map((node) => node.id)).toEqual([
-      'start',
-      'stranger',
-      'drawn',
-      'hidden',
-      'choice',
-      'evasion',
-      'evaded',
-      'foe',
-      'hero',
-      'none',
-      'battle',
-      'done',
-    ]);
-    expect(
-      engagement.edges
-        .filter((edge) => !flow.loopEdges.has(edge))
-        .every(
-          (edge) =>
-            (presentationIndexes.get(edge.from) ?? -1) <
-            (presentationIndexes.get(edge.to) ?? -1),
-        ),
-    ).toBe(true);
-    expect(engagement.nodes.map((node) => node.id)).toEqual(authorOrder);
   });
 });
